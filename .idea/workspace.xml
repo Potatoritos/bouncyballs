@@ -5,137 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/lwjgl_release_3_3.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Tilt.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/shaders/fragment.fs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/shaders/vertex.vs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid1043.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid1144.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid1509.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid2342.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid2432.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid2529.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid2628.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid2747.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid2851.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid2945.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid301.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid3037.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid3137.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid3228.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid3324.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid3415.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid3502.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid3608.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid3707.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid3799.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid3889.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid391.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid4152.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid4232.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid4317.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid4427.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid648.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid744.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid859.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid956.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/joml-1.10.5-javadoc.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/joml-1.10.5-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/joml-1.10.5.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/joml_license.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-assimp-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-assimp-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-bgfx-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-bgfx-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-freetype-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-freetype-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-glfw-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-glfw-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-harfbuzz-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-harfbuzz-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-hwloc-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-hwloc-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-jemalloc-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-jemalloc-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-ktx-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-ktx-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-libdivide-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-libdivide-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-llvm-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-llvm-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-lmdb-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-lmdb-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-lz4-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-lz4-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-meow-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-meow-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-meshoptimizer-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-meshoptimizer-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-nanovg-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-nanovg-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-nfd-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-nfd-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-nuklear-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-nuklear-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-openal-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-openal-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-opengl-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-opengl-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-opengles-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-opengles-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-openvr-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-opus-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-opus-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-ovr-javadoc.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-ovr-natives-windows.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-ovr-sources.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-ovr.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-par-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-par-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-remotery-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-remotery-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-rpmalloc-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-rpmalloc-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-shaderc-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-shaderc-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-spvc-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-spvc-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-sse-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-stb-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-stb-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-tinyexr-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-tinyexr-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-tinyfd-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-tinyfd-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-tootle-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-vma-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-vma-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-vulkan-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-vulkan-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-xxhash-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-xxhash-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-yoga-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-yoga-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-zstd-natives-macos-arm64.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-zstd-natives-macos.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/ovr_license.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Game.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/HelloWorld.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/algorithm/GeodesicPolyhedra.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/graphics/Mesh.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/graphics/Shader.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/graphics/ShaderProgram.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/graphics/Window.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/util/Util.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/util/Vector3fEpsilonComparator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/shaders/fragment.fs" beforeDir="false" afterPath="$PROJECT_DIR$/assets/shaders/fragment.fs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/shaders/vertex.vs" beforeDir="false" afterPath="$PROJECT_DIR$/assets/shaders/vertex.vs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/algorithm/GeodesicPolyhedra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/algorithm/GeodesicPolyhedra.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/Mesh.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/Mesh.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/ShaderProgram.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/ShaderProgram.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/util/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/Util.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -216,7 +94,7 @@
       <workItem from="1680810439685" duration="8802000" />
       <workItem from="1680885015007" duration="1151000" />
       <workItem from="1680887521337" duration="17424000" />
-      <workItem from="1680906084832" duration="4651000" />
+      <workItem from="1680906084832" duration="9951000" />
     </task>
     <servers />
   </component>

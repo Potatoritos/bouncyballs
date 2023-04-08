@@ -66,6 +66,9 @@ public class GeodesicPolyhedra {
         ArrayList<Vector3f> faces = generateIcosahedronFaces();
         ArrayList<Vector3f> newFaces = new ArrayList<>();
 
+        int numberEdges = 30;
+        int numberVertices = 12;
+
         for (int it = 0; it < iterations; it++) {
             newFaces.ensureCapacity(4 * faces.size());
             for (int i = 0; i < faces.size(); i += 3) {
@@ -95,82 +98,34 @@ public class GeodesicPolyhedra {
             newFaces = temp;
 
             newFaces.clear();
+
+            numberVertices += numberEdges;
+            numberEdges = numberVertices + faces.size()/3 - 2;
         }
 
-//        HashMap<Vector3f, Integer> ids = new HashMap<>();
-//        ArrayList<Float> vertices = new ArrayList<>();
-//        int[] indices = new int[faces.size()];
-//
-//        float[] colors = new float[faces.size()*3];
-//
-//        float[][] boing = new float[3][3];
-//        boing[0][0] = 0.5f;
-//        boing[0][1] = 0;
-//        boing[0][2] = 0;
-//        boing[1][0] = 0;
-//        boing[1][1] = 0.5f;
-//        boing[1][2] = 0;
-//        boing[2][0] = 0;
-//        boing[2][1] = 0;
-//        boing[2][2] = 0.5f;
-//
-//        int cnt=0;
-//
-//        for (int i = 0; i < faces.size(); i ++) {
-//            int id;
-//            Vector3f vertex = faces.get(i);
-////            if (ids.containsKey(vertex)) {
-////                id = ids.get(vertex);
-////            } else {
-//            id = vertices.size()/3;
-//            ids.put(vertex, id);
-//            vertices.add(vertex.x);
-//            vertices.add(vertex.y);
-//            vertices.add(vertex.z);
-//
-//            colors[3*i] = boing[cnt][0];
-//            colors[3*i+1] = boing[cnt][1];
-//            colors[3*i+2] = boing[cnt][2];
-//            cnt = (cnt+1)%3;
-//
-////            }
-//            indices[i] = id;
-//        }
-//
-//        float[] verticesArray = new float[vertices.size()];
-//        for (int i = 0; i < vertices.size(); i++) {
-//            verticesArray[i] = vertices.get(i);
-//        }
-
         HashMap<Vector3f, Integer> ids = new HashMap<>();
-        ArrayList<Float> vertices = new ArrayList<>();
+        float[] vertices = new float[3*numberVertices];
         int[] indices = new int[faces.size()];
+
+        int idCounter = 0;
 
         for (int i = 0; i < faces.size(); i ++) {
             int id;
             Vector3f vertex = faces.get(i);
-//            if (ids.containsKey(vertex)) {
-//                id = ids.get(vertex);
-//            } else {
-                id = vertices.size()/3;
+            if (ids.containsKey(vertex)) {
+                id = ids.get(vertex);
+            } else {
+                id = idCounter;
                 ids.put(vertex, id);
-                vertices.add(vertex.x);
-                vertices.add(vertex.y);
-                vertices.add(vertex.z);
-//            }
+                vertices[3*idCounter] = vertex.x;
+                vertices[3*idCounter + 1] = vertex.y;
+                vertices[3*idCounter + 2] = vertex.z;
+                idCounter++;
+            }
             indices[i] = id;
         }
 
-        float[] colors = new float[vertices.size()];
-        for (int i = 0; i < colors.length; i++) {
-            colors[i] = (float)Math.random();
-        }
-        float[] verticesArray = new float[vertices.size()];
-        for (int i = 0; i < vertices.size(); i++) {
-            verticesArray[i] = vertices.get(i);
-        }
-
-        return new Mesh(verticesArray, indices, colors);
+        return new Mesh(vertices, indices);
     }
 
 

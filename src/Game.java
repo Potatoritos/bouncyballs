@@ -1,5 +1,6 @@
 import graphics.*;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import util.Util;
 
@@ -39,6 +40,8 @@ public class Game {
         sp.link();
         sp.createUniform("projectionMatrix");
         sp.createUniform("worldMatrix");
+        sp.createUniform("color");
+
 //        float[] positions = new float[]{
 //                -0.5f, 0.5f, -1.05f,
 //                -0.5f, -0.5f, -1.05f,
@@ -62,7 +65,7 @@ public class Game {
         };
 //        mesh = new Mesh(positions, indices, colors);
 
-        mesh = generateIcosphereMesh(5);
+        mesh = generateIcosphereMesh(7);
         projectionMatrix = new Matrix4f()
                 .perspective(fov, window.getAspectRatio(), zNear, zFar);
         worldMatrix = new Matrix4f()
@@ -95,6 +98,7 @@ public class Game {
         sp.bind();
         sp.setUniform("projectionMatrix", projectionMatrix);
         sp.setUniform("worldMatrix", worldMatrix);
+        sp.setUniform("color", new Vector3f(0.5f, 0, 0));
         mesh.render();
         sp.unbind();
 

@@ -12,10 +12,9 @@ public class Mesh {
     private final int vaoId;
     private final int vertexVboId;
     private final int indexVboId;
-    private final int colorVboId;
     private final int vertexCount;
 
-    public Mesh(float[] vertices, int[] indices, float[] colors) {
+    public Mesh(float[] vertices, int[] indices) {
         vertexCount = indices.length;
 
         vaoId = glGenVertexArrays();
@@ -37,35 +36,18 @@ public class Mesh {
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexBuffer, GL_STATIC_DRAW);
         memFree(indexBuffer);
 
-        colorVboId = glGenBuffers();
-        FloatBuffer colorBuffer = memAllocFloat(colors.length);
-        colorBuffer.put(colors).flip();
-        glBindBuffer(GL_ARRAY_BUFFER, colorVboId);
-        glBufferData(GL_ARRAY_BUFFER, colorBuffer, GL_STATIC_DRAW);
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0);
-        memFree(colorBuffer);
-
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-//        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
     }
     public void render() {
         glBindVertexArray(vaoId);
-//        glEnableVertexAttribArray(0);
-//        glEnableVertexAttribArray(1);
-
         glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, 0);
-
         glBindVertexArray(0);
-//        glDisableVertexAttribArray(0);
-//        glDisableVertexAttribArray(1);
     }
 
     public void delete() {
         glDeleteBuffers(vertexVboId);
         glDeleteBuffers(indexVboId);
-        glDeleteBuffers(colorVboId);
 
         glDeleteVertexArrays(vaoId);
     }

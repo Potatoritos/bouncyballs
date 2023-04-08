@@ -1,5 +1,6 @@
 package graphics;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.FloatBuffer;
@@ -48,7 +49,14 @@ public class ShaderProgram {
             glUniformMatrix4fv(uniforms.get(name), false, buffer);
         }
     }
-    public void createUniform(String name) throws RuntimeException {
+    public void setUniform(String name, Vector3f value) {
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            FloatBuffer buffer = stack.mallocFloat(3);
+            value.get(buffer);
+            glUniform3fv(uniforms.get(name), buffer);
+        }
+    }
+    public void createUniform(String name) {
         int location = glGetUniformLocation(id, name);
         if (location < 0) {
             throw new RuntimeException("Could not find uniform: " + name);

@@ -5,7 +5,6 @@ import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.jar.JarEntry;
 
 
 public class GeodesicPolyhedra {
@@ -127,6 +126,5 @@ public class GeodesicPolyhedra {
 
         return new Mesh(vertices, indices);
     }
-
 
 }

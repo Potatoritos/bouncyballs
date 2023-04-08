@@ -23,7 +23,7 @@ public class Game {
     private ShaderProgram sp;
     Mesh mesh;
     private Matrix4f projectionMatrix;
-    private Matrix4f worldMatrix;
+    private Camera camera;
 
     public Game() {
         isRunning = true;
@@ -39,7 +39,7 @@ public class Game {
         sp.addShader(Shader.fromFile("shaders/vertex.vs"));
         sp.link();
         sp.createUniform("projectionMatrix");
-        sp.createUniform("worldMatrix");
+        sp.createUniform("viewMatrix");
         sp.createUniform("color");
 
 //        float[] positions = new float[]{
@@ -65,12 +65,12 @@ public class Game {
         };
 //        mesh = new Mesh(positions, indices, colors);
 
-        mesh = generateIcosphereMesh(7);
+        mesh = generateIcosphereMesh(2);
         projectionMatrix = new Matrix4f()
                 .perspective(fov, window.getAspectRatio(), zNear, zFar);
-        worldMatrix = new Matrix4f()
-                .translate(0,0,-3);
 
+        camera = new Camera();
+        camera.getPosition().z = -3;
 
         loop();
     }
@@ -81,10 +81,8 @@ public class Game {
         }
         rotation++;
         rotation %= 360;
-        worldMatrix = new Matrix4f()
-                .translate(0,0,-3)
-                .rotateX((float)Math.toRadians(rotation))
-                .rotateY((float)Math.toRadians(rotation/2));
+
+        camera.getRotation().x = (float)Math.toRadians(rotation);
     }
     private void render() {
         if (window.isResized()) {
@@ -97,7 +95,7 @@ public class Game {
 
         sp.bind();
         sp.setUniform("projectionMatrix", projectionMatrix);
-        sp.setUniform("worldMatrix", worldMatrix);
+        sp.setUniform("viewMatrix", camera.getViewMatrix());
         sp.setUniform("color", new Vector3f(0.5f, 0, 0));
         mesh.render();
         sp.unbind();
@@ -141,11 +139,11 @@ public class Game {
             }
 //            LockSupport.parkNanos((long)1e6);
 
-            try {
-                Thread.sleep(1);
-            } catch (InterruptedException e) {
-                System.out.println("zxczxzxc");
-            }
+//            try {
+//                Thread.sleep(1);
+//            } catch (InterruptedException e) {
+//                System.out.println("zxczxzxc");
+//            }
         }
     }
     public void close() {

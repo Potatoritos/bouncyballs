@@ -23,9 +23,9 @@ public class Shader {
 
     public static Shader fromFile(String path) {
         int type;
-        if (path.endsWith(".fs")) {
+        if (path.endsWith(".frag")) {
             type = GL_FRAGMENT_SHADER;
-        } else if (path.endsWith(".vs")) {
+        } else if (path.endsWith(".vert")) {
             type = GL_VERTEX_SHADER;
         } else {
             throw new RuntimeException("Could not determine shader type");

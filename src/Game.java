@@ -2,13 +2,10 @@ import graphics.*;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFWErrorCallback;
-import util.Util;
 
-import static algorithm.GeodesicPolyhedra.generateIcosphereMesh;
+import static util.Geometry.generateGeodesicPolyhedronMesh;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.*;
 
 public class Game {
     private boolean isRunning;
@@ -21,7 +18,7 @@ public class Game {
     private int rotation = 0;
 
     private ShaderProgram sp;
-    Mesh mesh;
+    GameObjectMesh mesh;
     private Matrix4f projectionMatrix;
     private Camera camera;
 
@@ -35,12 +32,12 @@ public class Game {
         }
         window = new Window();
         sp = new ShaderProgram();
-        sp.addShader(Shader.fromFile("shaders/fragment.fs"));
-        sp.addShader(Shader.fromFile("shaders/vertex.vs"));
+        sp.addShader(Shader.fromFile("shaders/fragment.frag"));
+        sp.addShader(Shader.fromFile("shaders/vertex.vert"));
         sp.link();
         sp.createUniform("projectionMatrix");
         sp.createUniform("viewMatrix");
-        sp.createUniform("color");
+//        sp.createUniform("color");
 
 //        float[] positions = new float[]{
 //                -0.5f, 0.5f, -1.05f,
@@ -65,12 +62,12 @@ public class Game {
         };
 //        mesh = new Mesh(positions, indices, colors);
 
-        mesh = generateIcosphereMesh(2);
+        mesh = generateGeodesicPolyhedronMesh(6);
         projectionMatrix = new Matrix4f()
                 .perspective(fov, window.getAspectRatio(), zNear, zFar);
 
         camera = new Camera();
-        camera.getPosition().z = -3;
+        camera.getPosition().z = 3;
 
         loop();
     }
@@ -82,7 +79,7 @@ public class Game {
         rotation++;
         rotation %= 360;
 
-        camera.getRotation().x = (float)Math.toRadians(rotation);
+//        camera.getRotation().x = (float)Math.toRadians(rotation);
     }
     private void render() {
         if (window.isResized()) {
@@ -96,7 +93,7 @@ public class Game {
         sp.bind();
         sp.setUniform("projectionMatrix", projectionMatrix);
         sp.setUniform("viewMatrix", camera.getViewMatrix());
-        sp.setUniform("color", new Vector3f(0.5f, 0, 0));
+//        sp.setUniform("color", new Vector3f(0.5f, 0, 0));
         mesh.render();
         sp.unbind();
 

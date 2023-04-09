@@ -152,5 +152,55 @@ public class Geometry {
 //
 //        return new BasicMesh(vertices, indices);
 //    }
+    public static GameObjectMesh rectangularPrismMesh(Vector3f position, Vector3f dimensions) {
+        Vector3f p = position, d = dimensions;
+        float[] vertices = new float[] {
+                p.x,        p.y,        p.z,
+                p.x+d.x,    p.y,        p.z,
+                p.x,        p.y+d.y,    p.z,
+                p.x+d.x,    p.y+d.y,    p.z,
 
+                p.x+d.x,    p.y,        p.z+d.z,
+                p.x,        p.y,        p.z+d.z,
+                p.x+d.x,    p.y+d.y,    p.z+d.z,
+                p.x,        p.y+d.y,    p.z+d.z,
+
+                p.x,        p.y,        p.z+d.z,
+                p.x,        p.y,        p.z,
+                p.x,        p.y+d.y,    p.z+d.z,
+                p.x,        p.y+d.y,    p.z,
+
+                p.x+d.x,    p.y,        p.z,
+                p.x+d.x,    p.y,        p.z+d.z,
+                p.x+d.x,    p.y+d.y,    p.z,
+                p.x+d.x,    p.y+d.y,    p.z+d.z,
+
+                p.x,        p.y,        p.z+d.z,
+                p.x+d.x,    p.y,        p.z+d.z,
+                p.x,        p.y,        p.z,
+                p.x+d.x,    p.y,        p.z,
+
+                p.x,        p.y+d.y,    p.z,
+                p.x+d.x,    p.y+d.y,    p.z,
+                p.x,        p.y+d.y,    p.z+d.z,
+                p.x+d.x,    p.y+d.y,    p.z+d.z
+        };
+        int[] indices = new int[] {
+                0, 1, 2, 1, 3, 2,
+                4, 5, 6, 5, 7, 6,
+                8, 9, 10, 9, 11, 10,
+                12, 13, 14, 13, 15, 14,
+                16, 17, 18, 17, 19, 18,
+                20, 21, 22, 21, 23, 22
+        };
+        float[] normals = new float[] {
+                0, 0, -1,   0, 0, -1,   0, 0, -1,   0, 0, -1,
+                0, 0, 1,    0, 0, 1,    0, 0, 1,    0, 0, 1,
+                -1, 0, 0,   -1, 0, 0,   -1, 0, 0,   -1, 0, 0,
+                1, 0, 0,    1, 0, 0,    1, 0, 0,    1, 0, 0,
+                0, -1, 0,   0, -1, 0,   0, -1, 0,   0, -1, 0,
+                0, 1, 0,    0, 1, 0,    0, 1, 0,    0, 1, 0
+        };
+        return new GameObjectMesh(vertices, normals, indices);
+    }
 }

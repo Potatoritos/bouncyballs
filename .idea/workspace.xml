@@ -5,15 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
-      <change afterPath="$PROJECT_DIR$/src/graphics/BasicMesh.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/graphics/GameObjectMesh.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/graphics/RenderEntity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/shaders/fragment.fs" beforeDir="false" afterPath="$PROJECT_DIR$/assets/shaders/fragment.frag" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/shaders/vertex.vs" beforeDir="false" afterPath="$PROJECT_DIR$/assets/shaders/vertex.vert" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/shaders/fragment.frag" beforeDir="false" afterPath="$PROJECT_DIR$/assets/shaders/fragment.frag" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/algorithm/GeodesicPolyhedra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/Geometry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/Mesh.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/Mesh.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/Shader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/Shader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/util/Geometry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/Geometry.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,7 +91,7 @@
       <workItem from="1680885015007" duration="1151000" />
       <workItem from="1680887521337" duration="17424000" />
       <workItem from="1680906084832" duration="12831000" />
-      <workItem from="1680970810422" duration="12584000" />
+      <workItem from="1680970810422" duration="18450000" />
     </task>
     <servers />
   </component>

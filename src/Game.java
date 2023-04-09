@@ -6,6 +6,7 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 import static util.Geometry.generateGeodesicPolyhedronMesh;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
+import static util.Geometry.rectangularPrismMesh;
 
 public class Game {
     private boolean isRunning;
@@ -18,7 +19,9 @@ public class Game {
     private int rotation = 0;
 
     private ShaderProgram sp;
-    GameObjectMesh mesh;
+    RenderEntity sphere;
+    RenderEntity prism;
+    RenderEntity[] entities;
     private Matrix4f projectionMatrix;
     private Camera camera;
 
@@ -37,6 +40,12 @@ public class Game {
         sp.link();
         sp.createUniform("projectionMatrix");
         sp.createUniform("viewMatrix");
+        sphere = new RenderEntity(generateGeodesicPolyhedronMesh(4));
+        prism = new RenderEntity(rectangularPrismMesh(new Vector3f(-0.5f, -0.5f, -0.5f), new Vector3f(1, 1, 1)));
+        prism.getPosition().y = 1f;
+        prism.getRotation().x = (float)Math.PI/4;
+//        sphere.getPosition().y = -1f;
+        entities = new RenderEntity[] {sphere, prism};
 //        sp.createUniform("color");
 
 //        float[] positions = new float[]{
@@ -45,29 +54,29 @@ public class Game {
 //                0.5f, -0.5f, -1.05f,
 //                0.5f, 0.5f, -1.05f,
 //        };
-        float[] positions = new float[]{
-                -0.5f,  0.5f, 0.0f,
-                -0.5f, -0.5f, 0.0f,
-                0.5f, -0.5f, 0.0f,
-                0.5f,  0.5f, 0.0f,
-        };
-        float[] colors = new float[]{
-                0.5f, 0.0f, 0.0f,
-                0.0f, 0.5f, 0.0f,
-                0.0f, 0.0f, 0.5f,
-                0.0f, 0.5f, 0.5f,
-        };
-        int[] indices = new int[]{
-                0, 1, 3, 3, 1, 2,
-        };
+//        float[] positions = new float[]{
+//                -0.5f,  0.5f, 0.0f,
+//                -0.5f, -0.5f, 0.0f,
+//                0.5f, -0.5f, 0.0f,
+//                0.5f,  0.5f, 0.0f,
+//        };
+//        float[] colors = new float[]{
+//                0.5f, 0.0f, 0.0f,
+//                0.0f, 0.5f, 0.0f,
+//                0.0f, 0.0f, 0.5f,
+//                0.0f, 0.5f, 0.5f,
+//        };
+//        int[] indices = new int[]{
+//                0, 1, 3, 3, 1, 2,
+//        };
 //        mesh = new Mesh(positions, indices, colors);
 
-        mesh = generateGeodesicPolyhedronMesh(6);
+//        mesh = generateGeodesicPolyhedronMesh(5);
         projectionMatrix = new Matrix4f()
                 .perspective(fov, window.getAspectRatio(), zNear, zFar);
 
         camera = new Camera();
-        camera.getPosition().z = 3;
+        camera.getPosition().z = 4;
 
         loop();
     }
@@ -78,6 +87,9 @@ public class Game {
         }
         rotation++;
         rotation %= 360;
+
+        sphere.getRotation().x = (float)Math.toRadians(rotation);
+        prism.getRotation().y = (float)Math.toRadians(rotation);
 
 //        camera.getRotation().x = (float)Math.toRadians(rotation);
     }
@@ -92,9 +104,11 @@ public class Game {
 
         sp.bind();
         sp.setUniform("projectionMatrix", projectionMatrix);
-        sp.setUniform("viewMatrix", camera.getViewMatrix());
 //        sp.setUniform("color", new Vector3f(0.5f, 0, 0));
-        mesh.render();
+        for (RenderEntity entity : entities) {
+            sp.setUniform("viewMatrix", camera.getViewMatrix().mul(entity.getWorldMatrix()));
+            entity.getMesh().render();
+        }
         sp.unbind();
 
         glfwSwapBuffers(window.getHandle()); // swap the color buffers

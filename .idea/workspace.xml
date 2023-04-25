@@ -10,12 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
-      <change afterPath="$PROJECT_DIR$/src/graphics/VertexArrayObject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/GameObjectMesh.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/GameObjectMesh.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/Mesh.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/Mesh.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/TextureMesh.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/TextureMesh.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/VertexBufferObject.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/BasicMesh.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/BasicMesh.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -107,7 +102,7 @@
       <workItem from="1682359408503" duration="3396000" />
       <workItem from="1682365045378" duration="1835000" />
       <workItem from="1682425447670" duration="117000" />
-      <workItem from="1682425821321" duration="5349000" />
+      <workItem from="1682425821321" duration="5508000" />
     </task>
     <servers />
   </component>

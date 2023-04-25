@@ -31,7 +31,7 @@ public class Shader {
             throw new RuntimeException("Could not determine shader type");
         }
 
-        return new Shader(Util.getFileSource(path), type);
+        return new Shader(Util.getFileSource("shaders/" + path), type);
 
     }
 

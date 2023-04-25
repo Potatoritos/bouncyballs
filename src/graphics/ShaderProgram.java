@@ -56,6 +56,9 @@ public class ShaderProgram {
             glUniform3fv(uniforms.get(name), buffer);
         }
     }
+    public void setUniform(String name, int value) {
+        glUniform1i(uniforms.get(name), value);
+    }
     public void createUniform(String name) {
         int location = glGetUniformLocation(id, name);
         if (location < 0) {

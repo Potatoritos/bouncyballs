@@ -2,6 +2,9 @@ package util;
 
 import graphics.BasicMesh;
 import graphics.GameObjectMesh;
+import graphics.Texture;
+import graphics.TextureMesh;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
@@ -202,5 +205,21 @@ public class Geometry {
                 0, 1, 0,    0, 1, 0,    0, 1, 0,    0, 1, 0
         };
         return new GameObjectMesh(vertices, normals, indices);
+    }
+    public static TextureMesh texturedRectangle(Vector2f position, Vector2f dimensions, Texture texture) {
+        float[] vertices = new float[] {
+                position.x, position.y, 0,
+                position.x + dimensions.x, position.y, 0,
+                position.x, position.y + dimensions.y, 0,
+                position.x + dimensions.x, position.y + dimensions.y, 0
+        };
+        int[] indices = new int[] {0, 1, 2, 1, 3, 2};
+        float[] textureCoords = new float[] {
+                0, 0,
+                1, 0,
+                0, 1,
+                1, 1
+        };
+        return new TextureMesh(vertices, textureCoords, indices, texture);
     }
 }

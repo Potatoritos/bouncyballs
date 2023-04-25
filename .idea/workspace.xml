@@ -1,14 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="Tilt:jar" />
+    </artifacts-to-build>
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
-      <change afterPath="$PROJECT_DIR$/src/graphics/RenderEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/Tilt_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/image/astolfo_necoarc.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/image/test.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/image/test2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/shaders/color_normals.frag" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/shaders/texture.frag" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/shaders/texture.vert" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/graphics/Texture.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/graphics/TextureMesh.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/shaders/fragment.frag" beforeDir="false" afterPath="$PROJECT_DIR$/assets/shaders/fragment.frag" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/shaders/fragment.frag" beforeDir="false" afterPath="$PROJECT_DIR$/assets/shaders/v2.vert" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/shaders/vertex.vert" beforeDir="false" afterPath="$PROJECT_DIR$/assets/shaders/color_normals.vert" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/Shader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/Shader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/ShaderProgram.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/ShaderProgram.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/Window.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/Window.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/util/Geometry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/Geometry.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -51,7 +69,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
@@ -91,7 +109,16 @@
       <workItem from="1680885015007" duration="1151000" />
       <workItem from="1680887521337" duration="17424000" />
       <workItem from="1680906084832" duration="12831000" />
-      <workItem from="1680970810422" duration="18450000" />
+      <workItem from="1680970810422" duration="25939000" />
+      <workItem from="1681047847623" duration="13010000" />
+      <workItem from="1681518189441" duration="34000" />
+      <workItem from="1682348248632" duration="9881000" />
+      <workItem from="1682359300018" duration="32000" />
+      <workItem from="1682359337234" duration="34000" />
+      <workItem from="1682359377282" duration="25000" />
+      <workItem from="1682359408503" duration="3396000" />
+      <workItem from="1682365045378" duration="1835000" />
+      <workItem from="1682425447670" duration="117000" />
     </task>
     <servers />
   </component>

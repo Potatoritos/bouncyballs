@@ -39,4 +39,7 @@ public class RenderEntity {
     public Mesh getMesh() {
         return mesh;
     }
+    public void delete() {
+        mesh.delete();
+    }
 }

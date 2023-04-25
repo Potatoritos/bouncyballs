@@ -1,4 +1,5 @@
 package graphics;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.ByteBuffer;
@@ -29,9 +30,16 @@ public class Texture {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 1);
 //        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 1);
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
-    public void setEmptyImage(int width, int height, int format) {
-        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, 0);
+    public void bind() {
+        glBindTexture(GL_TEXTURE_2D, id);
+    }
+    public static void unbind() {
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+    public void setEmptyImage(int width, int height, int internalFormat, int format, int type) {
+        glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, type, 0);
     }
     public void loadImage(String path) {
         ByteBuffer image;
@@ -61,4 +69,8 @@ public class Texture {
     public int getId() {
         return id;
     }
+    public void delete() {
+        glDeleteTextures(id);
+    }
+
 }

@@ -1,13 +1,17 @@
 import graphics.*;
+import graphics.Window;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFWErrorCallback;
 
+import java.awt.*;
 import java.nio.ByteBuffer;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL30.*;
+import static org.lwjgl.opengl.GL43C.GL_MAX_FRAMEBUFFER_HEIGHT;
+import static org.lwjgl.opengl.GL43C.GL_MAX_FRAMEBUFFER_WIDTH;
 import static util.Geometry.*;
 
 public class Game {
@@ -22,6 +26,7 @@ public class Game {
 
     private ShaderProgram colorNormals;
     private ShaderProgram textureShader;
+    private ShaderProgram sobelShader;
     RenderEntity sphere;
     RenderEntity prism;
     RenderEntity[] entities;
@@ -29,8 +34,9 @@ public class Game {
     private Camera camera;
 
     private RenderEntity textureRect;
+    private RenderEntity textureRect2;
 
-    private int fbo;
+    private FrameBufferObject fbo;
     private Texture depthTexture;
     private Texture colorTexture;
 
@@ -59,8 +65,18 @@ public class Game {
         textureShader.link();
         textureShader.createUniform("projectionMatrix");
         textureShader.createUniform("viewMatrix");
+        textureShader.createUniform("textureSampler");
+
+        sobelShader = new ShaderProgram();
+        sobelShader.addShader(Shader.fromFile("sobel.frag"));
+        sobelShader.addShader(Shader.fromFile("sobel.vert"));
+        sobelShader.link();
+        sobelShader.createUniform("projectionMatrix");
+        sobelShader.createUniform("viewMatrix");
+        sobelShader.createUniform("sampler");
+
 //        textureShader.createUniform("textureSampler");
-        sphere = new RenderEntity(generateGeodesicPolyhedronMesh(4));
+        sphere = new RenderEntity(generateGeodesicPolyhedronMesh(3));
         prism = new RenderEntity(rectangularPrismMesh(new Vector3f(-0.5f, -1f, -0.5f), new Vector3f(1, 2, 1)));
         prism.getPosition().y = 1f;
         prism.getRotation().x = (float)Math.PI/4;
@@ -72,49 +88,32 @@ public class Game {
         camera = new Camera();
         camera.getPosition().z = 4;
 
-//        fbo = glGenFramebuffers();
-//         glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-//
-//        colorTextureId = glGenTextures();
-//        glBindTexture(GL_TEXTURE_2D, colorTextureId);
-//
-//        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 800, 600, 0, GL_RGB, GL_UNSIGNED_BYTE, (ByteBuffer)null);
-//
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//
-//        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTextureId, 0);
-//
-//        int x = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-//        if (x != GL_FRAMEBUFFER_COMPLETE) {
-//            System.out.println("==========");
-//            System.out.println(x);
-//        }
-
-//        fbo = glGenFramebuffers();
-
-//        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-//        depthTexture = new Texture();
-//        texture.setEmptyImage(window.getWidth(), window.getHeight(), GL_DEPTH_COMPONENT);
-//        depthTexture.setEmptyImage(window.getWidth(), window.getHeight(), GL_DEPTH_COMPONENT);
-//        colorTexture.setEmptyImage(window.getWidth(), window.getHeight(), GL_RGB);
-
-
-//        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTexture.getId(), 0);
-//        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture.getId(), 0);
-
-
-//        int x = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-//        if (x != GL_FRAMEBUFFER_COMPLETE) {
-//            System.out.println("WTF");
-//            System.out.println(x);
-//        }
         colorTexture = new Texture();
-        colorTexture.loadImage("assets/image/astolfo_necoarc.png");
+//        colorTexture.loadImage("assets/image/astolfo_necoarc.png");
+        colorTexture.setEmptyImage(window.getWidth(), window.getHeight(), GL_RGBA32F, GL_RGBA, GL_FLOAT);
+
+        depthTexture = new Texture();
+        depthTexture.setEmptyImage(window.getWidth(), window.getHeight(), GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE);
+
+        fbo = new FrameBufferObject();
+        fbo.bind();
+        fbo.attachColorTexture(colorTexture);
+        fbo.attachDepthTexture(depthTexture);
+
+        int x = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+        if (x != GL_FRAMEBUFFER_COMPLETE) {
+            System.out.println("WTF");
+            System.out.println(x);
+        }
 
         textureRect = new RenderEntity(texturedRectangle(new Vector2f(0, 0), new Vector2f(1, 1), colorTexture));
-        textureRect.getPosition().x = -2f;
-        textureRect.setScale(1.5f);
+        textureRect.getPosition().x = -2.5f;
+        textureRect.setScale(1f);
+
+        textureRect2 = new RenderEntity(texturedRectangle(new Vector2f(0, 0), new Vector2f(1, 1), depthTexture));
+        textureRect2.getPosition().x = -2.52f;
+        textureRect2.getPosition().y = -1.5f;
+        textureRect2.setScale(1f);
         loop();
     }
     private void update() {
@@ -131,9 +130,9 @@ public class Game {
         prism.getPosition().y = (float)Math.sin(Math.toRadians(rotation)*2);
 
 
-        textureRect.getRotation().x = (float)Math.toRadians(rotation);
-        textureRect.getRotation().z = (float)Math.toRadians(rotation);
-        textureRect.getPosition().y = -(float)Math.sin(Math.toRadians(rotation)*2);
+//        textureRect.getRotation().x = (float)Math.toRadians(rotation);
+//        textureRect.getRotation().z = (float)Math.toRadians(rotation);
+//        textureRect.getPosition().y = -(float)Math.sin(Math.toRadians(rotation)*2);
 
 
 //        camera.getRotation().x = (float)Math.toRadians(rotation);
@@ -143,40 +142,85 @@ public class Game {
             glViewport(0, 0, window.getWidth(), window.getHeight());
             window.setResized(false);
 
-            projectionMatrix = new Matrix4f()
+            projectionMatrix = projectionMatrix.identity()
                     .perspective(fov, window.getAspectRatio(), zNear, zFar);
+
+            FrameBufferObject.unbind();
+            colorTexture.delete();
+            depthTexture.delete();
+            fbo.delete();
+
+            colorTexture = new Texture();
+            colorTexture.bind();
+            colorTexture.setEmptyImage(window.getWidth(), window.getHeight(), GL_RGBA, GL_RGBA, GL_FLOAT);
+            depthTexture = new Texture();
+            depthTexture.bind();
+            depthTexture.setEmptyImage(window.getWidth(), window.getHeight(), GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE);
+            Texture.unbind();
+
+            fbo = new FrameBufferObject();
+            fbo.bind();
+            fbo.attachColorTexture(colorTexture);
+            fbo.attachDepthTexture(depthTexture);
+
+            int x = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+            if (x != GL_FRAMEBUFFER_COMPLETE) {
+                System.out.println("WTF");
+                System.out.println(x);
+                System.out.println(GL_MAX_FRAMEBUFFER_WIDTH);
+                System.out.println(GL_MAX_FRAMEBUFFER_HEIGHT);
+                System.out.println(window.getWidth());
+                System.out.println(window.getHeight());
+            }
+
         }
-        // Set the clear color
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 //
         colorNormals.bind();
-//        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+        fbo.bind();
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 ////        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texture.getId(), 0);
 
         colorNormals.setUniform("projectionMatrix", projectionMatrix);
 //        sp.setUniform("color", new Vector3f(0.5f, 0, 0));
-//        for (RenderEntity entity : entities) {
-//            colorNormals.setUniform("viewMatrix", camera.getViewMatrix().mul(entity.getWorldMatrix()));
-//            entity.getMesh().render();
-//        }
-
-//        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
         for (RenderEntity entity : entities) {
             colorNormals.setUniform("viewMatrix", camera.getViewMatrix().mul(entity.getWorldMatrix()));
             entity.getMesh().render();
         }
 
+        FrameBufferObject.unbind();
+
+//        for (RenderEntity entity : entities) {
+//            colorNormals.setUniform("viewMatrix", camera.getViewMatrix().mul(entity.getWorldMatrix()));
+//            entity.getMesh().render();
+//        }
+
         colorNormals.unbind();
+
+        sobelShader.bind();
+        sobelShader.setUniform("sampler", 0);
+        sobelShader.setUniform("projectionMatrix", projectionMatrix);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, colorTexture.getId());
+        for (RenderEntity entity : entities) {
+            sobelShader.setUniform("viewMatrix", camera.getViewMatrix().mul(entity.getWorldMatrix()));
+
+            entity.getMesh().render();
+        }
+
+        sobelShader.unbind();
 //
         textureShader.bind();
 
+        textureShader.setUniform("textureSampler", 0);
         textureShader.setUniform("projectionMatrix", projectionMatrix);
         textureShader.setUniform("viewMatrix", camera.getViewMatrix().mul(textureRect.getWorldMatrix()));
-//        textureShader.setUniform("textureSampler", 0);
-
         textureRect.getMesh().render();
+
+//        textureShader.setUniform("viewMatrix", camera.getViewMatrix().mul(textureRect2.getWorldMatrix()));
+//        textureRect2.getMesh().render();
 
         textureShader.unbind();
 

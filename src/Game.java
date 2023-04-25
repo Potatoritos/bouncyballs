@@ -34,11 +34,8 @@ public class Game {
     private Camera camera;
 
     private RenderEntity textureRect;
-    private RenderEntity textureRect2;
 
-    private FrameBufferObject fbo;
-    private Texture depthTexture;
-    private Texture colorTexture;
+    private EmptyFbo normalFbo;
 
     private int colorTextureId;
 
@@ -88,17 +85,8 @@ public class Game {
         camera = new Camera();
         camera.getPosition().z = 4;
 
-        colorTexture = new Texture();
-//        colorTexture.loadImage("assets/image/astolfo_necoarc.png");
-        colorTexture.setEmptyImage(window.getWidth(), window.getHeight(), GL_RGBA32F, GL_RGBA, GL_FLOAT);
 
-        depthTexture = new Texture();
-        depthTexture.setEmptyImage(window.getWidth(), window.getHeight(), GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE);
-
-        fbo = new FrameBufferObject();
-        fbo.bind();
-        fbo.attachColorTexture(colorTexture);
-        fbo.attachDepthTexture(depthTexture);
+        normalFbo = new EmptyFbo(window.getWidth(), window.getHeight());
 
         int x = glCheckFramebufferStatus(GL_FRAMEBUFFER);
         if (x != GL_FRAMEBUFFER_COMPLETE) {
@@ -106,14 +94,10 @@ public class Game {
             System.out.println(x);
         }
 
-        textureRect = new RenderEntity(texturedRectangle(new Vector2f(0, 0), new Vector2f(1, 1), colorTexture));
+        textureRect = new RenderEntity(texturedRectangle(new Vector2f(0, 0), new Vector2f(1, 1), normalFbo.getColorTexture()));
         textureRect.getPosition().x = -2.5f;
         textureRect.setScale(1f);
 
-        textureRect2 = new RenderEntity(texturedRectangle(new Vector2f(0, 0), new Vector2f(1, 1), depthTexture));
-        textureRect2.getPosition().x = -2.52f;
-        textureRect2.getPosition().y = -1.5f;
-        textureRect2.setScale(1f);
         loop();
     }
     private void update() {
@@ -145,23 +129,7 @@ public class Game {
             projectionMatrix = projectionMatrix.identity()
                     .perspective(fov, window.getAspectRatio(), zNear, zFar);
 
-            FrameBufferObject.unbind();
-            colorTexture.delete();
-            depthTexture.delete();
-            fbo.delete();
-
-            colorTexture = new Texture();
-            colorTexture.bind();
-            colorTexture.setEmptyImage(window.getWidth(), window.getHeight(), GL_RGBA, GL_RGBA, GL_FLOAT);
-            depthTexture = new Texture();
-            depthTexture.bind();
-            depthTexture.setEmptyImage(window.getWidth(), window.getHeight(), GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE);
-            Texture.unbind();
-
-            fbo = new FrameBufferObject();
-            fbo.bind();
-            fbo.attachColorTexture(colorTexture);
-            fbo.attachDepthTexture(depthTexture);
+            normalFbo.resize(window.getWidth(), window.getHeight());
 
             int x = glCheckFramebufferStatus(GL_FRAMEBUFFER);
             if (x != GL_FRAMEBUFFER_COMPLETE) {
@@ -178,7 +146,7 @@ public class Game {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 //
         colorNormals.bind();
-        fbo.bind();
+        normalFbo.bind();
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 ////        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texture.getId(), 0);
@@ -203,7 +171,7 @@ public class Game {
         sobelShader.setUniform("sampler", 0);
         sobelShader.setUniform("projectionMatrix", projectionMatrix);
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, colorTexture.getId());
+        glBindTexture(GL_TEXTURE_2D, normalFbo.getColorTexture().getId());
         for (RenderEntity entity : entities) {
             sobelShader.setUniform("viewMatrix", camera.getViewMatrix().mul(entity.getWorldMatrix()));
 

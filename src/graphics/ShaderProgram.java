@@ -2,6 +2,7 @@ package graphics;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.system.MemoryStack;
+import util.Util;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
@@ -13,14 +14,59 @@ import static org.lwjgl.opengl.GL20.*;
 public class ShaderProgram {
     private final int id;
     ArrayList<Shader> shaders;
-    private final Map<String, Integer> uniforms;
+    private final HashMap<String, Integer> uniforms;
+
     public ShaderProgram() {
         id = glCreateProgram();
         if (id == 0) {
-            throw new RuntimeException("Could not create shader!");
+            throw new RuntimeException("Could not create shader program!");
         }
         shaders = new ArrayList<>();
         uniforms = new HashMap<>();
+    }
+    public static ShaderProgram fromFile(String path) {
+        ShaderProgram program = new ShaderProgram();
+        String source = Util.getFileSource("shaders/" + path);
+
+        StringBuilder lines = new StringBuilder();
+        int shaderType = 0;
+        String[] split = source.split("\n");
+        ArrayList<String> uniformNames = new ArrayList<>();
+
+        for (int i = 0; i < split.length; i++) {
+            String line = split[i];
+
+            if (!line.startsWith("///")) {
+                lines.append(line + "\n");
+            }
+            if (line.startsWith("/// ") || i == split.length-1) {
+                if (shaderType != 0) {
+                    program.addShader(new Shader(lines.toString(), shaderType));
+                    lines.setLength(0);
+                }
+                if (i != split.length-1) {
+                    String typeName = line.substring(4);
+                    switch (typeName) {
+                        case "Vertex" -> shaderType = GL_VERTEX_SHADER;
+                        case "Fragment" -> shaderType = GL_FRAGMENT_SHADER;
+                        default -> {
+                            throw new RuntimeException(
+                                    String.format("Could not determine shader type: '%s' on line %d\n", typeName, i));
+                        }
+                    }
+                }
+            }
+            if (line.startsWith("uniform")) {
+                uniformNames.add(line.substring(line.lastIndexOf(' ')+1, line.length()-1));
+            }
+        }
+
+        program.link();
+        for (String uniformName : uniformNames) {
+            program.createUniform(uniformName);
+        }
+
+        return program;
     }
     public void addShader(Shader shader) {
         glAttachShader(id, shader.getId());

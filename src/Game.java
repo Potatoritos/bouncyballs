@@ -74,6 +74,8 @@ public class Game {
 //        sobelShader.createUniform("normalTexture");
         sobelShader.createUniform("depthTexture");
 
+        sobelShader = ShaderProgram.fromFile("sobel_filter.glsl");
+
 //        textureShader.createUniform("textureSampler");
         sphere = new RenderEntity(generateGeodesicPolyhedronMesh(3));
         sphere.getPosition().x = 1f;

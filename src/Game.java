@@ -20,7 +20,7 @@ public class Game {
 
     private float fov = (float)Math.toRadians(60);
     private float zNear = 0.01f;
-    private float zFar = 1000;
+    private float zFar = 100;
 
     private int rotation = 0;
 
@@ -70,15 +70,18 @@ public class Game {
         sobelShader.link();
         sobelShader.createUniform("projectionMatrix");
         sobelShader.createUniform("viewMatrix");
-        sobelShader.createUniform("sampler");
+//        sobelShader.createUniform("normalTexture");
+        sobelShader.createUniform("depthTexture");
 
 //        textureShader.createUniform("textureSampler");
         sphere = new RenderEntity(generateGeodesicPolyhedronMesh(3));
+        sphere.getPosition().x = 1f;
         prism = new RenderEntity(rectangularPrismMesh(new Vector3f(-0.5f, -1f, -0.5f), new Vector3f(1, 2, 1)));
         prism.getPosition().y = 1f;
         prism.getRotation().x = (float)Math.PI/4;
 //        sphere.getPosition().y = -1f;
         entities = new RenderEntity[] {sphere, prism};
+//        entities = new RenderEntity[] {prism};
         projectionMatrix = new Matrix4f()
                 .perspective(fov, window.getAspectRatio(), zNear, zFar);
 
@@ -87,12 +90,6 @@ public class Game {
 
 
         normalFbo = new EmptyFbo(window.getWidth(), window.getHeight());
-
-        int x = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-        if (x != GL_FRAMEBUFFER_COMPLETE) {
-            System.out.println("WTF");
-            System.out.println(x);
-        }
 
         textureRect = new RenderEntity(texturedRectangle(new Vector2f(0, 0), new Vector2f(1, 1), normalFbo.getColorTexture()));
         textureRect.getPosition().x = -2.5f;
@@ -112,6 +109,7 @@ public class Game {
         prism.getRotation().y = (float)Math.toRadians(rotation);
         prism.getRotation().z = (float)Math.toRadians(rotation)/2;
         prism.getPosition().y = (float)Math.sin(Math.toRadians(rotation)*2);
+        prism.getPosition().z = -10*(float)Math.sin(Math.toRadians(rotation)*2)-10;
 
 
 //        textureRect.getRotation().x = (float)Math.toRadians(rotation);
@@ -130,16 +128,6 @@ public class Game {
                     .perspective(fov, window.getAspectRatio(), zNear, zFar);
 
             normalFbo.resize(window.getWidth(), window.getHeight());
-
-            int x = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-            if (x != GL_FRAMEBUFFER_COMPLETE) {
-                System.out.println("WTF");
-                System.out.println(x);
-                System.out.println(GL_MAX_FRAMEBUFFER_WIDTH);
-                System.out.println(GL_MAX_FRAMEBUFFER_HEIGHT);
-                System.out.println(window.getWidth());
-                System.out.println(window.getHeight());
-            }
 
         }
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -168,10 +156,13 @@ public class Game {
         colorNormals.unbind();
 
         sobelShader.bind();
-        sobelShader.setUniform("sampler", 0);
+//        sobelShader.setUniform("normalTexture", 0);
+        sobelShader.setUniform("depthTexture", 1);
         sobelShader.setUniform("projectionMatrix", projectionMatrix);
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, normalFbo.getColorTexture().getId());
+        normalFbo.getColorTexture().bind();
+        glActiveTexture(GL_TEXTURE1);
+        normalFbo.getDepthTexture().bind();
         for (RenderEntity entity : entities) {
             sobelShader.setUniform("viewMatrix", camera.getViewMatrix().mul(entity.getWorldMatrix()));
 

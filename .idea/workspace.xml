@@ -10,8 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
-      <change afterPath="$PROJECT_DIR$/src/graphics/EmptyFbo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/shaders/sobel.frag" beforeDir="false" afterPath="$PROJECT_DIR$/assets/shaders/sobel.frag" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -105,7 +105,9 @@
       <workItem from="1682365045378" duration="1835000" />
       <workItem from="1682425447670" duration="117000" />
       <workItem from="1682425821321" duration="19988000" />
-      <workItem from="1682451342948" duration="1175000" />
+      <workItem from="1682451342948" duration="3578000" />
+      <workItem from="1682455777486" duration="1241000" />
+      <workItem from="1682484829707" duration="2541000" />
     </task>
     <servers />
   </component>

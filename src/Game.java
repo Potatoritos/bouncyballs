@@ -50,33 +50,10 @@ public class Game {
         }
         window = new Window();
 
-        colorNormals = new ShaderProgram();
-        colorNormals.addShader(Shader.fromFile("color_normals.frag"));
-        colorNormals.addShader(Shader.fromFile("color_normals.vert"));
-        colorNormals.link();
-        colorNormals.createUniform("projectionMatrix");
-        colorNormals.createUniform("viewMatrix");
-
-        textureShader = new ShaderProgram();
-        textureShader.addShader(Shader.fromFile("texture.frag"));
-        textureShader.addShader(Shader.fromFile("texture.vert"));
-        textureShader.link();
-        textureShader.createUniform("projectionMatrix");
-        textureShader.createUniform("viewMatrix");
-        textureShader.createUniform("textureSampler");
-
-        sobelShader = new ShaderProgram();
-        sobelShader.addShader(Shader.fromFile("sobel.frag"));
-        sobelShader.addShader(Shader.fromFile("sobel.vert"));
-        sobelShader.link();
-        sobelShader.createUniform("projectionMatrix");
-        sobelShader.createUniform("viewMatrix");
-//        sobelShader.createUniform("normalTexture");
-        sobelShader.createUniform("depthTexture");
-
+        colorNormals = ShaderProgram.fromFile("color_normals.glsl");
+        textureShader = ShaderProgram.fromFile("texture.glsl");
         sobelShader = ShaderProgram.fromFile("sobel_filter.glsl");
 
-//        textureShader.createUniform("textureSampler");
         sphere = new RenderEntity(generateGeodesicPolyhedronMesh(3));
         sphere.getPosition().x = 1f;
         prism = new RenderEntity(rectangularPrismMesh(new Vector3f(-0.5f, -1f, -0.5f), new Vector3f(1, 2, 1)));

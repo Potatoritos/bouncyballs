@@ -29,6 +29,7 @@ public class Game {
     private ShaderProgram sobelShader;
     RenderEntity sphere;
     RenderEntity prism;
+    RenderEntity prism2;
     RenderEntity[] entities;
     private Matrix4f projectionMatrix;
     private Camera camera;
@@ -79,8 +80,12 @@ public class Game {
         prism = new RenderEntity(rectangularPrismMesh(new Vector3f(-0.5f, -1f, -0.5f), new Vector3f(1, 2, 1)));
         prism.getPosition().y = 1f;
         prism.getRotation().x = (float)Math.PI/4;
+
+        prism2 = new RenderEntity(rectangularPrismMesh(new Vector3f(-0.5f, -1f, -0.5f), new Vector3f(1, 2, 1)));
+        prism2.getPosition().x = 1f;
+
 //        sphere.getPosition().y = -1f;
-        entities = new RenderEntity[] {sphere, prism};
+        entities = new RenderEntity[] {sphere, prism, prism2};
 //        entities = new RenderEntity[] {prism};
         projectionMatrix = new Matrix4f()
                 .perspective(fov, window.getAspectRatio(), zNear, zFar);
@@ -108,8 +113,13 @@ public class Game {
         sphere.getRotation().x = (float)Math.toRadians(rotation);
         prism.getRotation().y = (float)Math.toRadians(rotation);
         prism.getRotation().z = (float)Math.toRadians(rotation)/2;
-        prism.getPosition().y = (float)Math.sin(Math.toRadians(rotation)*2);
+//        prism.getPosition().y = (float)Math.sin(Math.toRadians(rotation)*2);
         prism.getPosition().z = -10*(float)Math.sin(Math.toRadians(rotation)*2)-10;
+
+
+        prism2.getRotation().y = (float)Math.toRadians(rotation);
+        prism2.getRotation().z = (float)Math.toRadians(rotation)/2;
+        prism2.getPosition().y = (float)Math.sin(Math.toRadians(rotation)*2);
 
 
 //        textureRect.getRotation().x = (float)Math.toRadians(rotation);

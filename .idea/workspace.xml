@@ -10,16 +10,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
-      <change afterPath="$PROJECT_DIR$/assets/shaders/color_normals.glsl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/shaders/texture.glsl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/shaders/light.glsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.attach_pid3864" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/shaders/color_normals.frag" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/shaders/color_normals.vert" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/shaders/sobel.frag" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/shaders/sobel.vert" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/shaders/texture.frag" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/shaders/texture.vert" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/shaders/sobel_filter.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/assets/shaders/sobel_filter.glsl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/GameObjectMesh.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/GameObjectMesh.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/util/Geometry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/Geometry.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,7 +112,9 @@
       <workItem from="1682451342948" duration="3578000" />
       <workItem from="1682455777486" duration="1241000" />
       <workItem from="1682484829707" duration="4148000" />
-      <workItem from="1682527191182" duration="6167000" />
+      <workItem from="1682527191182" duration="8427000" />
+      <workItem from="1682537046479" duration="3514000" />
+      <workItem from="1682599908812" duration="5576000" />
     </task>
     <servers />
   </component>

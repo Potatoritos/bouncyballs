@@ -7,6 +7,7 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 
 import java.awt.*;
 import java.nio.ByteBuffer;
+import java.util.Vector;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL30.*;
@@ -54,13 +55,13 @@ public class Game {
         textureShader = ShaderProgram.fromFile("texture.glsl");
         sobelShader = ShaderProgram.fromFile("sobel_filter.glsl");
 
-        sphere = new RenderEntity(generateGeodesicPolyhedronMesh(3));
+        sphere = new RenderEntity(generateGeodesicPolyhedronMesh(1, new Vector3f(0, 0, 1)));
         sphere.getPosition().x = 1f;
-        prism = new RenderEntity(rectangularPrismMesh(new Vector3f(-0.5f, -1f, -0.5f), new Vector3f(1, 2, 1)));
+        prism = new RenderEntity(rectangularPrismMesh(new Vector3f(-0.5f, -1f, -0.5f), new Vector3f(1, 2, 1), new Vector3f(1, 0, 0)));
         prism.getPosition().y = 1f;
         prism.getRotation().x = (float)Math.PI/4;
 
-        prism2 = new RenderEntity(rectangularPrismMesh(new Vector3f(-0.5f, -1f, -0.5f), new Vector3f(1, 2, 1)));
+        prism2 = new RenderEntity(rectangularPrismMesh(new Vector3f(-0.5f, -1f, -0.5f), new Vector3f(1, 2, 1), new Vector3f(0, 1, 0)));
         prism2.getPosition().x = 1f;
 
 //        sphere.getPosition().y = -1f;
@@ -119,7 +120,7 @@ public class Game {
             normalFbo.resize(window.getWidth(), window.getHeight());
 
         }
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClearColor(1.0f, 1.0f, 1.0f, 0.4f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 //
         colorNormals.bind();
@@ -154,6 +155,7 @@ public class Game {
         normalFbo.getDepthTexture().bind();
         for (RenderEntity entity : entities) {
             sobelShader.setUniform("viewMatrix", camera.getViewMatrix().mul(entity.getWorldMatrix()));
+//            sobelShader.setUniform("color", entity.getColor());
 
             entity.getMesh().render();
         }

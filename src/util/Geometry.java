@@ -1,6 +1,5 @@
 package util;
 
-import graphics.BasicMesh;
 import graphics.GameObjectMesh;
 import graphics.Texture;
 import graphics.TextureMesh;
@@ -8,12 +7,16 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 
 public class Geometry {
+    private final static Vector3f u;
+    private final static Vector3f v;
+    static {
+        u = new Vector3f();
+        v = new Vector3f();
+    }
     public static Vector3f triangleNormal(Vector3f a, Vector3f b, Vector3f c) {
-        Vector3f u = new Vector3f(), v = new Vector3f();
         b.sub(a, u);
         c.sub(a, v);
         return u.cross(v).normalize();
@@ -96,35 +99,42 @@ public class Geometry {
         }
         return faces;
     }
-    private static void addVector(float[] arr, int index, Vector3f vector) {
+    private static void insertVector(float[] arr, int index, Vector3f vector) {
         arr[3*index] = vector.x;
         arr[3*index + 1] = vector.y;
         arr[3*index + 2] = vector.z;
     }
 
-    public static GameObjectMesh generateGeodesicPolyhedronMesh(int iterations) {
+    public static GameObjectMesh generateGeodesicPolyhedronMesh(int iterations, Vector3f color) {
         ArrayList<Vector3f> faces = generateGeodesicPolyhedronFaces(iterations);
         float[] vertices = new float[3*faces.size()];
         float[] normals = new float[3*faces.size()];
+        float[] colors = new float[3*faces.size()];
         int[] indices = new int[faces.size()];
 
         for (int i = 0; i < faces.size(); i += 3) {
             Vector3f v1 = faces.get(i), v2 = faces.get(i+1), v3 = faces.get(i+2);
-            addVector(vertices, i, v1);
-            addVector(vertices, i+1, v2);
-            addVector(vertices, i+2, v3);
+            insertVector(vertices, i, v1);
+            insertVector(vertices, i+1, v2);
+            insertVector(vertices, i+2, v3);
 
             Vector3f normal = triangleNormal(v1, v2, v3);
-            addVector(normals, i, normal);
-            addVector(normals, i+1, normal);
-            addVector(normals, i+2, normal);
+            insertVector(normals, i, normal);
+            insertVector(normals, i+1, normal);
+            insertVector(normals, i+2, normal);
 
             indices[i] = i;
             indices[i+1] = i+1;
             indices[i+2] = i+2;
         }
 
-        return new GameObjectMesh(vertices, normals, indices);
+//        computeFaceNormals(normals, vertices, indices);
+
+        for (int i = 0; i < faces.size(); i++) {
+            insertVector(colors, i, color);
+        }
+
+        return new GameObjectMesh(vertices, normals, colors, indices);
     }
 
 //    public static Mesh generateIcosphereBasicMesh() {
@@ -155,7 +165,7 @@ public class Geometry {
 //
 //        return new BasicMesh(vertices, indices);
 //    }
-    public static GameObjectMesh rectangularPrismMesh(Vector3f position, Vector3f dimensions) {
+    public static GameObjectMesh rectangularPrismMesh(Vector3f position, Vector3f dimensions, Vector3f color) {
         Vector3f p = position, d = dimensions;
         float[] vertices = new float[] {
                 p.x,        p.y,        p.z,
@@ -204,7 +214,13 @@ public class Geometry {
                 0, -1, 0,   0, -1, 0,   0, -1, 0,   0, -1, 0,
                 0, 1, 0,    0, 1, 0,    0, 1, 0,    0, 1, 0
         };
-        return new GameObjectMesh(vertices, normals, indices);
+//        float[] normals = new float[3*indices.length];
+//        computeFaceNormals(normals, vertices, indices);
+        float[] colors = new float[3*indices.length];
+        for (int i = 0; i < indices.length; i++) {
+            insertVector(colors, i, color);
+        }
+        return new GameObjectMesh(vertices, normals, colors, indices);
     }
     public static TextureMesh texturedRectangle(Vector2f position, Vector2f dimensions, Texture texture) {
         float[] vertices = new float[] {
@@ -221,5 +237,19 @@ public class Geometry {
                 1, 1
         };
         return new TextureMesh(vertices, textureCoords, indices, texture);
+    }
+
+    // Wrong and I don't know why
+    public static void computeFaceNormals(float[] normals, float[] vertices, int[] indices) {
+        Vector3f a = new Vector3f(), b = new Vector3f(), c = new Vector3f();
+        for (int i = 0; i < indices.length; i += 3) {
+            a.set(vertices[3*indices[i]], vertices[3*indices[i]+1], vertices[3*indices[i+2]+2]);
+            b.set(vertices[3*indices[i+1]], vertices[3*indices[i+1]+1], vertices[3*indices[i+1]+2]);
+            c.set(vertices[3*indices[i+2]], vertices[3*indices[i+2]+1], vertices[3*indices[i+2]+2]);
+            Vector3f normal = triangleNormal(a, b, c);
+            normals[3*indices[i]] = normals[3*indices[i+1]] = normals[3*indices[i+2]] = normal.x;
+            normals[3*indices[i]+1] = normals[3*indices[i+1]+1] = normals[3*indices[i+2]+1] = normal.y;
+            normals[3*indices[i]+2] = normals[3*indices[i+1]+2] = normals[3*indices[i+2]+2] = normal.z;
+        }
     }
 }

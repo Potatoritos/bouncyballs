@@ -28,6 +28,7 @@ public class Game {
     private ShaderProgram colorNormals;
     private ShaderProgram textureShader;
     private ShaderProgram sobelShader;
+    private ShaderProgram lightShader;
     RenderEntity sphere;
     RenderEntity prism;
     RenderEntity prism2;
@@ -54,8 +55,9 @@ public class Game {
         colorNormals = ShaderProgram.fromFile("color_normals.glsl");
         textureShader = ShaderProgram.fromFile("texture.glsl");
         sobelShader = ShaderProgram.fromFile("sobel_filter.glsl");
+        lightShader = ShaderProgram.fromFile("light.glsl");
 
-        sphere = new RenderEntity(generateGeodesicPolyhedronMesh(1, new Vector3f(0, 0, 1)));
+        sphere = new RenderEntity(generateGeodesicPolyhedronMesh(3, new Vector3f(0, 0, 1)));
         sphere.getPosition().x = 1f;
         prism = new RenderEntity(rectangularPrismMesh(new Vector3f(-0.5f, -1f, -0.5f), new Vector3f(1, 2, 1), new Vector3f(1, 0, 0)));
         prism.getPosition().y = 1f;
@@ -145,16 +147,22 @@ public class Game {
 
         colorNormals.unbind();
 
-        sobelShader.bind();
+//        sobelShader.bind();
 //        sobelShader.setUniform("normalTexture", 0);
-        sobelShader.setUniform("depthTexture", 1);
-        sobelShader.setUniform("projectionMatrix", projectionMatrix);
-        glActiveTexture(GL_TEXTURE0);
-        normalFbo.getColorTexture().bind();
-        glActiveTexture(GL_TEXTURE1);
-        normalFbo.getDepthTexture().bind();
+//        sobelShader.setUniform("depthTexture", 1);
+//        sobelShader.setUniform("projectionMatrix", projectionMatrix);
+
+        lightShader.bind();
+//        sobelShader.setUniform("normalTexture", 0);
+//        sobelShader.setUniform("depthTexture", 1);
+        lightShader.setUniform("projectionMatrix", projectionMatrix);
+
+//        glActiveTexture(GL_TEXTURE0);
+//        normalFbo.getColorTexture().bind();
+//        glActiveTexture(GL_TEXTURE1);
+//        normalFbo.getDepthTexture().bind();
         for (RenderEntity entity : entities) {
-            sobelShader.setUniform("viewMatrix", camera.getViewMatrix().mul(entity.getWorldMatrix()));
+            lightShader.setUniform("viewMatrix", camera.getViewMatrix().mul(entity.getWorldMatrix()));
 //            sobelShader.setUniform("color", entity.getColor());
 
             entity.getMesh().render();

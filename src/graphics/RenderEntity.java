@@ -36,6 +36,16 @@ public class RenderEntity {
                 .rotateZ(rotation.z)
                 .scale(scale);
     }
+    public Matrix4f getWorldMatrix(float globalRotationX, float globalRotationY) {
+        return worldMatrix.identity()
+                .rotateX(globalRotationX)
+                .rotateY(globalRotationY)
+                .translate(position)
+                .rotateX(rotation.x)
+                .rotateY(rotation.y)
+                .rotateZ(rotation.z)
+                .scale(scale);
+    }
     public Mesh getMesh() {
         return mesh;
     }

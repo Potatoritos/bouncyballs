@@ -10,14 +10,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
-      <change afterPath="$PROJECT_DIR$/assets/shaders/outline.glsl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/shaders/shadows.glsl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/graphics/DepthMapFbo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/shaders/sobel_filter.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/assets/shaders/sobel_filter.glsl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/ShaderProgram.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/ShaderProgram.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/util/Geometry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/Geometry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/RenderEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/RenderEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/Window.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/Window.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/util/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/Util.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,7 +116,7 @@
       <workItem from="1682722729308" duration="259000" />
       <workItem from="1682944139848" duration="7026000" />
       <workItem from="1683136520794" duration="3894000" />
-      <workItem from="1683204229902" duration="7456000" />
+      <workItem from="1683204229902" duration="9959000" />
     </task>
     <servers />
   </component>

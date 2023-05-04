@@ -19,6 +19,8 @@ public class Window {
 
     private int width;
     private int height;
+    private double mouseX;
+    private double mouseY;
     private boolean resized;
     public Window() {
         width = 600;
@@ -76,6 +78,11 @@ public class Window {
             this.height = height;
             this.resized = true;
         });
+
+        glfwSetCursorPosCallback(handle, (window, x, y) -> {
+            mouseX = x;
+            mouseY = y;
+        });
     }
     public boolean shouldClose() {
         return glfwWindowShouldClose(handle);
@@ -102,6 +109,12 @@ public class Window {
     }
     public int getHeight() {
         return height;
+    }
+    public double getMouseX() {
+        return mouseX;
+    }
+    public double getMouseY() {
+        return mouseY;
     }
     public float getAspectRatio() {
         return (float)width / height;

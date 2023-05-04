@@ -18,4 +18,8 @@ public class Util {
     public static boolean withinEpsilon(float a, float b) {
         return Math.abs(a - b) <= Math.max(Math.abs(a), Math.abs(b)) * EPSILON;
     }
+
+    public static double cutMaxMin(double a, double min, double max) {
+        return Math.max(Math.min(a, max), min);
+    }
 }

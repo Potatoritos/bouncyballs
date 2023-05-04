@@ -59,14 +59,15 @@ float linearizeDepth(float depth) {
 }
 void main() {
     mat3 r, g, b, depth;
+    int size = 10;
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
-            vec3 normalSample = texelFetch(normalTexture, ivec2(gl_FragCoord) + 5*ivec2(i-1,j-1), 0).rgb;
+            vec3 normalSample = texelFetch(normalTexture, ivec2(gl_FragCoord) + size*ivec2(i-1,j-1), 0).rgb;
             r[i][j] = normalSample.r;
             g[i][j] = normalSample.g;
             b[i][j] = normalSample.b;
 
-            float depthSample = texelFetch(depthTexture, ivec2(gl_FragCoord) + 5*ivec2(i-1,j-1), 0).r;
+            float depthSample = texelFetch(depthTexture, ivec2(gl_FragCoord) + size*ivec2(i-1,j-1), 0).r;
             depth[i][j] = (linearizeDepth(depthSample) - near) / (far - near);
         }
     }
@@ -76,8 +77,8 @@ void main() {
 
 //    vec3 c1 = color - gradientDepth * 0.8;
 //    vec3 c2 = color - gradientNormal * 0.2;
-    if (gradientDepth > 0.2 || gradientNormal > 0.7) {
-        fragColor = vec4(color*0.4, 1);
+    if (gradientDepth > 1 || gradientNormal > 0.7) {
+        fragColor = vec4(0, 0, 0, 1);
 //        if (length(c1) < length(c2)) {
 //            fragColor = vec4(c1, 1);
 //        } else {

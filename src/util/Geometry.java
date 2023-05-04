@@ -119,6 +119,7 @@ public class Geometry {
             insertVector(vertices, i+2, v3);
 
             Vector3f normal = triangleNormal(v1, v2, v3);
+//            Vector3f normal = new Vector3f(0, 0, 0);
             insertVector(normals, i, normal);
             insertVector(normals, i+1, normal);
             insertVector(normals, i+2, normal);
@@ -167,6 +168,9 @@ public class Geometry {
 //    }
     public static GameObjectMesh rectangularPrismMesh(Vector3f position, Vector3f dimensions, Vector3f color) {
         Vector3f p = position, d = dimensions;
+        Vector3f center = new Vector3f(p.x+d.x/2, p.y+d.y/2, p.z+d.z/2);
+//        center.set(position);
+//        p.half(d, center);
         float[] vertices = new float[] {
                 p.x,        p.y,        p.z,
                 p.x+d.x,    p.y,        p.z,
@@ -206,18 +210,32 @@ public class Geometry {
                 16, 17, 18, 17, 19, 18,
                 20, 21, 22, 21, 23, 22
         };
-        float[] normals = new float[] {
-                0, 0, -1,   0, 0, -1,   0, 0, -1,   0, 0, -1,
-                0, 0, 1,    0, 0, 1,    0, 0, 1,    0, 0, 1,
-                -1, 0, 0,   -1, 0, 0,   -1, 0, 0,   -1, 0, 0,
-                1, 0, 0,    1, 0, 0,    1, 0, 0,    1, 0, 0,
-                0, -1, 0,   0, -1, 0,   0, -1, 0,   0, -1, 0,
-                0, 1, 0,    0, 1, 0,    0, 1, 0,    0, 1, 0
-        };
+        float[] normals = new float[vertices.length];
+        for (int i = 0; i < vertices.length/3; i++) {
+            u.set(vertices[3*i], vertices[3*i+1], vertices[3*i+2]).sub(center).normalize();
+            insertVector(normals, i, u);
+        }
+
+//        float[] normals = new float[] {
+//                0, 0, -1,   0, 0, -1,   0, 0, -1,   0, 0, -1,
+//                0, 0, 1,    0, 0, 1,    0, 0, 1,    0, 0, 1,
+//                -1, 0, 0,   -1, 0, 0,   -1, 0, 0,   -1, 0, 0,
+//                1, 0, 0,    1, 0, 0,    1, 0, 0,    1, 0, 0,
+//                0, -1, 0,   0, -1, 0,   0, -1, 0,   0, -1, 0,
+//                0, 1, 0,    0, 1, 0,    0, 1, 0,    0, 1, 0
+//        };
+//        float[] normals = new float[] {
+//                0, 0, 0,   0, 0, 0,   0, 0, 0,   0, 0, 0,
+//                0, 0, 0,    0, 0, 0,    0, 0, 0,    0, 0, 0,
+//                0, 0, 0,   0, 0, 0,   0, 0, 0,   0, 0, 0,
+//                0, 0, 0,    0, 0, 0,    0, 0, 0,    0, 0, 0,
+//                0, 0, 0,   0, 0, 0,   0, 0, 0,   0, 0, 0,
+//                0, 0, 0,    0, 0, 0,    0, 0, 0,    0, 0, 0
+//        };
 //        float[] normals = new float[3*indices.length];
 //        computeFaceNormals(normals, vertices, indices);
-        float[] colors = new float[3*indices.length];
-        for (int i = 0; i < indices.length; i++) {
+        float[] colors = new float[vertices.length];
+        for (int i = 0; i < vertices.length/3; i++) {
             insertVector(colors, i, color);
         }
         return new GameObjectMesh(vertices, normals, colors, indices);

@@ -1,3 +1,5 @@
+package game;
+
 import graphics.*;
 import graphics.Window;
 import org.joml.Matrix4f;
@@ -5,10 +7,6 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import util.Util;
-
-import java.awt.*;
-import java.nio.ByteBuffer;
-import java.util.Vector;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL30.*;
@@ -44,9 +42,14 @@ public class Game {
 
     private int colorTextureId;
 
-    private float rotationX;
-    private float rotationY;
+    private double rotationX;
+    private double rotationY;
     private float expandFactor;
+
+    private double velX;
+    private double velY;
+
+    private LevelScene levelScene;
 
     public Game() {
         isRunning = true;
@@ -64,32 +67,36 @@ public class Game {
         lightShader = ShaderProgram.fromFile("light.glsl");
         outlineShader = ShaderProgram.fromFile("outline.glsl");
 
-        sphere = new RenderEntity(generateGeodesicPolyhedronMesh(3, new Vector3f(0, 0, 1)));
+        sphere = new RenderEntity(generateGeodesicPolyhedronMesh(2, new Vector3f(0, 0, 1)));
         sphere.getPosition().x = 1f;
-        prism = new RenderEntity(rectangularPrismMesh(new Vector3f(-0.5f, -0.5f, -0.5f), new Vector3f(1, 1, 1), new Vector3f(1, 0, 0)));
+        sphere.getPosition().z = 0.5f;
+        prism = new RenderEntity(rectangularPrismMesh(new Vector3f(-0.5f, -4f, -0.5f), new Vector3f(1, 1, 1), new Vector3f(1, 0, 0)));
         prism.getPosition().x = -1f;
-//        prism.getPosition().z = -3f;
+        prism.getPosition().z = 0.5f;
 //        prism.getRotation().x = (float)Math.PI/4;
 //        prism.getRotation().y = (float)Math.toRadians(60)/2;
 
-        prism2 = new RenderEntity(rectangularPrismMesh(new Vector3f(-0.5f, -1f, -0.5f), new Vector3f(1, 2, 1), new Vector3f(0, 1, 0)));
-        prism2.getPosition().x = 1f;
-        prism2.getPosition().z = -2f;
+        prism2 = new RenderEntity(rectangularPrismMesh(new Vector3f(-4f, -4f, -0.5f), new Vector3f(8, 8, 1), new Vector3f(0, 1, 0)));
+//        prism2.getPosition().x = 1f;
+        prism2.getPosition().z = -0.5f;
 
 //        sphere.getPosition().y = -1f;
 //        entities = new RenderEntity[] {sphere, prism, prism2};
-        entities = new RenderEntity[] {prism, prism2};
+        entities = new RenderEntity[] {prism, prism2, sphere};
         projectionMatrix = new Matrix4f()
                 .perspective(fov, window.getAspectRatio(), zNear, zFar);
 
         camera = new Camera();
-        camera.getPosition().z = 8;
+        camera.getPosition().z = 20;
 
         normalFbo = new EmptyFbo(window.getWidth(), window.getHeight());
 
         textureRect = new RenderEntity(texturedRectangle(new Vector2f(0, 0), new Vector2f(1, 1), normalFbo.getColorTexture()));
         textureRect.getPosition().x = -2.5f;
-        textureRect.setScale(1f);
+//        textureRect.setScale(1f);
+
+        levelScene = new LevelScene();
+        levelScene.loadLevel(Level.fromFile("level0.txt"));
 
         loop();
     }
@@ -113,8 +120,25 @@ public class Game {
         double mouseX = (window.getMouseX() - (window.getWidth() - minWindowDimension)/2.0)/minWindowDimension;
         double mouseY = (window.getMouseY() - (window.getHeight() - minWindowDimension)/2.0)/minWindowDimension;
 
-        rotationX = (float)((Util.cutMaxMin(mouseY, 0, 1)-0.5) * Math.PI / 4);
-        rotationY = (float)((Util.cutMaxMin(mouseX, 0, 1)-0.5) * Math.PI / 4);
+        rotationX = (Util.cutMaxMin(mouseY, 0, 1)-0.5) * Math.PI / 3;
+        rotationY = (Util.cutMaxMin(mouseX, 0, 1)-0.5) * Math.PI / 3;
+
+        velX += Math.sin(rotationY)*0.02;
+        velY += -Math.sin(rotationX)*0.02;
+
+        velX = Util.cutMaxMin(velX, -0.2, 0.2);
+        velY = Util.cutMaxMin(velY, -0.2, 0.2);
+
+//        System.out.printf("a %f, %f\n", velX, velY);
+
+
+        sphere.getPosition().x += velX;
+        sphere.getPosition().y += velY;
+
+        sphere.getPosition().x = Util.cutMaxMin(sphere.getPosition().x, -5, 5);
+        sphere.getPosition().y = Util.cutMaxMin(sphere.getPosition().y, -5, 5);
+
+//        System.out.printf("a %f, %f\n", Math.toDegrees(rotationX), Math.toDegrees(rotationY));
     }
     private void render() {
         if (window.isResized()) {
@@ -126,13 +150,20 @@ public class Game {
 
             normalFbo.resize(window.getWidth(), window.getHeight());
 
+            levelScene.onWindowResize(window.getWidth(), window.getHeight());
+
         }
         FrameBufferObject.unbind();
+        /*
         glClearColor(1.0f, 1.0f, 1.0f, 1f);
         glEnable(GL_STENCIL_TEST);
         glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
         glStencilMask(0xFF);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); // clear the framebuffer
+        */
+
+
+
 //
 //        colorNormals.bind();
 //        normalFbo.bind();
@@ -171,13 +202,14 @@ public class Game {
 //        glActiveTexture(GL_TEXTURE1);
 //        normalFbo.getDepthTexture().bind();
 
+        /*
         glStencilFunc(GL_ALWAYS, 1, 0xFF);
         glStencilMask(0xFF);
 
         colorNormals.bind();
         colorNormals.setUniform("projectionMatrix", projectionMatrix);
         for (RenderEntity entity : entities) {
-            colorNormals.setUniform("viewMatrix", camera.getViewMatrix().mul(entity.getWorldMatrix(rotationX, rotationY)));
+            colorNormals.setUniform("viewMatrix", camera.getViewMatrix().mul(entity.getWorldMatrix((float)rotationX, (float)rotationY)));
             entity.getMesh().render();
         }
         colorNormals.unbind();
@@ -190,7 +222,7 @@ public class Game {
         outlineShader.setUniform("projectionMatrix", projectionMatrix);
         for (RenderEntity entity : entities) {
             outlineShader.setUniform("expand", expandFactor);
-            outlineShader.setUniform("viewMatrix", camera.getViewMatrix().mul(entity.getWorldMatrix(rotationX, rotationY)));
+            outlineShader.setUniform("viewMatrix", camera.getViewMatrix().mul(entity.getWorldMatrix((float)rotationX, (float)rotationY)));
             entity.getMesh().render();
         }
 //        glEnable(GL_DEPTH_TEST);
@@ -209,6 +241,10 @@ public class Game {
 //        textureRect2.getMesh().render();
 
 //        textureShader.unbind();
+
+         */
+
+        levelScene.render();
 
         glfwSwapBuffers(window.getHandle()); // swap the color buffers
     }

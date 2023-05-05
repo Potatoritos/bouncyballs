@@ -2,6 +2,7 @@ package graphics;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.system.MemoryStack;
+import org.lwjgl.system.MemoryUtil;
 import util.Util;
 
 import java.nio.FloatBuffer;
@@ -57,7 +58,11 @@ public class ShaderProgram {
                 }
             }
             if (line.startsWith("uniform")) {
-                uniformNames.add(line.substring(line.lastIndexOf(' ')+1, line.length()-1));
+                int bracket = line.lastIndexOf('[');
+                uniformNames.add(line.substring(
+                        line.lastIndexOf(' ') + 1,
+                        bracket == -1 ? line.length()-1 : bracket)
+                );
             }
         }
 
@@ -87,6 +92,18 @@ public class ShaderProgram {
         if (glGetProgrami(id, GL_VALIDATE_STATUS) == 0) {
             System.err.println("Warning validating shader: " + glGetProgramInfoLog(id, 1024));
         }
+    }
+    public void setUniform(String name, FloatBuffer buffer) {
+        glUniformMatrix4fv(uniforms.get(name), false, buffer);
+    }
+    public void setUniform(String name, ArrayList<Matrix4f> values) {
+        FloatBuffer buffer = MemoryUtil.memAllocFloat(16*values.size());
+        for (int i = 0; i < values.size(); i++) {
+            values.get(i).get(i*16, buffer);
+        }
+        buffer.flip();
+        glUniformMatrix4fv(uniforms.get(name), false, buffer);
+        MemoryUtil.memFree(buffer);
     }
     public void setUniform(String name, Matrix4f value) {
         try (MemoryStack stack = MemoryStack.stackPush()) {
@@ -123,6 +140,9 @@ public class ShaderProgram {
     }
     public void delete() {
         unbind();
+        for (Shader shader : shaders) {
+            shader.delete();
+        }
         glDeleteProgram(id);
     }
 }

@@ -10,10 +10,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
+      <change afterPath="$PROJECT_DIR$/assets/levels/level0.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/shaders/color_normals_instanced.glsl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/shaders/outline_instanced.glsl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/Ball.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/BlockTile.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/Level.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/LevelScene.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/Scene.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/Tile.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/TileMap.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/image/astolfo_necoarc.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/astolfo_necoarc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/image/test.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/test.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/image/test2.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/images/test2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/shaders/outline.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/assets/shaders/outline.glsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/LICENSE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HelloWorld.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/Mesh.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/Mesh.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/graphics/RenderEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/RenderEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/Window.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/Window.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/ShaderProgram.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/ShaderProgram.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/util/Geometry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/Geometry.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/util/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/Util.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -24,8 +43,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="GLSL Shader" />
+        <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -65,6 +85,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/assets/levels" />
       <recent name="$PROJECT_DIR$/assets/shader" />
     </key>
   </component>
@@ -116,7 +137,10 @@
       <workItem from="1682722729308" duration="259000" />
       <workItem from="1682944139848" duration="7026000" />
       <workItem from="1683136520794" duration="3894000" />
-      <workItem from="1683204229902" duration="9959000" />
+      <workItem from="1683204229902" duration="18591000" />
+      <workItem from="1683232707955" duration="1021000" />
+      <workItem from="1683236107324" duration="12584000" />
+      <workItem from="1683290319529" duration="20650000" />
     </task>
     <servers />
   </component>

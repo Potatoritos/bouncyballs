@@ -22,4 +22,7 @@ public class Util {
     public static double cutMaxMin(double a, double min, double max) {
         return Math.max(Math.min(a, max), min);
     }
+    public static float cutMaxMin(float a, float min, float max) {
+        return Math.max(Math.min(a, max), min);
+    }
 }

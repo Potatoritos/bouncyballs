@@ -118,11 +118,12 @@ public class Geometry {
             insertVector(vertices, i+1, v2);
             insertVector(vertices, i+2, v3);
 
-            Vector3f normal = triangleNormal(v1, v2, v3);
+//            Vector3f normal = triangleNormal(v1, v2, v3);
 //            Vector3f normal = new Vector3f(0, 0, 0);
-            insertVector(normals, i, normal);
-            insertVector(normals, i+1, normal);
-            insertVector(normals, i+2, normal);
+
+            insertVector(normals, i, v1);
+            insertVector(normals, i+1, v2);
+            insertVector(normals, i+2, v3);
 
             indices[i] = i;
             indices[i+1] = i+1;

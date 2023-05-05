@@ -50,6 +50,7 @@ public class Game {
     private double velY;
 
     private LevelScene levelScene;
+    private InputMap inputMap;
 
     public Game() {
         isRunning = true;
@@ -97,6 +98,7 @@ public class Game {
 
         levelScene = new LevelScene();
         levelScene.loadLevel(Level.fromFile("level0.txt"));
+        inputMap = new InputMap();
 
         loop();
     }
@@ -119,6 +121,9 @@ public class Game {
         int minWindowDimension = Math.min(window.getHeight(), window.getWidth());
         double mouseX = (window.getMouseX() - (window.getWidth() - minWindowDimension)/2.0)/minWindowDimension;
         double mouseY = (window.getMouseY() - (window.getHeight() - minWindowDimension)/2.0)/minWindowDimension;
+        inputMap.getMousePosition().set(mouseX, mouseY);
+
+        levelScene.update(inputMap);
 
         rotationX = (Util.cutMaxMin(mouseY, 0, 1)-0.5) * Math.PI / 3;
         rotationY = (Util.cutMaxMin(mouseX, 0, 1)-0.5) * Math.PI / 3;
@@ -150,7 +155,7 @@ public class Game {
 
             normalFbo.resize(window.getWidth(), window.getHeight());
 
-            levelScene.onWindowResize(window.getWidth(), window.getHeight());
+            levelScene.handleWindowResize(window.getWidth(), window.getHeight());
 
         }
         FrameBufferObject.unbind();

@@ -16,10 +16,10 @@ public abstract class Scene {
         camera = new Camera();
         projectionMatrix = new Matrix4f();
     }
-    public void onWindowResize(int width, int height) {
+    public void handleWindowResize(int width, int height) {
         projectionMatrix.identity().perspective(fov, (float)width/height, zNear, zFar);
     }
-    public abstract void update();
+    public abstract void update(InputMap inputMap);
     public abstract void render();
     public abstract void delete();
 }

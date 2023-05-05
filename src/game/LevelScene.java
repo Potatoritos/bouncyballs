@@ -6,6 +6,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.system.MemoryUtil;
+import util.Util;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
@@ -55,8 +56,9 @@ public class LevelScene extends Scene {
 
         camera.getPosition().z = 6;
     }
-    public void update() {
-
+    public void update(InputMap input) {
+        rotation.x = (float)((Util.cutMaxMin(input.getMousePosition().y, 0, 1)-0.5) * Math.PI / 3);
+        rotation.y = (float)((Util.cutMaxMin(input.getMousePosition().x, 0, 1)-0.5) * Math.PI / 3);
     }
     private void setViewMatrices(ShaderProgram shader, ArrayList<BlockTile> tiles) {
         FloatBuffer buffer = MemoryUtil.memAllocFloat(16*tiles.size());
@@ -75,8 +77,9 @@ public class LevelScene extends Scene {
         glStencilMask(0xFF);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-        colorNormalsInstanced.bind();
         glStencilFunc(GL_ALWAYS, 1, 0xFF);
+        glStencilMask(0xFF); //
+        colorNormalsInstanced.bind();
         colorNormalsInstanced.setUniform("projectionMatrix", projectionMatrix);
 
         setViewMatrices(colorNormalsInstanced, floorTiles);
@@ -89,6 +92,25 @@ public class LevelScene extends Scene {
         wallYMesh.renderInstanced(wallYTiles.size());
 
         colorNormalsInstanced.unbind();
+
+        glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+        glStencilMask(0x00);
+
+        outlineInstanced.bind();
+        outlineInstanced.setUniform("projectionMatrix", projectionMatrix);
+        outlineInstanced.setUniform("expand", 0.015f);
+
+        setViewMatrices(outlineInstanced, floorTiles);
+        floorMesh.renderInstanced(floorTiles.size());
+
+        setViewMatrices(outlineInstanced, wallXTiles);
+        wallXMesh.renderInstanced(wallXTiles.size());
+
+        setViewMatrices(outlineInstanced, wallYTiles);
+        wallYMesh.renderInstanced(wallYTiles.size());
+
+        outlineInstanced.unbind();
+
         glDisable(GL_STENCIL_TEST);
     }
     public void loadLevel(Level level) {
@@ -102,7 +124,7 @@ public class LevelScene extends Scene {
             for (int j = 0; j < level.getColumns(); j++) {
                 if (level.getFloorState(i, j)) {
                     BlockTile tile = new BlockTile(
-                            new Vector3f(level.getPosX(j), level.getPosY(i), -0.25f),
+                            new Vector3f(level.getPosX(j), level.getPosY(i), 0f),
                             new Vector3f(1, 1, 0.25f)
                     );
                     floorTiles.add(tile);
@@ -111,7 +133,7 @@ public class LevelScene extends Scene {
             for (int j = 0; j < level.getColumns()+1; j++) {
                 if (level.getWallXState(i, j)) {
                     BlockTile tile = new BlockTile(
-                            new Vector3f(level.getPosX(j)-0.05f, level.getPosY(i), 0),
+                            new Vector3f(level.getPosX(j), level.getPosY(i), 0),
                             new Vector3f(0.1f, 1, 0.5f)
                     );
                     wallXTiles.add(tile);
@@ -122,7 +144,7 @@ public class LevelScene extends Scene {
             for (int j = 0; j < level.getColumns(); j++) {
                 if (level.getWallYState(i, j)) {
                     BlockTile tile = new BlockTile(
-                            new Vector3f(level.getPosX(j), level.getPosY(i) - 0.05f, 0),
+                            new Vector3f(level.getPosX(j), level.getPosY(i), 0),
                             new Vector3f(1, 0.1f, 0.5f)
                     );
                     wallYTiles.add(tile);

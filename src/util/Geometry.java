@@ -8,6 +8,8 @@ import org.joml.Vector3f;
 
 import java.util.ArrayList;
 
+import static java.lang.Math.sqrt;
+
 
 public class Geometry {
     private final static Vector3f u;
@@ -29,11 +31,11 @@ public class Geometry {
     public static ArrayList<Vector3f> generateIcosahedronFaces() {
         ArrayList<Vector3f> faces = new ArrayList<>(60);
 
-        float x = 1/(float)Math.sqrt(5);
+        float x = 1/(float) sqrt(5);
         float y1 = (1-x)/2;
         float y2 = (1+x)/2;
-        float z1 = (float)Math.sqrt(y1);
-        float z2 = (float)Math.sqrt(y2);
+        float z1 = (float) sqrt(y1);
+        float z2 = (float) sqrt(y2);
 
         Vector3f top = new Vector3f(1, 0, 0);
         Vector3f bottom = new Vector3f(-1, 0, 0);
@@ -203,6 +205,15 @@ public class Geometry {
                 p.x,        p.y+d.y,    p.z+d.z,
                 p.x+d.x,    p.y+d.y,    p.z+d.z
         };
+        float l = (float)sqrt(1f/3);
+        float[] normals = new float[] {
+                -l, -l, -l,   l, -l, -l,   -l, l, -l,   l, l, -l,
+                l, -l, l,    -l, -l, l,    l, l, l,    -l, l, l,
+                -l, -l, l,   -l, -l, -l,   -l, l, l,   -l, l, -l,
+                l, -l, -l,    l, -l, l,    l, l, -l,    l, l, l,
+                -l, -l, l,   l, -l, l,   -l, -l, -l,   l, -l, -l,
+                -l, l, -l,    l, l, -l,    -l, l, l,    l, l, l
+        };
         int[] indices = new int[] {
                 0, 1, 2, 1, 3, 2,
                 4, 5, 6, 5, 7, 6,
@@ -211,11 +222,11 @@ public class Geometry {
                 16, 17, 18, 17, 19, 18,
                 20, 21, 22, 21, 23, 22
         };
-        float[] normals = new float[vertices.length];
-        for (int i = 0; i < vertices.length/3; i++) {
-            u.set(vertices[3*i], vertices[3*i+1], vertices[3*i+2]).sub(center).normalize();
-            insertVector(normals, i, u);
-        }
+//        float[] normals = new  float[vertices.length];
+//        for (int i = 0; i < vertices.length/3; i++) {
+//            u.set(vertices[3*i], vertices[3*i+1], vertices[3*i+2]).sub(center).normalize();
+//            insertVector(normals, i, u);
+//        }
 
 //        float[] normals = new float[] {
 //                0, 0, -1,   0, 0, -1,   0, 0, -1,   0, 0, -1,

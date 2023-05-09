@@ -1,25 +1,22 @@
 package game;
 
-import graphics.Camera;
-import org.joml.Matrix4f;
+import graphics.PerspectiveCamera;
 
 public abstract class Scene {
-    protected float fov;
-    protected float zNear;
-    protected float zFar;
-    protected Camera camera;
-    protected final Matrix4f projectionMatrix;
+    protected PerspectiveCamera camera;
     public Scene() {
-        fov = (float)Math.PI/3;
-        zNear = 0.01f;
-        zFar = 100;
-        camera = new Camera();
-        projectionMatrix = new Matrix4f();
+        camera = new PerspectiveCamera();
+        camera.setFov((float)Math.PI/3);
+        camera.setZNear(0.01f);
+        camera.setZFar(100f);
+        camera.setAspectRatio(16f/9);
+        camera.updateProjectionMatrix();
     }
     public void handleWindowResize(int width, int height) {
-        projectionMatrix.identity().perspective(fov, (float)width/height, zNear, zFar);
+        camera.setAspectRatio((float)width/height);
+        camera.updateProjectionMatrix();
     }
-    public abstract void update(InputMap inputMap);
+    public abstract void update(InputState inputMap);
     public abstract void render();
     public abstract void delete();
 }

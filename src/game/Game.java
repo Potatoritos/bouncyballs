@@ -10,8 +10,6 @@ import util.Util;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL30.*;
-import static org.lwjgl.opengl.GL43C.GL_MAX_FRAMEBUFFER_HEIGHT;
-import static org.lwjgl.opengl.GL43C.GL_MAX_FRAMEBUFFER_WIDTH;
 import static util.Geometry.*;
 
 public class Game {
@@ -34,7 +32,7 @@ public class Game {
     RenderEntity prism2;
     RenderEntity[] entities;
     private Matrix4f projectionMatrix;
-    private Camera camera;
+    private PerspectiveCamera camera;
 
     private RenderEntity textureRect;
 
@@ -50,7 +48,7 @@ public class Game {
     private double velY;
 
     private LevelScene levelScene;
-    private InputMap inputMap;
+    private InputState inputMap;
 
     public Game() {
         isRunning = true;
@@ -87,7 +85,7 @@ public class Game {
         projectionMatrix = new Matrix4f()
                 .perspective(fov, window.getAspectRatio(), zNear, zFar);
 
-        camera = new Camera();
+        camera = new PerspectiveCamera();
         camera.getPosition().z = 20;
 
         normalFbo = new EmptyFbo(window.getWidth(), window.getHeight());
@@ -98,7 +96,7 @@ public class Game {
 
         levelScene = new LevelScene();
         levelScene.loadLevel(Level.fromFile("level0.txt"));
-        inputMap = new InputMap();
+        inputMap = new InputState();
 
         loop();
     }

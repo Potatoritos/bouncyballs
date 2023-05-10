@@ -10,18 +10,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
-      <change afterPath="$PROJECT_DIR$/src/game/GameObject.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tilt.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Tilt.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/game/Ball.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Ball.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/BlockTile.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game/Box.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Box.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/game/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/InputMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/InputState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game/GameObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/GameObject.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/game/LevelScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/LevelScene.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/Scene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Scene.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/Tile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Box.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/TileMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/TileMap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/Camera.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/PerspectiveCamera.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/PerspectiveCamera.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/PerspectiveCamera.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/util/Geometry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/Geometry.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -72,7 +67,7 @@
     &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.editor&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -138,7 +133,9 @@
       <workItem from="1683556018040" duration="1177000" />
       <workItem from="1683561553420" duration="4574000" />
       <workItem from="1683567831648" duration="2092000" />
-      <workItem from="1683635973008" duration="544000" />
+      <workItem from="1683635973008" duration="13802000" />
+      <workItem from="1683667709649" duration="1968000" />
+      <workItem from="1683721807596" duration="9577000" />
     </task>
     <servers />
   </component>

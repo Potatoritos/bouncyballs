@@ -4,8 +4,8 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 public class PerspectiveCamera {
-    private final Vector3f position;
-    private final Vector3f rotation;
+    public final Vector3f position;
+    public final Vector3f rotation;
     private final Matrix4f viewMatrix;
     private float fov;
     private float zNear;
@@ -17,12 +17,6 @@ public class PerspectiveCamera {
         rotation = new Vector3f();
         viewMatrix = new Matrix4f();
         projectionMatrix = new Matrix4f();
-    }
-    public Vector3f getPosition() {
-        return position;
-    }
-    public Vector3f getRotation() {
-        return rotation;
     }
     public Matrix4f getProjectionMatrix() {
         return projectionMatrix;

@@ -11,8 +11,7 @@ import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
 import static org.lwjgl.opengl.GL30.*;
-import static util.Geometry.generateGeodesicPolyhedronMesh;
-import static util.Geometry.rectangularPrismMesh;
+import static util.Geometry.*;
 
 public class LevelScene extends Scene {
     private Level level;
@@ -61,13 +60,62 @@ public class LevelScene extends Scene {
         wallXTiles = new ArrayList<>();
         wallYTiles = new ArrayList<>();
 
-        camera.getPosition().z = 6;
+        camera.position.z = 6;
         ball = new Ball(new Vector3f(1, 2, 0.4f), 0.4f);
     }
     public void update(InputState input) {
-        rotation.x = (float)((Util.cutMaxMin(input.getMousePosition().y, 0, 1)-0.5) * Math.PI);
-        rotation.y = (float)((Util.cutMaxMin(input.getMousePosition().x, 0, 1)-0.5) * Math.PI);
+        rotation.x = (float)((Util.cutMaxMin(input.getMousePosition().y, 0, 1)-0.5) * Math.PI/3);
+        rotation.y = (float)((Util.cutMaxMin(input.getMousePosition().x, 0, 1)-0.5) * Math.PI/3);
+
+        ball.velocity.x += Math.sin(rotation.y * 0.002);
+        ball.velocity.x = Util.cutMaxMin(ball.velocity.x, -0.2f, 0.2f);
+        ball.velocity.y += -Math.sin(rotation.x * 0.002);
+        ball.velocity.y = Util.cutMaxMin(ball.velocity.y, -0.2f, 0.2f);
+
+//        if (ball.velocity.length() > 0.1f) {
+//            ball.velocity.normalize(0.1f);
+//        }
+
+        float border = 3;
+
+        if (ball.position.x > border) {
+            ball.position.x = border;
+            ball.velocity.x = 0;
+        }
+        if (ball.position.x < -border) {
+            ball.position.x = -border;
+            ball.velocity.x = 0;
+        }
+        if (ball.position.y > border) {
+            ball.position.y = border;
+            ball.velocity.y = 0;
+        }
+        if (ball.position.y < -border) {
+            ball.position.y = -border;
+            ball.velocity.y = 0;
+        }
+
+        for (Box box : wallXTiles) {
+            processCollisions(ball, box);
+        }
+//        for (Box box : wallYTiles) {
+//            processCollisions(ball, box);
+//        }
+
+        ball.update();
     }
+
+    void processCollisions(Ball ball, Box box) {
+        Vector2f result = new Vector2f();
+        if (intersectionRayWallX(ball.velocity.x, ball.position.x, ball.velocity.y, ball.position.y, box.position.x-ball.getRadius(), box.dimensions.y, box.position.y, result)) {
+            if (ball.velocity.x >= 0) {
+                ball.position.x = result.x;
+                ball.position.y = result.y;
+                ball.velocity.x = 0;
+            }
+        }
+    }
+
     private void setViewMatrices(ShaderProgram shader, ArrayList<Box> tiles) {
         FloatBuffer buffer = MemoryUtil.memAllocFloat(16*tiles.size());
         for (int i = 0; i < tiles.size(); i++) {

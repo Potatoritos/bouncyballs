@@ -86,7 +86,7 @@ public class Game {
                 .perspective(fov, window.getAspectRatio(), zNear, zFar);
 
         camera = new PerspectiveCamera();
-        camera.getPosition().z = 20;
+        camera.position.z = 20;
 
         normalFbo = new EmptyFbo(window.getWidth(), window.getHeight());
 
@@ -133,7 +133,6 @@ public class Game {
         velY = Util.cutMaxMin(velY, -0.2, 0.2);
 
 //        System.out.printf("a %f, %f\n", velX, velY);
-
 
         sphere.getPosition().x += velX;
         sphere.getPosition().y += velY;

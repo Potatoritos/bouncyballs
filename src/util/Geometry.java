@@ -3,6 +3,7 @@ package util;
 import graphics.GameObjectMesh;
 import graphics.Texture;
 import graphics.TextureMesh;
+import org.joml.Vector2d;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
@@ -149,7 +150,10 @@ public class Geometry {
     //  ⎡ x = r sin(s) + u
     //  ⎣ y = r cos(s) + v
     // where 0 ≤ t ≤ 1, 0 ≤ s ≤ 2π
-    public static boolean intersectionRayCircle(double a, double b, double c, double d, double r, double u, double v, Vector2f result) {
+    public static boolean intersectionRayCircle(double a, double b, double c, double d, double r, double u, double v, Vector2d result) {
+        if (a == 0 || c == 0) {
+            return false;
+        }
         double A = a*a + c*c;
         double B = 2*a*(b-u) + 2*c*(d-v);
         double C = (b-u)*(b-u) + (d-v)*(d-v) - r*r;
@@ -182,10 +186,7 @@ public class Geometry {
     //  ⎡ x = e
     //  ⎣ y = gs + h
     // where 0 ≤ s,t ≤ 1
-    public static boolean intersectionRayWallX(double a, double b, double c, double d, double e, double g, double h, Vector2f result) {
-//        if ((a == 0 && b != e) || g == 0) {
-//            return false;
-//        }
+    public static boolean intersectionRayWallX(double a, double b, double c, double d, double e, double g, double h, Vector2d result) {
         if (a == 0 || g == 0) {
             return false;
         }
@@ -206,7 +207,7 @@ public class Geometry {
     //  ⎡ x = es + f
     //  ⎣ y = g
     // where 0 ≤ s,t ≤ 1
-    private static boolean intersectionRayWallY(double a, double b, double c, double d, double e, double f, double g, Vector2f result) {
+    public static boolean intersectionRayWallY(double a, double b, double c, double d, double e, double f, double g, Vector2d result) {
         boolean r = intersectionRayWallX(c, d, a, b, g, e, f, result);
         result.set(result.y, result.x);
         return r;

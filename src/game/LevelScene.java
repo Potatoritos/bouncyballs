@@ -3,6 +3,7 @@ package game;
 import graphics.GameObjectMesh;
 import graphics.ShaderProgram;
 import org.joml.Vector2f;
+import org.joml.Vector3d;
 import org.joml.Vector3f;
 import org.lwjgl.system.MemoryUtil;
 import util.Util;
@@ -31,6 +32,7 @@ public class LevelScene extends Scene {
     private final ArrayList<Box> wallXTiles;
     private final ArrayList<Box> wallYTiles;
     private final Ball ball;
+    private final CollisionHandler collisionHandler;
     public LevelScene() {
         super();
         floorMesh = rectangularPrismMesh(
@@ -61,7 +63,9 @@ public class LevelScene extends Scene {
         wallYTiles = new ArrayList<>();
 
         camera.position.z = 6;
-        ball = new Ball(new Vector3f(1, 2, 0.4f), 0.4f);
+        ball = new Ball(new Vector3d(1, 2, 0.4), 0.4);
+
+        collisionHandler = new CollisionHandler();
     }
     public void update(InputState input) {
         rotation.x = (float)((Util.cutMaxMin(input.getMousePosition().y, 0, 1)-0.5) * Math.PI/3);
@@ -95,26 +99,36 @@ public class LevelScene extends Scene {
             ball.velocity.y = 0;
         }
 
+        collisionHandler.reset();
         for (Box box : wallXTiles) {
-            processCollisions(ball, box);
+            collisionHandler.processCollision(ball, box);
         }
-//        for (Box box : wallYTiles) {
-//            processCollisions(ball, box);
-//        }
+        for (Box box : wallYTiles) {
+            collisionHandler.processCollision(ball, box);
+        }
+        collisionHandler.applyResult(ball);
 
         ball.update();
     }
 
-    void processCollisions(Ball ball, Box box) {
-        Vector2f result = new Vector2f();
-        if (intersectionRayWallX(ball.velocity.x, ball.position.x, ball.velocity.y, ball.position.y, box.position.x-ball.getRadius(), box.dimensions.y, box.position.y, result)) {
-            if (ball.velocity.x >= 0) {
-                ball.position.x = result.x;
-                ball.position.y = result.y;
-                ball.velocity.x = 0;
-            }
-        }
-    }
+//    void processCollisions(Ball ball, Box box) {
+//        Vector2f result = new Vector2f();
+//        if ((ball.velocity.x > 0 && intersectionRayWallX(ball.velocity.x, ball.position.x, ball.velocity.y, ball.position.y, box.position.x-ball.getRadius(), box.dimensions.y, box.position.y, result))
+//        || (ball.velocity.x < 0 && intersectionRayWallX(ball.velocity.x, ball.position.x, ball.velocity.y, ball.position.y, box.position.x+box.dimensions.x+ball.getRadius(), box.dimensions.y, box.position.y, result))) {
+//            ball.position.x = result.x;
+//            ball.position.y = result.y;
+//            if (Math.abs(ball.velocity.x) < 0.01f) {
+//                ball.velocity.x = 0;
+//            } else {
+//                ball.velocity.x = -ball.velocity.x/4;
+//            }
+//        }
+//        if (ball.velocity.x < 0 && intersectionRayWallX(ball.velocity.x, ball.position.x, ball.velocity.y, ball.position.y, box.position.x+box.dimensions.x+ball.getRadius(), box.dimensions.y, box.position.y, result)) {
+//            ball.position.x = result.x;
+//            ball.position.y = result.y;
+//            ball.velocity.x = 0;
+//        }
+//    }
 
     private void setViewMatrices(ShaderProgram shader, ArrayList<Box> tiles) {
         FloatBuffer buffer = MemoryUtil.memAllocFloat(16*tiles.size());
@@ -190,8 +204,8 @@ public class LevelScene extends Scene {
             for (int j = 0; j < level.getColumns(); j++) {
                 if (level.getFloorState(i, j)) {
                     Box tile = new Box(
-                            new Vector3f(level.getPosX(j), level.getPosY(i), -0.25f),
-                            new Vector3f(1, 1, 0.25f)
+                            new Vector3d(level.getPosX(j), level.getPosY(i), -0.25),
+                            new Vector3d(1, 1, 0.25)
                     );
                     floorTiles.add(tile);
                 }
@@ -199,8 +213,8 @@ public class LevelScene extends Scene {
             for (int j = 0; j < level.getColumns()+1; j++) {
                 if (level.getWallXState(i, j)) {
                     Box tile = new Box(
-                            new Vector3f(level.getPosX(j)-0.05f, level.getPosY(i), 0),
-                            new Vector3f(0.1f, 1, 0.5f)
+                            new Vector3d(level.getPosX(j)-0.05, level.getPosY(i), 0),
+                            new Vector3d(0.1, 1, 0.5)
                     );
                     wallXTiles.add(tile);
                 }
@@ -210,8 +224,8 @@ public class LevelScene extends Scene {
             for (int j = 0; j < level.getColumns(); j++) {
                 if (level.getWallYState(i, j)) {
                     Box tile = new Box(
-                            new Vector3f(level.getPosX(j), level.getPosY(i)-0.05f, 0),
-                            new Vector3f(1, 0.1f, 0.5f)
+                            new Vector3d(level.getPosX(j), level.getPosY(i)-0.05, 0),
+                            new Vector3d(1, 0.1, 0.5)
                     );
                     wallYTiles.add(tile);
                 }

@@ -1,5 +1,6 @@
-package game;
+package geometry;
 
+import game.GameObject;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3d;

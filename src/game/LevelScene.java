@@ -1,8 +1,11 @@
 package game;
 
+import geometry.Ball;
+import geometry.Box;
+import geometry.CollisionHandler;
+import geometry.CollisionHandlerOld;
 import graphics.GameObjectMesh;
 import graphics.ShaderProgram;
-import org.joml.Vector2f;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 import org.lwjgl.system.MemoryUtil;
@@ -11,8 +14,10 @@ import util.Util;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
+import static geometry.MeshGeometry.generateGeodesicPolyhedronMesh;
+import static geometry.MeshGeometry.rectangularPrismMesh;
 import static org.lwjgl.opengl.GL30.*;
-import static util.Geometry.*;
+import static geometry.Geometry.*;
 
 public class LevelScene extends Scene {
     private Level level;
@@ -26,13 +31,14 @@ public class LevelScene extends Scene {
     private final ShaderProgram colorNormalsInstanced;
     private final ShaderProgram outline;
     private final ShaderProgram outlineInstanced;
-    private final Vector2f rotation;
+    private final Vector3d rotation;
 
     private final ArrayList<Box> floorTiles;
     private final ArrayList<Box> wallXTiles;
     private final ArrayList<Box> wallYTiles;
     private final Ball ball;
     private final CollisionHandler collisionHandler;
+    private long timer;
     public LevelScene() {
         super();
         floorMesh = rectangularPrismMesh(
@@ -56,29 +62,36 @@ public class LevelScene extends Scene {
         outline = ShaderProgram.fromFile("outline.glsl");
         outlineInstanced = ShaderProgram.fromFile("outline_instanced.glsl");
 
-        rotation = new Vector2f();
+        rotation = new Vector3d();
 
         floorTiles = new ArrayList<>();
         wallXTiles = new ArrayList<>();
         wallYTiles = new ArrayList<>();
 
         camera.position.z = 6;
-        ball = new Ball(new Vector3d(1, 2, 0.4), 0.4);
+//        ball = new Ball(new Vector3d(0.049043, 0.471136, 0.4), 0.4);
+        ball = new Ball(new Vector3d(0.95, 0.2, 0.4), 0.4);
 
         collisionHandler = new CollisionHandler();
     }
     public void update(InputState input) {
-        rotation.x = (float)((Util.cutMaxMin(input.getMousePosition().y, 0, 1)-0.5) * Math.PI/3);
-        rotation.y = (float)((Util.cutMaxMin(input.getMousePosition().x, 0, 1)-0.5) * Math.PI/3);
+        timer++;
+        rotation.x = (Util.cutMaxMin(input.getMousePosition().y, 0, 1)-0.5) * Math.PI/3;
+        rotation.y = (Util.cutMaxMin(input.getMousePosition().x, 0, 1)-0.5) * Math.PI/3;
+
+//        if (timer >= 60) {
+//            ball.velocity.x = -0.01;
+//            ball.velocity.y = 0.01;
+//        }
 
         ball.velocity.x += Math.sin(rotation.y * 0.002);
         ball.velocity.x = Util.cutMaxMin(ball.velocity.x, -0.2f, 0.2f);
         ball.velocity.y += -Math.sin(rotation.x * 0.002);
         ball.velocity.y = Util.cutMaxMin(ball.velocity.y, -0.2f, 0.2f);
 
-//        if (ball.velocity.length() > 0.1f) {
-//            ball.velocity.normalize(0.1f);
-//        }
+        if (ball.velocity.length() > 0.1f) {
+            ball.velocity.normalize(0.1f);
+        }
 
         float border = 3;
 
@@ -100,13 +113,17 @@ public class LevelScene extends Scene {
         }
 
         collisionHandler.reset();
+        collisionHandler.setBall(ball);
         for (Box box : wallXTiles) {
-            collisionHandler.processCollision(ball, box);
+            collisionHandler.addBox(box);
         }
         for (Box box : wallYTiles) {
-            collisionHandler.processCollision(ball, box);
+            collisionHandler.addBox(box);
         }
-        collisionHandler.applyResult(ball);
+        collisionHandler.processCollisions();
+//        if (!collisionHandler.hasCollidedX() && !collisionHandler.hasCollidedY()) {
+//        System.out.printf("z %.16f %.16f | %.16f %.16f\n", ball.position.x, ball.position.y, ball.velocity.x, ball.velocity.y);
+//        }
 
         ball.update();
     }

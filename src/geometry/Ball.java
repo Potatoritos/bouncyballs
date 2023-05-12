@@ -1,5 +1,6 @@
-package game;
+package geometry;
 
+import game.GameObject;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -19,10 +20,10 @@ public class Ball extends GameObject {
     public void update() {
         position.add(velocity);
     }
-    public Matrix4f getWorldMatrix(Vector2f globalRotation) {
+    public Matrix4f getWorldMatrix(Vector3d globalRotation) {
         return worldMatrix.identity()
-                .rotateX(globalRotation.x)
-                .rotateY(globalRotation.y)
+                .rotateX((float)globalRotation.x)
+                .rotateY((float)globalRotation.y)
                 .translate((float)position.x, (float)position.y, (float)position.z)
                 .scale((float)radius);
     }

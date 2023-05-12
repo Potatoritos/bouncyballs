@@ -10,15 +10,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
-      <change afterPath="$PROJECT_DIR$/src/game/CollisionCandidateHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/game/CollisionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/levels/level1.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/geometry/Circle.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/geometry/CollisionCircle.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/geometry/CollisionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/geometry/CollisionHandlerOld.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/geometry/CollisionLineX.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/geometry/CollisionLineY.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/geometry/CollisionObject.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/geometry/Geometry.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/geometry/Line.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/Ball.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Ball.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/Box.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Box.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game/Ball.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/Ball.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game/Box.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/Box.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game/CollisionCandidateHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game/CollisionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Game.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/game/GameObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/GameObject.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/game/LevelScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/LevelScene.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/TileMap.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/util/Geometry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/Geometry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/util/Geometry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/MeshGeometry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/util/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/Util.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,7 +70,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/potatoritos/Tilt/lwjgl-release-3.3.2-custom&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/potatoritos/Tilt/assets/levels&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -73,6 +84,9 @@
   }
 }</component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/assets/levels" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/assets/levels" />
       <recent name="$PROJECT_DIR$/assets/shader" />
@@ -137,7 +151,13 @@
       <workItem from="1683635973008" duration="13802000" />
       <workItem from="1683667709649" duration="1968000" />
       <workItem from="1683721807596" duration="19740000" />
-      <workItem from="1683747405445" duration="7220000" />
+      <workItem from="1683747405445" duration="20317000" />
+      <workItem from="1683811784533" duration="16623000" />
+      <workItem from="1683839748506" duration="4314000" />
+      <workItem from="1683894709735" duration="1646000" />
+      <workItem from="1683908798861" duration="7525000" />
+      <workItem from="1683922355205" duration="5333000" />
+      <workItem from="1683933258658" duration="1516000" />
     </task>
     <servers />
   </component>

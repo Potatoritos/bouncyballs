@@ -8,9 +8,10 @@ import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import util.Util;
 
+import static geometry.MeshGeometry.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL30.*;
-import static util.Geometry.*;
+import static geometry.Geometry.*;
 
 public class Game {
     private boolean isRunning;

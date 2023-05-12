@@ -1,9 +1,8 @@
-package util;
+package geometry;
 
 import graphics.GameObjectMesh;
 import graphics.Texture;
 import graphics.TextureMesh;
-import org.joml.Vector2d;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
@@ -11,8 +10,7 @@ import java.util.ArrayList;
 
 import static java.lang.Math.sqrt;
 
-
-public class Geometry {
+public class MeshGeometry {
     private final static Vector3f u;
     private final static Vector3f v;
     static {
@@ -140,77 +138,6 @@ public class Geometry {
         }
 
         return new GameObjectMesh(vertices, normals, colors, indices);
-    }
-
-    // Finds the intersection (x,y) closest to (b,d) of the
-    // ray and circle given by the parametric equations
-    //  ⎡ x = at + b
-    //  ⎣ y = ct + d
-    // and
-    //  ⎡ x = r sin(s) + u
-    //  ⎣ y = r cos(s) + v
-    // where 0 ≤ t ≤ 1, 0 ≤ s ≤ 2π
-    public static boolean intersectionRayCircle(double a, double b, double c, double d, double r, double u, double v, Vector2d result) {
-        if (a == 0 || c == 0) {
-            return false;
-        }
-        double A = a*a + c*c;
-        double B = 2*a*(b-u) + 2*c*(d-v);
-        double C = (b-u)*(b-u) + (d-v)*(d-v) - r*r;
-        double D = B*B - 4*A*C;
-        if (D < 0) return false;
-
-        double sqrtD = Math.sqrt(D);
-        double t1 = (-B + sqrtD) / (2*A);
-        double t2 = (-B - sqrtD) / (2*A);
-
-        if ((t1 < 0 || t1 > 1) && (t2 < 0 || t2 > 1)) return false;
-
-        double x1 = a*t1 + b;
-        double y1 = c*t1 + d;
-        double x2 = a*t2 + b;
-        double y2 = c*t2 + d;
-        if (Math.hypot(x1-b, y1-d) <= Math.hypot(x2-b, y2-d)) {
-            result.set(x1, y1);
-        } else {
-            result.set(x2, y2);
-        }
-        return true;
-    }
-
-    // Finds the intersection (x,y) of the
-    // rays given by the parametric equations
-    //  ⎡ x = at + b
-    //  ⎣ y = ct + d
-    // and
-    //  ⎡ x = e
-    //  ⎣ y = gs + h
-    // where 0 ≤ s,t ≤ 1
-    public static boolean intersectionRayWallX(double a, double b, double c, double d, double e, double g, double h, Vector2d result) {
-        if (a == 0 || g == 0) {
-            return false;
-        }
-        double t = (e-b)/a;
-        double s = (c*t + d - h)/g;
-        if (t < 0 || t > 1 || s < 0 || s > 1) {
-            return false;
-        }
-        result.set(a*t+b, c*t+d);
-        return true;
-    }
-
-    // Finds the intersection (x,y) of the
-    // rays given by the parametric equations
-    //  ⎡ x = at + b
-    //  ⎣ y = ct + d
-    // and
-    //  ⎡ x = es + f
-    //  ⎣ y = g
-    // where 0 ≤ s,t ≤ 1
-    public static boolean intersectionRayWallY(double a, double b, double c, double d, double e, double f, double g, Vector2d result) {
-        boolean r = intersectionRayWallX(c, d, a, b, g, e, f, result);
-        result.set(result.y, result.x);
-        return r;
     }
 
     public static GameObjectMesh rectangularPrismMesh(Vector3f position, Vector3f dimensions, Vector3f color) {

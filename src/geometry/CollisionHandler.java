@@ -22,7 +22,6 @@ public class CollisionHandler {
     }
     public void reset() {
         collisionObjects.clear();
-//        System.out.println("=======================");
     }
     public void setBall(Ball ball) {
         this.ball = ball;
@@ -42,20 +41,23 @@ public class CollisionHandler {
         addCollisionObject(new CollisionLineY(box, new Vector2d(box.position.x, box.position.y-ball.getRadius()), new Vector2d(box.dimensions.x, 0), 1));
         addCollisionObject(new CollisionLineY(box, new Vector2d(box.position.x, box.position.y+box.dimensions.y+ball.getRadius()), new Vector2d(box.dimensions.x, 0), -1));
 
-//        addCollisionObject(new CollisionCircle(box, ball.getRadius(), new Vector2d(box.position.x, box.position.y)));
-//        addCollisionObject(new CollisionCircle(box, ball.getRadius(), new Vector2d(box.position.x+box.dimensions.x, box.position.y)));
-//        addCollisionObject(new CollisionCircle(box, ball.getRadius(), new Vector2d(box.position.x, box.position.y+box.dimensions.y)));
-//        addCollisionObject(new CollisionCircle(box, ball.getRadius(), new Vector2d(box.position.x+box.dimensions.x, box.position.y+box.dimensions.y)));
+        addCollisionObject(new CollisionCircle(box, ball.getRadius(), new Vector2d(box.position.x, box.position.y)));
+        addCollisionObject(new CollisionCircle(box, ball.getRadius(), new Vector2d(box.position.x+box.dimensions.x, box.position.y)));
+        addCollisionObject(new CollisionCircle(box, ball.getRadius(), new Vector2d(box.position.x, box.position.y+box.dimensions.y)));
+        addCollisionObject(new CollisionCircle(box, ball.getRadius(), new Vector2d(box.position.x+box.dimensions.x, box.position.y+box.dimensions.y)));
     }
 
     public void processCollisions() {
         int i = 0;
         Vector2d intersection = new Vector2d();
-        while (ballMotion.displacement.lengthSquared() > 0 && ++i < 7) {
+//        while (ballMotion.displacement.lengthSquared() > 0 && ++i < 7) {
+        while (i++ < 7) {
             minDistance = Double.POSITIVE_INFINITY;
             for (CollisionObject object : collisionObjects) {
                 boolean intersects = object.intersect(ballMotion, intersection);
-                if (!intersects) continue;
+                if (!intersects) {
+                    continue;
+                }
 
                 double distance = distance(intersection, ballMotion.position);
                 if (distance <= minDistance) {
@@ -74,6 +76,5 @@ public class CollisionHandler {
         ball.position.y = ballMotion.position.y;
         ball.velocity.x = ballMotion.displacement.x;
         ball.velocity.y = ballMotion.displacement.y;
-        System.out.println(collisionObjects.size());
     }
 }

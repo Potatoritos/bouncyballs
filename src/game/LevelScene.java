@@ -3,7 +3,6 @@ package game;
 import geometry.Ball;
 import geometry.Box;
 import geometry.CollisionHandler;
-import geometry.CollisionHandlerOld;
 import graphics.GameObjectMesh;
 import graphics.ShaderProgram;
 import org.joml.Vector3d;
@@ -69,7 +68,6 @@ public class LevelScene extends Scene {
         wallYTiles = new ArrayList<>();
 
         camera.position.z = 6;
-//        ball = new Ball(new Vector3d(0.049043, 0.471136, 0.4), 0.4);
         ball = new Ball(new Vector3d(0.95, 0.2, 0.4), 0.4);
 
         collisionHandler = new CollisionHandler();
@@ -121,31 +119,10 @@ public class LevelScene extends Scene {
             collisionHandler.addBox(box);
         }
         collisionHandler.processCollisions();
-//        if (!collisionHandler.hasCollidedX() && !collisionHandler.hasCollidedY()) {
-//        System.out.printf("z %.16f %.16f | %.16f %.16f\n", ball.position.x, ball.position.y, ball.velocity.x, ball.velocity.y);
-//        }
 
         ball.update();
     }
 
-//    void processCollisions(Ball ball, Box box) {
-//        Vector2f result = new Vector2f();
-//        if ((ball.velocity.x > 0 && intersectionRayWallX(ball.velocity.x, ball.position.x, ball.velocity.y, ball.position.y, box.position.x-ball.getRadius(), box.dimensions.y, box.position.y, result))
-//        || (ball.velocity.x < 0 && intersectionRayWallX(ball.velocity.x, ball.position.x, ball.velocity.y, ball.position.y, box.position.x+box.dimensions.x+ball.getRadius(), box.dimensions.y, box.position.y, result))) {
-//            ball.position.x = result.x;
-//            ball.position.y = result.y;
-//            if (Math.abs(ball.velocity.x) < 0.01f) {
-//                ball.velocity.x = 0;
-//            } else {
-//                ball.velocity.x = -ball.velocity.x/4;
-//            }
-//        }
-//        if (ball.velocity.x < 0 && intersectionRayWallX(ball.velocity.x, ball.position.x, ball.velocity.y, ball.position.y, box.position.x+box.dimensions.x+ball.getRadius(), box.dimensions.y, box.position.y, result)) {
-//            ball.position.x = result.x;
-//            ball.position.y = result.y;
-//            ball.velocity.x = 0;
-//        }
-//    }
 
     private void setViewMatrices(ShaderProgram shader, ArrayList<Box> tiles) {
         FloatBuffer buffer = MemoryUtil.memAllocFloat(16*tiles.size());

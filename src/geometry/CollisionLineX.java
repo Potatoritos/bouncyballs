@@ -25,8 +25,6 @@ public class CollisionLineX extends CollisionObject {
         if (Math.signum(line.displacement.x) == directionSign)
             return intersectionLineWallX(line, this.line, result);
         else {
-            if (!intersectionLineWallX(line, this.line, result))
-                System.out.println("no x");
             return false;
         }
     }

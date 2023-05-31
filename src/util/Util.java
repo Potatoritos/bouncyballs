@@ -29,6 +29,15 @@ public class Util {
         return a;
     }
 
+    public static double clipWithinEpsilon(double a, double... withinValues) {
+        for (double x : withinValues) {
+            if (withinEpsilon(a, x)) {
+                return x;
+            }
+        }
+        return a;
+    }
+
     public static double cutMaxMin(double a, double min, double max) {
         return Math.max(Math.min(a, max), min);
     }

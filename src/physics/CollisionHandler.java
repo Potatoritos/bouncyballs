@@ -1,5 +1,8 @@
-package geometry;
+package physics;
 
+import game.Ball;
+import game.Box;
+import geometry.Line2;
 import org.joml.Vector2d;
 
 import java.util.ArrayList;
@@ -9,7 +12,7 @@ import static util.Util.withinEpsilon;
 
 public class CollisionHandler {
     private Ball ball;
-    private final Line ballMotion;
+    private final Line2 ballMotion;
     private final ArrayList<CollisionObject> collisionObjects;
 
     private double minDistance;
@@ -17,7 +20,7 @@ public class CollisionHandler {
     private CollisionObject minCollisionObject;
     public CollisionHandler() {
         collisionObjects = new ArrayList<>();
-        ballMotion = new Line();
+        ballMotion = new Line2();
         minIntersection = new Vector2d();
     }
     public void reset() {

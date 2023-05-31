@@ -1,8 +1,8 @@
 package game;
 
-import geometry.Ball;
-import geometry.Box;
-import geometry.CollisionHandler;
+import graphics.EmptyFbo;
+import graphics.FrameBufferObject;
+import physics.CollisionHandler;
 import graphics.GameObjectMesh;
 import graphics.ShaderProgram;
 import org.joml.Vector3d;
@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import static geometry.MeshGeometry.generateGeodesicPolyhedronMesh;
 import static geometry.MeshGeometry.rectangularPrismMesh;
 import static org.lwjgl.opengl.GL30.*;
-import static geometry.Geometry.*;
 
 public class LevelScene extends Scene {
     private Level level;
@@ -30,47 +29,60 @@ public class LevelScene extends Scene {
     private final ShaderProgram colorNormalsInstanced;
     private final ShaderProgram outline;
     private final ShaderProgram outlineInstanced;
+    private final ShaderProgram sobelFilterInstanced;
+    private final EmptyFbo edgeSourceFbo;
     private final Vector3d rotation;
 
     private final ArrayList<Box> floorTiles;
     private final ArrayList<Box> wallXTiles;
     private final ArrayList<Box> wallYTiles;
+    private final ArrayList<Ball> balls;
     private final Ball ball;
     private final CollisionHandler collisionHandler;
     private long timer;
-    public LevelScene() {
+    public LevelScene(int windowWidth, int windowHeight) {
         super();
         floorMesh = rectangularPrismMesh(
                 new Vector3f(0, 0, 0),
                 new Vector3f(1, 1, 0.25f),
-                new Vector3f(1f, 1f, 1f)
+                new Vector3f(0.8f, 0.8f, 0.8f)
         );
         wallXMesh = rectangularPrismMesh(
                 new Vector3f(0, 0, 0),
                 new Vector3f(0.1f, 1, 0.5f),
-                new Vector3f(1f, 1f, 1f)
+                new Vector3f(0.8f, 0.8f, 0.8f)
         );
         wallYMesh = rectangularPrismMesh(
                 new Vector3f(0, -0, 0),
                 new Vector3f(1, 0.1f, 0.5f),
-                new Vector3f(1f, 1f, 1f)
+                new Vector3f(0.8f, 0.8f, 0.8f)
         );
-        ballMesh = generateGeodesicPolyhedronMesh(3, new Vector3f(1f, 1f, 1f));
+        ballMesh = generateGeodesicPolyhedronMesh(3, new Vector3f(0.6f, 0.6f, 0.6f));
         colorNormals = ShaderProgram.fromFile("color_normals.glsl");
         colorNormalsInstanced = ShaderProgram.fromFile("color_normals_instanced.glsl");
         outline = ShaderProgram.fromFile("outline.glsl");
         outlineInstanced = ShaderProgram.fromFile("outline_instanced.glsl");
+        sobelFilterInstanced = ShaderProgram.fromFile("sobel_filter_instanced.glsl");
 
         rotation = new Vector3d();
 
         floorTiles = new ArrayList<>();
         wallXTiles = new ArrayList<>();
         wallYTiles = new ArrayList<>();
+        balls = new ArrayList<>();
 
         camera.position.z = 6;
         ball = new Ball(new Vector3d(0.95, 0.2, 0.4), 0.4);
+        balls.add(ball);
+        edgeSourceFbo = new EmptyFbo(windowWidth, windowHeight);
+        handleWindowResize(windowWidth, windowHeight);
 
         collisionHandler = new CollisionHandler();
+    }
+    @Override
+    public void handleWindowResize(int width, int height) {
+        super.handleWindowResize(width, height);
+        edgeSourceFbo.resize(width, height);
     }
     public void update(InputState input) {
         timer++;
@@ -123,8 +135,20 @@ public class LevelScene extends Scene {
         ball.update();
     }
 
+    private void renderGameObjects(ShaderProgram shader) {
+        setViewMatrices(shader, wallXTiles);
+        wallXMesh.renderInstanced(wallXTiles.size());
 
-    private void setViewMatrices(ShaderProgram shader, ArrayList<Box> tiles) {
+        setViewMatrices(shader, wallYTiles);
+        wallYMesh.renderInstanced(wallYTiles.size());
+
+        setViewMatrices(shader, floorTiles);
+        floorMesh.renderInstanced(floorTiles.size());
+
+        setViewMatrices(shader, balls);
+        ballMesh.renderInstanced(balls.size());
+    }
+    private void setViewMatrices(ShaderProgram shader, ArrayList<? extends GameObject> tiles) {
         FloatBuffer buffer = MemoryUtil.memAllocFloat(16*tiles.size());
         for (int i = 0; i < tiles.size(); i++) {
             camera.getViewMatrix(tiles.get(i).getWorldMatrix(rotation)).get(i*16, buffer);
@@ -136,56 +160,67 @@ public class LevelScene extends Scene {
         if (level == null) return;
 
         glClearColor(1, 1, 1, 1);
-        glEnable(GL_STENCIL_TEST);
-        glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-        glStencilMask(0xFF);
+//        glEnable(GL_STENCIL_TEST);
+//        glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+//        glStencilMask(0xFF);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-        glStencilFunc(GL_ALWAYS, 1, 0xFF);
-        glStencilMask(0xFF); //
+//        glStencilFunc(GL_ALWAYS, 1, 0xFF);
+//        glStencilMask(0xFF);
+
+        edgeSourceFbo.bind();
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         colorNormals.bind();
         colorNormals.setUniform("projectionMatrix", camera.getProjectionMatrix());
         colorNormals.setUniform("viewMatrix", camera.getViewMatrix(ball.getWorldMatrix(rotation)));
-        ballMesh.render();
+//        ballMesh.render();
 
         colorNormalsInstanced.bind();
         colorNormalsInstanced.setUniform("projectionMatrix", camera.getProjectionMatrix());
 
-        setViewMatrices(colorNormalsInstanced, wallXTiles);
-        wallXMesh.renderInstanced(wallXTiles.size());
+        renderGameObjects(colorNormalsInstanced);
 
-        setViewMatrices(colorNormalsInstanced, wallYTiles);
-        wallYMesh.renderInstanced(wallYTiles.size());
+        FrameBufferObject.unbind();
+        sobelFilterInstanced.bind();
+        sobelFilterInstanced.setUniform("normalTexture", 0);
+        sobelFilterInstanced.setUniform("depthTexture", 1);
+        sobelFilterInstanced.setUniform("projectionMatrix", camera.getProjectionMatrix());
 
-        setViewMatrices(colorNormalsInstanced, floorTiles);
-        floorMesh.renderInstanced(floorTiles.size());
+        glActiveTexture(GL_TEXTURE0);
+        edgeSourceFbo.getColorTexture().bind();
+        glActiveTexture(GL_TEXTURE1);
+        edgeSourceFbo.getDepthTexture().bind();
 
-        glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-        glStencilMask(0x00);
+        renderGameObjects(sobelFilterInstanced);
 
-        outline.bind();
-        outline.setUniform("projectionMatrix", camera.getProjectionMatrix());
-        outline.setUniform("viewMatrix", camera.getViewMatrix(ball.getWorldMatrix(rotation)));
-        outline.setUniform("expand", 0.05f);
-        ballMesh.render();
 
-        outlineInstanced.bind();
-        outlineInstanced.setUniform("projectionMatrix", camera.getProjectionMatrix());
-        outlineInstanced.setUniform("expand", 0.03f);
+//        glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+//        glStencilMask(0x00);
 
-        setViewMatrices(outlineInstanced, floorTiles);
-        floorMesh.renderInstanced(floorTiles.size());
+//        outline.bind();
+//        outline.setUniform("projectionMatrix", camera.getProjectionMatrix());
+//        outline.setUniform("viewMatrix", camera.getViewMatrix(ball.getWorldMatrix(rotation)));
+//        outline.setUniform("expand", 0.05f);
+//        ballMesh.render();
 
-        setViewMatrices(outlineInstanced, wallXTiles);
-        wallXMesh.renderInstanced(wallXTiles.size());
-
-        setViewMatrices(outlineInstanced, wallYTiles);
-        wallYMesh.renderInstanced(wallYTiles.size());
-
-        outlineInstanced.unbind();
-
-        glDisable(GL_STENCIL_TEST);
+//        outlineInstanced.bind();
+//        outlineInstanced.setUniform("projectionMatrix", camera.getProjectionMatrix());
+//        outlineInstanced.setUniform("expand", 0.03f);
+//
+//        setViewMatrices(outlineInstanced, floorTiles);
+//        floorMesh.renderInstanced(floorTiles.size());
+//
+//        setViewMatrices(outlineInstanced, wallXTiles);
+//        wallXMesh.renderInstanced(wallXTiles.size());
+//
+//        setViewMatrices(outlineInstanced, wallYTiles);
+//        wallYMesh.renderInstanced(wallYTiles.size());
+//
+//        outlineInstanced.unbind();
+//
+//        glDisable(GL_STENCIL_TEST);
     }
     public void loadLevel(Level level) {
         this.level = level;

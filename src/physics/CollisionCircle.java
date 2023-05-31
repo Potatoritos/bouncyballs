@@ -1,6 +1,8 @@
-package geometry;
+package physics;
 
 import game.GameObject;
+import geometry.Circle;
+import geometry.Line2;
 import org.joml.Vector2d;
 
 import static geometry.Geometry.*;
@@ -11,7 +13,7 @@ public class CollisionCircle extends CollisionObject {
         super(parent);
         circle = new Circle(radius, position);
     }
-    public void reflectLine(Line line, Vector2d intersection, double length) {
+    public void reflectLine(Line2 line, Vector2d intersection, double length) {
         Vector2d normal = new Vector2d();
         intersection.sub(circle.position, normal).normalize();
         Vector2d reflectionNormal = new Vector2d();
@@ -25,7 +27,7 @@ public class CollisionCircle extends CollisionObject {
     public double distance(Vector2d point) {
         return distanceCirclePoint(circle, point);
     }
-    public boolean intersect(Line line, Vector2d result) {
+    public boolean intersect(Line2 line, Vector2d result) {
         boolean intersects = intersectionLineCircle(line, circle, result);
         if (!intersects) return false;
         Vector2d normal = new Vector2d();

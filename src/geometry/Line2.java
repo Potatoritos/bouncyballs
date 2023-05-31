@@ -2,16 +2,17 @@ package geometry;
 
 import org.joml.Vector2d;
 
-public class Line {
+public class Line2 {
     public final Vector2d position;
     public final Vector2d displacement;
-    public Line() {
+    public Line2() {
         this.position = new Vector2d();
         this.displacement = new Vector2d();
     }
-    public Line(Vector2d position, Vector2d displacement) {
-        this.position = position;
-        this.displacement = displacement;
+    public Line2(Vector2d position, Vector2d displacement) {
+        this();
+        this.position.set(position);
+        this.displacement.set(displacement);
     }
     public double x1() {
         return position.x;

@@ -95,7 +95,7 @@ public class Game {
         textureRect.getPosition().x = -2.5f;
 //        textureRect.setScale(1f);
 
-        levelScene = new LevelScene();
+        levelScene = new LevelScene(window.getWidth(), window.getHeight());
         levelScene.loadLevel(Level.fromFile("level0.txt"));
         inputMap = new InputState();
 

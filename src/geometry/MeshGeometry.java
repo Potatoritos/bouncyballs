@@ -177,14 +177,14 @@ public class MeshGeometry {
                 p.x+d.x,    p.y+d.y,    p.z+d.z
         };
         float l = (float)sqrt(1f/3);
-        float[] normals = new float[] {
-                -l, -l, -l,   l, -l, -l,   -l, l, -l,   l, l, -l,
-                l, -l, l,    -l, -l, l,    l, l, l,    -l, l, l,
-                -l, -l, l,   -l, -l, -l,   -l, l, l,   -l, l, -l,
-                l, -l, -l,    l, -l, l,    l, l, -l,    l, l, l,
-                -l, -l, l,   l, -l, l,   -l, -l, -l,   l, -l, -l,
-                -l, l, -l,    l, l, -l,    -l, l, l,    l, l, l
-        };
+//        float[] normals = new float[] {
+//                -l, -l, -l,   l, -l, -l,   -l, l, -l,   l, l, -l,
+//                l, -l, l,    -l, -l, l,    l, l, l,    -l, l, l,
+//                -l, -l, l,   -l, -l, -l,   -l, l, l,   -l, l, -l,
+//                l, -l, -l,    l, -l, l,    l, l, -l,    l, l, l,
+//                -l, -l, l,   l, -l, l,   -l, -l, -l,   l, -l, -l,
+//                -l, l, -l,    l, l, -l,    -l, l, l,    l, l, l
+//        };
         int[] indices = new int[] {
                 0, 1, 2, 1, 3, 2,
                 4, 5, 6, 5, 7, 6,
@@ -199,14 +199,14 @@ public class MeshGeometry {
 //            insertVector(normals, i, u);
 //        }
 
-//        float[] normals = new float[] {
-//                0, 0, -1,   0, 0, -1,   0, 0, -1,   0, 0, -1,
-//                0, 0, 1,    0, 0, 1,    0, 0, 1,    0, 0, 1,
-//                -1, 0, 0,   -1, 0, 0,   -1, 0, 0,   -1, 0, 0,
-//                1, 0, 0,    1, 0, 0,    1, 0, 0,    1, 0, 0,
-//                0, -1, 0,   0, -1, 0,   0, -1, 0,   0, -1, 0,
-//                0, 1, 0,    0, 1, 0,    0, 1, 0,    0, 1, 0
-//        };
+        float[] normals = new float[] {
+                0, 0, -1,   0, 0, -1,   0, 0, -1,   0, 0, -1,
+                0, 0, 1,    0, 0, 1,    0, 0, 1,    0, 0, 1,
+                -1, 0, 0,   -1, 0, 0,   -1, 0, 0,   -1, 0, 0,
+                1, 0, 0,    1, 0, 0,    1, 0, 0,    1, 0, 0,
+                0, -1, 0,   0, -1, 0,   0, -1, 0,   0, -1, 0,
+                0, 1, 0,    0, 1, 0,    0, 1, 0,    0, 1, 0
+        };
 //        float[] normals = new float[] {
 //                0, 0, 0,   0, 0, 0,   0, 0, 0,   0, 0, 0,
 //                0, 0, 0,    0, 0, 0,    0, 0, 0,    0, 0, 0,

@@ -1,20 +1,34 @@
 package geometry;
 
 import org.joml.Vector2d;
+import org.joml.Vector3d;
 
 import static util.Util.clipWithinEpsilon;
 import static util.Util.withinEpsilon;
 
 
 public class Geometry {
-    private static Vector2d u;
-    static {
-        u = new Vector2d();
-    }
     // Stores the projection of a onto b in result
     public static void project(Vector2d a, Vector2d b, Vector2d result) {
         result.set(b);
         result.mul(a.dot(b) / b.dot(b));
+    }
+
+    public static boolean intersectionLinePlane(Line3 line, Plane plane, Vector3d result) {
+        // set t = (plane.d1 × plane.d2) • (line.pos - plane.pos) / -line.d • (plane.d1 × plane.d2)
+
+        Vector3d d1xd2 = new Vector3d();
+        plane.displacement1.cross(plane.displacement2, d1xd2);
+
+        Vector3d posDifference = new Vector3d();
+        line.position.sub(plane.position, posDifference);
+
+        double t = d1xd2.dot(posDifference);
+        Vector3d lineNegative = new Vector3d();
+        line.displacement.negate(lineNegative);
+        t /= lineNegative.dot(d1xd2);
+
+        return true;
     }
 
     // Finds the intersection (x,y) closest to (b,d) of the
@@ -65,7 +79,7 @@ public class Geometry {
         return true;
     }
 
-    public static boolean intersectionLineCircle(Line line, Circle circle, Vector2d result) {
+    public static boolean intersectionLineCircle(Line2 line, Circle circle, Vector2d result) {
         return intersectionLineCircle(line.displacement.x, line.position.x, line.displacement.y, line.position.y, circle.radius, circle.position.x, circle.position.y, result);
     }
 
@@ -84,25 +98,25 @@ public class Geometry {
         double t = (e-b)/a;
         double s = (c*t + d - h)/g;
         if (t < 0 || t > 1 || s < 0 || s > 1) {
-//            t = clipWithinEpsilon(clipWithinEpsilon(t, 0), 1);
-//            s = clipWithinEpsilon(clipWithinEpsilon(t, 0), 1);
-            boolean t1Within = withinEpsilon(t, 0);
-            boolean t2Within = withinEpsilon(s, 0);
+            t = clipWithinEpsilon(clipWithinEpsilon(t, 0), 1);
+            s = clipWithinEpsilon(clipWithinEpsilon(t, 0), 1);
+//            boolean t1Within = withinEpsilon(t, 0);
+//            boolean t2Within = withinEpsilon(s, 0);
 //            t = clipWithinEpsilon(t, 0);
 //            s = clipWithinEpsilon(s, 0);
-            if (t1Within) t = 0;
-            if (t2Within) s = 0;
-            if (!t1Within && !t2Within) {
-                return false;
-            }
-//            if (t < 0 || t > 1 || s < 0 || s > 1)
+//            if (t1Within) t = 0;
+//            if (t2Within) s = 0;
+//            if (!t1Within && !t2Within) {
 //                return false;
+//            }
+            if (t < 0 || t > 1 || s < 0 || s > 1)
+                return false;
         }
         result.set(a*t+b, c*t+d);
         return true;
     }
 
-    public static boolean intersectionLineWallX(Line line, Line wall, Vector2d result) {
+    public static boolean intersectionLineWallX(Line2 line, Line2 wall, Vector2d result) {
         return intersectionLineWallX(line.displacement.x, line.position.x, line.displacement.y, line.position.y, wall.position.x, wall.displacement.y, wall.position.y, result);
     }
 
@@ -120,16 +134,17 @@ public class Geometry {
         return r;
     }
 
-    public static boolean intersectionLineWallY(Line line, Line wall, Vector2d result) {
+    public static boolean intersectionLineWallY(Line2 line, Line2 wall, Vector2d result) {
         return intersectionLineWallY(line.displacement.x, line.position.x, line.displacement.y, line.position.y, wall.displacement.x, wall.position.x, wall.position.y, result);
     }
 
 //    public static double distanceLinePoint(Line line, Vector2d point) {
 //        return Math.abs((line.x2()-line.x1())*(line.y1()-point.y) - (line.x1()-point.x)*(line.y2()-line.y1())) / Math.hypot(line.x2()-line.x1(), line.y2()-line.y1());
 //    }
-    public static double distanceLineSegmentPoint(Line line, Vector2d point) {
+    public static double distanceLineSegmentPoint(Line2 line, Vector2d point) {
         double l = line.displacement.lengthSquared();
         if (l == 0) return distance(line.position, point);
+        Vector2d u = new Vector2d();
         point.sub(line.position, u);
         double t = Math.max(0, Math.min(1, u.dot(line.displacement) / l));
         u.set(line.displacement).mul(t).add(line.position);

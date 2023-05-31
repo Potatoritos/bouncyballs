@@ -1,4 +1,4 @@
-package geometry;
+package game;
 
 import game.GameObject;
 import org.joml.Matrix4f;

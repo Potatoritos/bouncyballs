@@ -48,7 +48,7 @@ float linearizeDepth(float depth) {
 }
 void main() {
     mat3 r, g, b, depth;
-    int size = 10;
+    int size = 1;
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             vec3 normalSample = texelFetch(normalTexture, ivec2(gl_FragCoord) + size*ivec2(i-1,j-1), 0).rgb;

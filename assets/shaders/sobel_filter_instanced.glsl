@@ -48,7 +48,7 @@ float linearizeDepth(float depth) {
 }
 void main() {
     mat3 r, g, b, depth;
-    int size = 1;
+    int size = 2;
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             vec3 normalSample = texelFetch(normalTexture, ivec2(gl_FragCoord) + size*ivec2(i-1,j-1), 0).rgb;
@@ -64,7 +64,7 @@ void main() {
     float gradientNormal = max(max(gradient(r), gradient(g)), gradient(b));
     float gradientDepth = gradient(depth);
 
-    if (gradientDepth > 0.008 || gradientNormal > 1) {
+    if (gradientDepth > 0.015 || gradientNormal > 1) {
         fragColor = vec4(0, 0, 0, 1);
     } else {
         fragColor = vec4(color, 1);

@@ -58,17 +58,6 @@ public class Geometry {
         return true;
     }
 
-    public static void arbitraryTangent(Vector3d normal, Vector3d result) {
-        if (normal.x == 0) {
-            result.set(xHat);
-        } else if (normal.y == 0) {
-            result.set(yHat);
-        } else if (normal.z == 0) {
-            result.set(zHat);
-        } else {
-            result.set(1/normal.x, -1/normal.y, 0);
-        }
-    }
     public static boolean intersectionLineCylinder(Line3 line, Cylinder cylinder, Vector3d result) {
         // Rotate everything such that the cylinder's axis lies on the z-axis
         // Only works for axis-aligned cylinders (too lazy to figure out the proper way of doing this)
@@ -77,16 +66,18 @@ public class Geometry {
                 new Vector3d(cylinder.position),
                 new Vector3d(cylinder.axis)
         );
-        Matrix3d rotationMatrix = new Matrix3d().identity();
-        if (cylinder.axis.x == 0 && cylinder.axis.z == 0) {
-            rotationMatrix.rotationX(Math.PI/2);
-        } else if (cylinder.axis.y == 0 && cylinder.axis.z == 0) {
-            rotationMatrix.rotationY(Math.PI/2);
+        Matrix3d rotationMatrix = new Matrix3d();
+        if (cylinder.axis.z == 0) {
+            if (cylinder.axis.x == 0) {
+                rotationMatrix.rotationX(Math.PI/2);
+            } else if (cylinder.axis.y == 0) {
+                rotationMatrix.rotationY(Math.PI/2);
+            }
+            rotatedLine.position.mul(rotationMatrix);
+            rotatedLine.displacement.mul(rotationMatrix);
+            rotatedCylinderAxis.position.mul(rotationMatrix);
+            rotatedCylinderAxis.displacement.mul(rotationMatrix);
         }
-        rotatedLine.position.mul(rotationMatrix);
-        rotatedLine.displacement.mul(rotationMatrix);
-        rotatedCylinderAxis.position.mul(rotationMatrix);
-        rotatedCylinderAxis.displacement.mul(rotationMatrix);
 
         // Project the rotated line and cylinder to the XY plane
         Line2 lineXY = new Line2(

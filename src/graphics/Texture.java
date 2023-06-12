@@ -1,6 +1,7 @@
 package graphics;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.system.MemoryStack;
+import util.Deletable;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -8,7 +9,7 @@ import java.nio.IntBuffer;
 import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.stb.STBImage.*;
 
-public class Texture {
+public class Texture implements Deletable {
     private final int id;
     public Texture() {
         id = glGenTextures();

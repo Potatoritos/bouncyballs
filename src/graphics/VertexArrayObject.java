@@ -1,6 +1,7 @@
 package graphics;
 
 import org.lwjgl.system.MemoryUtil;
+import util.Deletable;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 
 import static org.lwjgl.opengl.GL30.*;
 
-public class VertexArrayObject {
+public class VertexArrayObject implements Deletable {
     private final int id;
     private int eboSize;
     ArrayList<Integer> vbos;

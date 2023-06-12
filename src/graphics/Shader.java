@@ -1,10 +1,11 @@
 package graphics;
 
+import util.Deletable;
 import util.Util;
 
 import static org.lwjgl.opengl.GL20.*;
 
-public class Shader {
+public class Shader implements Deletable {
     private int id;
 
     public Shader(String source, int type) {

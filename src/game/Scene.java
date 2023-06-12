@@ -1,8 +1,9 @@
 package game;
 
 import graphics.PerspectiveCamera;
+import util.Deletable;
 
-public abstract class Scene {
+public abstract class Scene implements Deletable {
     protected PerspectiveCamera camera;
     public Scene() {
         camera = new PerspectiveCamera();

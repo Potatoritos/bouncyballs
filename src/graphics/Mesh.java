@@ -1,11 +1,13 @@
 package graphics;
 
+import util.Deletable;
+
 import java.nio.ByteBuffer;
 
 import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.opengl.GL31.glDrawElementsInstanced;
 
-public class Mesh {
+public class Mesh implements Deletable {
     protected final VertexArrayObject vao;
     public Mesh() {
         vao = new VertexArrayObject();

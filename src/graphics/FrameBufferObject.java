@@ -1,6 +1,7 @@
 package graphics;
 
 import org.lwjgl.opengl.GL30;
+import util.Deletable;
 
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL30.GL_DEPTH_ATTACHMENT;
@@ -8,7 +9,7 @@ import static org.lwjgl.opengl.GL30.GL_FRAMEBUFFER;
 import static org.lwjgl.opengl.GL30.glFramebufferTexture2D;
 import static org.lwjgl.opengl.GL30C.*;
 
-public class FrameBufferObject {
+public class FrameBufferObject implements Deletable {
     private final int id;
     public FrameBufferObject() {
         id = glGenFramebuffers();

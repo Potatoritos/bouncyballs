@@ -2,8 +2,9 @@ package graphics;
 
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
+import util.Deletable;
 
-public class RenderEntity {
+public class RenderEntity implements Deletable {
     private final Mesh mesh;
     private final Vector3f position;
 //    private final Vector3f rotation;

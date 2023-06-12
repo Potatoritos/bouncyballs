@@ -3,6 +3,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
+import util.Deletable;
 import util.Util;
 
 import java.nio.FloatBuffer;
@@ -12,7 +13,7 @@ import java.util.Map;
 
 import static org.lwjgl.opengl.GL20.*;
 
-public class ShaderProgram {
+public class ShaderProgram implements Deletable {
     private final int id;
     ArrayList<Shader> shaders;
     private final HashMap<String, Integer> uniforms;

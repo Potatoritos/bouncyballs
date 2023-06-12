@@ -9,6 +9,7 @@ import org.joml.Vector3d;
 import org.joml.Vector3f;
 import org.lwjgl.system.MemoryUtil;
 import math.MathUtil;
+import util.Deletable;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
@@ -262,10 +263,8 @@ public class LevelScene extends Scene {
         }
     }
     public void delete() {
-        floorMesh.delete();
-        wallXMesh.delete();
-        wallYMesh.delete();
-        colorNormalsInstanced.delete();
-        outlineInstanced.delete();
+        for (Deletable obj : new Deletable[] {floorMesh, wallXMesh, wallYMesh, colorNormalsInstanced, outlineInstanced}) {
+            obj.delete();
+        }
     }
 }

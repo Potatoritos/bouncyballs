@@ -14,16 +14,32 @@ public class Geometry {
     private static final Vector3d zHat = new Vector3d(0, 0, 1);
 
     // Stores the projection of a onto b in result
-    public static void project(Vector2d a, Vector2d b, Vector2d result) {
-        result.set(b);
-        result.mul(a.dot(b) / b.lengthSquared());
-    }
     public static void project(Vector3d a, Vector3d b, Vector3d result) {
         result.set(b);
         result.mul(a.dot(b) / b.lengthSquared());
     }
+    public static void project(Vector2d a, Vector2d b, Vector2d result) {
+        result.set(b);
+        result.mul(a.dot(b) / b.lengthSquared());
+    }
 
-    public static boolean intersectionLinePlane(Line3 line, Plane plane, Vector3d result) {
+    // If t is not -1, sets result to line.pos + t*line.displacement and returns true
+    // Otherwise, returns false
+    public static boolean scaleLine(Line3 line, double t, Vector3d result) {
+        if (t == -1) return false;
+        result.set(line.displacement).mul(t).add(line.position);
+        return true;
+    }
+    public static boolean scaleLine(Line2 line, double t, Vector2d result) {
+        if (t == -1) return false;
+        result.set(line.displacement).mul(t).add(line.position);
+        return true;
+    }
+
+    public static double intersectionLinePlane(Line3 line, Plane plane) {
+        if (line.displacement.lengthSquared() == 0) {
+            return -1;
+        }
         // set t = (plane.d1 × plane.d2) • (line.pos - plane.pos) / -line.d • (plane.d1 × plane.d2)
         Vector3d r = new Vector3d();
         plane.displacement1.cross(plane.displacement2, r);
@@ -51,14 +67,19 @@ public class Geometry {
         u = clipWithinEpsilon(u, 0, 1);
         v = clipWithinEpsilon(v, 0, 1);
         if (t < 0 || t > 1 || u < 0 || u > 1 || v < 0 || v > 1) {
-            return false;
+            return -1;
         }
 
-        result.set(line.displacement).mul(t).add(line.position);
-        return true;
+        return t;
+    }
+    public static boolean intersectionLinePlane(Line3 line, Plane plane, Vector3d result) {
+        return scaleLine(line, intersectionLinePlane(line, plane), result);
     }
 
-    public static boolean intersectionLineCylinder(Line3 line, Cylinder cylinder, Vector3d result) {
+    public static double intersectionLineCylinder(Line3 line, Cylinder cylinder) {
+        if (line.displacement.lengthSquared() == 0) {
+            return -1;
+        }
         // Rotate everything such that the cylinder's axis lies on the z-axis
         // Only works for axis-aligned cylinders (too lazy to figure out the proper way of doing this)
         Line3 rotatedLine = new Line3(line);
@@ -82,7 +103,7 @@ public class Geometry {
                 new Vector2d(rotatedLine.displacement.x, rotatedLine.displacement.y)
         );
         if (lineXY.displacement.lengthSquared() == 0) {
-            return false;
+            return -1;
         }
         Vector2d cylinderPositionXY = new Vector2d(rotatedCylinderAxis.position.x, rotatedCylinderAxis.position.y);
         Circle circle = new Circle(cylinder.radius, cylinderPositionXY);
@@ -90,7 +111,7 @@ public class Geometry {
         // Find the intersection of the projected lines and cylinder (now a circle)
         double t = intersectionLineCircle(lineXY, circle);
         if (t == -1) {
-            return false;
+            return -1;
         }
 
         // Check if the intersection is on the cylinder (in the z-direction)
@@ -98,14 +119,19 @@ public class Geometry {
         double bottom = rotatedCylinderAxis.position.z;
         double top = bottom + rotatedCylinderAxis.displacement.z;
         if (!withinRange(intersectionZ, bottom, top)) {
-            return false;
+            return -1;
         }
 
-        result.set(line.displacement).mul(t).add(line.position);
-        return true;
+        return t;
+    }
+    public static boolean intersectionLineCylinder(Line3 line, Cylinder cylinder, Vector3d result) {
+        return scaleLine(line, intersectionLineCylinder(line, cylinder), result);
     }
 
-    public static boolean intersectionLineSphere(Line3 line, Sphere sphere, Vector3d result) {
+    public static double intersectionLineSphere(Line3 line, Sphere sphere) {
+        if (line.displacement.lengthSquared() == 0) {
+            return -1;
+        }
         Vector3d lineToSphere = new Vector3d(line.position).sub(sphere.position);
         Quadratic q = new Quadratic(
                 line.displacement.lengthSquared(),
@@ -113,18 +139,20 @@ public class Geometry {
                 lineToSphere.lengthSquared() - sphere.getRadius()*sphere.getRadius()
         );
         if (q.discriminant() < 0) {
-            return false;
+            return -1;
         }
         double t = minNonNegativeClipped(q.solution1(), q.solution2());
         if (t < 0 || t > 1) {
-            return false;
+            return -1;
         }
-        result.set(line.displacement).mul(t).add(line.position);
-        return true;
+        return t;
+    }
+    public static boolean intersectionLineSphere(Line3 line, Sphere sphere, Vector3d result) {
+        return scaleLine(line, intersectionLineSphere(line, sphere), result);
     }
 
     public static double intersectionLineCircle(Line2 line, Circle circle) {
-        if (line.displacement.x == 0 && line.displacement.y == 0) {
+        if (line.displacement.lengthSquared() == 0) {
             return -1;
         }
         Vector2d lineToCircle = new Vector2d(line.position).sub(circle.position);
@@ -142,12 +170,8 @@ public class Geometry {
         }
         return t;
     }
-
     public static boolean intersectionLineCircle(Line2 line, Circle circle, Vector2d result) {
-        double t = intersectionLineCircle(line, circle);
-        if (t == -1) return false;
-        result.set(line.displacement).mul(t).add(line.position);
-        return true;
+        return scaleLine(line, intersectionLineCircle(line, circle), result);
     }
 
     // Finds the intersection (x,y) of the

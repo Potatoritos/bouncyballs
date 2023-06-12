@@ -4,7 +4,7 @@ import org.joml.Vector3f;
 
 import java.util.Comparator;
 
-import static util.Util.withinEpsilon;
+import static math.MathUtil.withinEpsilon;
 
 public class Vector3fEpsilonComparator implements Comparator<Vector3f> {
     @Override

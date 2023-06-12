@@ -1,10 +1,11 @@
 package geometry;
 
+import math.Quadratic;
 import org.joml.Matrix3d;
 import org.joml.Vector2d;
 import org.joml.Vector3d;
 
-import static util.Util.*;
+import static math.MathUtil.*;
 
 
 public class Geometry {
@@ -205,39 +206,20 @@ public class Geometry {
         if (a == 0 && c == 0) {
             return false;
         }
-        double A = a*a + c*c;
-        double B = 2*a*(b-u) + 2*c*(d-v);
-        double C = (b-u)*(b-u) + (d-v)*(d-v) - r*r;
-        double D = B*B - 4*A*C;
-        if (D < 0) {
+        Quadratic q = new Quadratic(
+            a*a + c*c,
+            2*a*(b-u) + 2*c*(d-v),
+            (b-u)*(b-u) + (d-v)*(d-v) - r*r
+        );
+        if (q.discriminant() < 0) {
             return false;
         }
 
-        double sqrtD = Math.sqrt(D);
-        double t1 = (-B + sqrtD) / (2*A);
-        double t2 = (-B - sqrtD) / (2*A);
-
-        if ((t1 < 0 || t1 > 1) && (t2 < 0 || t2 > 1) && !withinEpsilon(t1, 0) && !withinEpsilon(t2, 0)) {
-            boolean t1Within = withinEpsilon(t1, 0);
-            boolean t2Within = withinEpsilon(t2, 0);
-            if (t1Within) t1 = 0;
-            if (t2Within) t2 = 0;
-            if (!t1Within && !t2Within) {
-                return false;
-            }
+        double t = minNonNegativeClipped(q.solution1(), q.solution2());
+        if (t < 0 || t > 1) {
+            return false;
         }
-
-        double x1 = a*t1 + b;
-        double y1 = c*t1 + d;
-        double x2 = a*t2 + b;
-        double y2 = c*t2 + d;
-        System.out.printf("x1: %f, y1: %f\n", x1, y1);
-        System.out.printf("x2: %f, y2: %f\n", x2, y2);
-        if (Math.hypot(x1-b, y1-d) <= Math.hypot(x2-b, y2-d)) {
-            result.set(x1, y1, t1);
-        } else {
-            result.set(x2, y2, t2);
-        }
+        result.set(a*t + b, c*t + d, t);
         return true;
     }
 
@@ -255,9 +237,9 @@ public class Geometry {
     // where 0 ≤ t ≤ 1, 0 ≤ s ≤ 2π
     public static boolean intersectionLineCircle(double a, double b, double c, double d, double r, double u, double v, Vector2d result) {
         Vector3d resultT = new Vector3d();
-        intersectionLineCircleT(a, b, c, d, r, u, v, resultT);
+        boolean intersects = intersectionLineCircleT(a, b, c, d, r, u, v, resultT);
         result.set(resultT.x, resultT.y);
-        return true;
+        return intersects;
     }
 
     public static boolean intersectionLineCircle(Line2 line, Circle circle, Vector2d result) {

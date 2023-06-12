@@ -7,7 +7,7 @@ import org.joml.Vector2d;
 import java.util.ArrayList;
 
 import static geometry.Geometry.*;
-import static util.Util.withinEpsilon;
+import static math.MathUtil.withinEpsilon;
 
 public class CollisionHandler {
     private Ball ball;

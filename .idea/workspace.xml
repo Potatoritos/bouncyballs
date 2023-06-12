@@ -12,7 +12,11 @@
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game/LevelScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/LevelScene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/geometry/CollisionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/CollisionHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/geometry/Geometry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/Geometry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/util/Vector3fEpsilonComparator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/Vector3fEpsilonComparator.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,6 +34,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -53,7 +58,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "f83c06c3",
     "last_opened_file_path": "/home/potatoritos/Tilt",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",

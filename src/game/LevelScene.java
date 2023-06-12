@@ -8,7 +8,7 @@ import graphics.ShaderProgram;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 import org.lwjgl.system.MemoryUtil;
-import util.Util;
+import math.MathUtil;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
@@ -86,8 +86,8 @@ public class LevelScene extends Scene {
     }
     public void update(InputState input) {
         timer++;
-        rotation.x = (Util.cutMaxMin(input.getMousePosition().y, 0, 1)-0.5) * Math.PI/3;
-        rotation.y = (Util.cutMaxMin(input.getMousePosition().x, 0, 1)-0.5) * Math.PI/3;
+        rotation.x = (MathUtil.cutMaxMin(input.getMousePosition().y, 0, 1)-0.5) * Math.PI/3;
+        rotation.y = (MathUtil.cutMaxMin(input.getMousePosition().x, 0, 1)-0.5) * Math.PI/3;
 
 //        if (timer >= 60) {
 //            ball.velocity.x = -0.01;
@@ -95,9 +95,9 @@ public class LevelScene extends Scene {
 //        }
 
         ball.velocity.x += Math.sin(rotation.y * 0.002);
-        ball.velocity.x = Util.cutMaxMin(ball.velocity.x, -0.2f, 0.2f);
+        ball.velocity.x = MathUtil.cutMaxMin(ball.velocity.x, -0.2f, 0.2f);
         ball.velocity.y += -Math.sin(rotation.x * 0.002);
-        ball.velocity.y = Util.cutMaxMin(ball.velocity.y, -0.2f, 0.2f);
+        ball.velocity.y = MathUtil.cutMaxMin(ball.velocity.y, -0.2f, 0.2f);
 
         if (ball.velocity.length() > 0.1f) {
             ball.velocity.normalize(0.1f);

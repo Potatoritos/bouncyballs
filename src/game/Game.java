@@ -6,7 +6,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFWErrorCallback;
-import util.Util;
+import math.MathUtil;
 
 import static geometry.MeshGeometry.*;
 import static org.lwjgl.glfw.GLFW.*;
@@ -16,7 +16,7 @@ public class Game {
     private boolean isRunning;
     private Window window;
 
-    private float fov = (float)Math.toRadians(60);
+    private float fov = (float) Math.toRadians(60);
     private float zNear = 0.01f;
     private float zFar = 100;
 
@@ -123,22 +123,22 @@ public class Game {
 
         levelScene.update(inputMap);
 
-        rotationX = (Util.cutMaxMin(mouseY, 0, 1)-0.5) * Math.PI / 3;
-        rotationY = (Util.cutMaxMin(mouseX, 0, 1)-0.5) * Math.PI / 3;
+        rotationX = (MathUtil.cutMaxMin(mouseY, 0, 1)-0.5) * Math.PI / 3;
+        rotationY = (MathUtil.cutMaxMin(mouseX, 0, 1)-0.5) * Math.PI / 3;
 
         velX += Math.sin(rotationY)*0.02;
         velY += -Math.sin(rotationX)*0.02;
 
-        velX = Util.cutMaxMin(velX, -0.2, 0.2);
-        velY = Util.cutMaxMin(velY, -0.2, 0.2);
+        velX = MathUtil.cutMaxMin(velX, -0.2, 0.2);
+        velY = MathUtil.cutMaxMin(velY, -0.2, 0.2);
 
 //        System.out.printf("a %f, %f\n", velX, velY);
 
         sphere.getPosition().x += velX;
         sphere.getPosition().y += velY;
 
-        sphere.getPosition().x = Util.cutMaxMin(sphere.getPosition().x, -5, 5);
-        sphere.getPosition().y = Util.cutMaxMin(sphere.getPosition().y, -5, 5);
+        sphere.getPosition().x = MathUtil.cutMaxMin(sphere.getPosition().x, -5, 5);
+        sphere.getPosition().y = MathUtil.cutMaxMin(sphere.getPosition().y, -5, 5);
 
 //        System.out.printf("a %f, %f\n", Math.toDegrees(rotationX), Math.toDegrees(rotationY));
     }

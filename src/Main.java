@@ -23,13 +23,13 @@ public class Main {
 //        }
 //        System.out.printf("avg: %f\nmax: %f\n", (double)avgDelta/1e9/1000, (double)maxDelta/1e9);
 
-        Line3 line = new Line3(new Vector3d(-1,2,2), new Vector3d(3,-2,-1));
-        Sphere sphere = new Sphere(new Vector3d(0, 0, 0), 2);
-        Vector3d result = new Vector3d();
-        System.out.println(intersectionLineSphere(line, sphere, result));
-        System.out.println(result);
-//        Game game = new Game();
-//        game.run();
-//        game.close();
+//        Line3 line = new Line3(new Vector3d(-1,2,2), new Vector3d(3,-2,-1));
+//        Sphere sphere = new Sphere(new Vector3d(0, 0, 0), 2);
+//        Vector3d result = new Vector3d();
+//        System.out.println(intersectionLineSphere(line, sphere, result));
+//        System.out.println(result);
+        Game game = new Game();
+        game.run();
+        game.close();
     }
 }

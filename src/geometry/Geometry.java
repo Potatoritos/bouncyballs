@@ -62,10 +62,7 @@ public class Geometry {
         // Rotate everything such that the cylinder's axis lies on the z-axis
         // Only works for axis-aligned cylinders (too lazy to figure out the proper way of doing this)
         Line3 rotatedLine = new Line3(line);
-        Line3 rotatedCylinderAxis = new Line3(
-                new Vector3d(cylinder.position),
-                new Vector3d(cylinder.axis)
-        );
+        Line3 rotatedCylinderAxis = new Line3(cylinder.position, cylinder.axis);
         Matrix3d rotationMatrix = new Matrix3d();
         if (cylinder.axis.z == 0) {
             if (cylinder.axis.x == 0) {
@@ -88,7 +85,7 @@ public class Geometry {
             return false;
         }
         Vector2d cylinderPositionXY = new Vector2d(rotatedCylinderAxis.position.x, rotatedCylinderAxis.position.y);
-        Circle circle = new Circle(cylinder.radius, new Vector2d(cylinderPositionXY));
+        Circle circle = new Circle(cylinder.radius, cylinderPositionXY);
 
         // Find the intersection of the projected lines and cylinder (now a circle)
         double t = intersectionLineCircle(lineXY, circle);
@@ -134,7 +131,7 @@ public class Geometry {
         Quadratic q = new Quadratic(
                 line.displacement.lengthSquared(),
                 2*line.displacement.dot(lineToCircle),
-                lineToCircle.lengthSquared() - circle.radius*circle.radius
+                lineToCircle.lengthSquared() - circle.getRadius()*circle.getRadius()
         );
         if (q.discriminant() < 0) {
             return -1;
@@ -221,7 +218,7 @@ public class Geometry {
         return distance(u, point);
     }
     public static double distanceCirclePoint(Circle circle, Vector2d point) {
-        return Math.hypot(circle.position.x-point.x, circle.position.y-point.y) - circle.radius;
+        return Math.hypot(circle.position.x-point.x, circle.position.y-point.y) - circle.getRadius();
     }
     public static double distance(Vector2d a, Vector2d b) {
         return Math.hypot(b.x-a.x, b.y-a.y);

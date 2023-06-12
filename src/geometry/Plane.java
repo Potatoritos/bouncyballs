@@ -11,11 +11,14 @@ public class Plane {
         displacement1 = new Vector3d();
         displacement2 = new Vector3d();
     }
-    public Plane(Vector3d pos, Vector3d displacement1, Vector3d displacement2) {
+    public Plane(Vector3d position, Vector3d displacement1, Vector3d displacement2) {
         this();
-        this.position.set(pos);
+        this.position.set(position);
         this.displacement1.set(displacement1);
         this.displacement2.set(displacement2);
+    }
+    public Plane(Plane plane) {
+        this(plane.position, plane.displacement1, plane.displacement2);
     }
 
     public Vector3d getNormal() {

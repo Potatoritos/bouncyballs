@@ -14,6 +14,9 @@ public class Line2 {
         this.position.set(position);
         this.displacement.set(displacement);
     }
+    public Line2(Line2 line) {
+        this(line.position, line.displacement);
+    }
     public double x1() {
         return position.x;
     }

@@ -69,21 +69,19 @@ public class Geometry {
         }
     }
     public static boolean intersectionLineCylinder(Line3 line, Cylinder cylinder, Vector3d result) {
-        // Rotate everything at the angle that makes the cylinder's axis lie on the z-axis
+        // Rotate everything such that the cylinder's axis lies on the z-axis
         // Only works for axis-aligned cylinders (too lazy to figure out the proper way of doing this)
         Line3 rotatedLine = new Line3(line);
         Line3 rotatedCylinderAxis = new Line3(
                 new Vector3d(cylinder.position),
                 new Vector3d(cylinder.axis)
         );
-
         Matrix3d rotationMatrix = new Matrix3d().identity();
         if (cylinder.axis.x == 0 && cylinder.axis.z == 0) {
             rotationMatrix.rotationX(Math.PI/2);
         } else if (cylinder.axis.y == 0 && cylinder.axis.z == 0) {
             rotationMatrix.rotationY(Math.PI/2);
         }
-
         rotatedLine.position.mul(rotationMatrix);
         rotatedLine.displacement.mul(rotationMatrix);
         rotatedCylinderAxis.position.mul(rotationMatrix);
@@ -184,9 +182,12 @@ public class Geometry {
         if (discrim < 0) {
             return false;
         }
+        discrim = Math.sqrt(discrim);
 
         double t1 = (-b - discrim) / (2*a);
         double t2 = (-b + discrim) / (2*a);
+
+        System.out.printf("t1=%f, t2=%f\n", t1, t2);
 
         if (t1 < 0) t1 = t2;
         if (t2 < 0) t2 = t1;

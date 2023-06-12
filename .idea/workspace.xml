@@ -10,27 +10,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
-      <change afterPath="$PROJECT_DIR$/src/geometry/CollisionCylinder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/geometry/CollisionHandler3.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/geometry/CollisionObject3.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/geometry/CollisionPlane.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/geometry/CollisionSphere.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/geometry/Cylinder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/LevelScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/LevelScene.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/geometry/Circle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/Circle.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/geometry/Geometry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/Geometry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/geometry/Line2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/Line2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/geometry/Line3.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/Line3.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/geometry/Plane.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/Plane.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/physics/CollisionCircle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/CollisionCircle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/physics/CollisionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/CollisionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/physics/CollisionLineX.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/CollisionLineX.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/physics/CollisionLineY.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/CollisionLineY.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/physics/CollisionObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/CollisionObject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/util/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/Util.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -190,7 +172,7 @@
       <workItem from="1686122915748" duration="8994000" />
       <workItem from="1686227849224" duration="2633000" />
       <workItem from="1686573393978" duration="4947000" />
-      <workItem from="1686580481230" duration="9925000" />
+      <workItem from="1686580481230" duration="15148000" />
     </task>
     <servers />
   </component>

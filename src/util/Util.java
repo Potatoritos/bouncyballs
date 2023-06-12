@@ -38,6 +38,15 @@ public class Util {
         return a;
     }
 
+    public static boolean withinRange(double value, double a, double b) {
+        if (b < a) {
+            double tmp = b;
+            b = a;
+            a = tmp;
+        }
+        return a <= value && value <= b;
+    }
+
     public static double cutMaxMin(double a, double min, double max) {
         return Math.max(Math.min(a, max), min);
     }

@@ -2,7 +2,7 @@ package game;
 
 import graphics.EmptyFbo;
 import graphics.FrameBufferObject;
-import physics.CollisionHandler;
+import geometry.CollisionHandler;
 import graphics.GameObjectMesh;
 import graphics.ShaderProgram;
 import org.joml.Vector3d;

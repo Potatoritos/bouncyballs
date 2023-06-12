@@ -9,4 +9,7 @@ public class Circle {
         this.radius = radius;
         this.position = new Vector2d().set(position);
     }
+    public String toString() {
+        return "Circle pos=" + position + " r=" + radius;
+    }
 }

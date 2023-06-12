@@ -1,4 +1,4 @@
-package physics;
+package geometry;
 
 import game.GameObject;
 import geometry.Line2;

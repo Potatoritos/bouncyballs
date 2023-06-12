@@ -1,13 +1,11 @@
-package physics;
+package geometry;
 
 import game.GameObject;
-import geometry.Circle;
-import geometry.Line2;
 import org.joml.Vector2d;
 
 import static geometry.Geometry.*;
 
-public class CollisionCircle extends CollisionObject {
+public class  CollisionCircle extends CollisionObject {
     private final Circle circle;
     public CollisionCircle(GameObject parent, double radius, Vector2d position) {
         super(parent);

@@ -1,45 +1,206 @@
 package geometry;
 
+import org.joml.Matrix3d;
 import org.joml.Vector2d;
 import org.joml.Vector3d;
 
-import static util.Util.clipWithinEpsilon;
-import static util.Util.withinEpsilon;
+import static util.Util.*;
 
 
 public class Geometry {
+    private static final Vector3d xHat = new Vector3d(1, 0, 0);
+    private static final Vector3d yHat = new Vector3d(0, 1, 0);
+    private static final Vector3d zHat = new Vector3d(0, 0, 1);
+
     // Stores the projection of a onto b in result
     public static void project(Vector2d a, Vector2d b, Vector2d result) {
         result.set(b);
-        result.mul(a.dot(b) / b.dot(b));
+        result.mul(a.dot(b) / b.lengthSquared());
+    }
+    public static void project(Vector3d a, Vector3d b, Vector3d result) {
+        result.set(b);
+        result.mul(a.dot(b) / b.lengthSquared());
     }
 
     public static boolean intersectionLinePlane(Line3 line, Plane plane, Vector3d result) {
         // set t = (plane.d1 × plane.d2) • (line.pos - plane.pos) / -line.d • (plane.d1 × plane.d2)
-
-        Vector3d d1xd2 = new Vector3d();
-        plane.displacement1.cross(plane.displacement2, d1xd2);
+        Vector3d r = new Vector3d();
+        plane.displacement1.cross(plane.displacement2, r);
 
         Vector3d posDifference = new Vector3d();
-        line.position.sub(plane.position, posDifference);
+        line.position.sub(plane.position, posDifference); // line.pos - plane.pos
 
-        double t = d1xd2.dot(posDifference);
+        double t = r.dot(posDifference);
         Vector3d lineNegative = new Vector3d();
         line.displacement.negate(lineNegative);
-        t /= lineNegative.dot(d1xd2);
+        double denom = lineNegative.dot(r);
+        t /= denom;
+
+        // set u = (plane.d2 × -line.d) • (line.pos - plane.pos) / -line.d • (plane.d1 × plane.d2)
+        plane.displacement2.cross(lineNegative, r);
+        double u = r.dot(posDifference);
+        u /= denom;
+
+        // set v = (-line.d × plane.d1) • (line.pos - plane.pos) / -line.d • (plane.d1 × plane.d2)
+        lineNegative.cross(plane.displacement1, r);
+        double v = r.dot(posDifference);
+        v /= denom;
+
+        t = clipWithinEpsilon(t, 0, 1);
+        u = clipWithinEpsilon(u, 0, 1);
+        v = clipWithinEpsilon(v, 0, 1);
+        if (t < 0 || t > 1 || u < 0 || u > 1 || v < 0 || v > 1) {
+            return false;
+        }
+
+        result.set(line.displacement).mul(t).add(line.position);
+        return true;
+    }
+
+    public static void arbitraryTangent(Vector3d normal, Vector3d result) {
+        if (normal.x == 0) {
+            result.set(xHat);
+        } else if (normal.y == 0) {
+            result.set(yHat);
+        } else if (normal.z == 0) {
+            result.set(zHat);
+        } else {
+            result.set(1/normal.x, -1/normal.y, 0);
+        }
+    }
+    public static boolean intersectionLineCylinder(Line3 line, Cylinder cylinder, Vector3d result) {
+        // Rotate everything at the angle that makes the cylinder's axis lie on the z-axis
+        // Only works for axis-aligned cylinders (too lazy to figure out the proper way of doing this)
+        Line3 rotatedLine = new Line3(line);
+        Line3 rotatedCylinderAxis = new Line3(
+                new Vector3d(cylinder.position),
+                new Vector3d(cylinder.axis)
+        );
+
+        Matrix3d rotationMatrix = new Matrix3d().identity();
+        if (cylinder.axis.x == 0 && cylinder.axis.z == 0) {
+            rotationMatrix.rotationX(Math.PI/2);
+        } else if (cylinder.axis.y == 0 && cylinder.axis.z == 0) {
+            rotationMatrix.rotationY(Math.PI/2);
+        }
+
+        rotatedLine.position.mul(rotationMatrix);
+        rotatedLine.displacement.mul(rotationMatrix);
+        rotatedCylinderAxis.position.mul(rotationMatrix);
+        rotatedCylinderAxis.displacement.mul(rotationMatrix);
+
+        // Project the rotated line and cylinder to the XY plane
+        Line2 lineXY = new Line2(
+                new Vector2d(rotatedLine.position.x, rotatedLine.position.y),
+                new Vector2d(rotatedLine.displacement.x, rotatedLine.displacement.y)
+        );
+        if (lineXY.displacement.lengthSquared() == 0) {
+            return false;
+        }
+        Vector2d cylinderPositionXY = new Vector2d(rotatedCylinderAxis.position.x, rotatedCylinderAxis.position.y);
+        Circle circle = new Circle(cylinder.radius, new Vector2d(cylinderPositionXY));
+
+        // Find the intersection of the projected lines and cylinder (now a circle)
+        Vector3d circleIntersectionResult = new Vector3d();
+        if (!intersectionLineCircleT(lineXY, circle, circleIntersectionResult)) {
+            return false;
+        }
+
+        // Check if the intersection is on the cylinder (in the z-direction)
+        double t = circleIntersectionResult.z;
+        double intersectionZ = rotatedLine.position.z + t*rotatedLine.displacement.z;
+        double bottom = rotatedCylinderAxis.position.z;
+        double top = bottom + rotatedCylinderAxis.displacement.z;
+        if (!withinRange(intersectionZ, bottom, top)) {
+            return false;
+        }
+
+        result.set(line.displacement).mul(t).add(line.position);
+        return true;
+    }
+    public static boolean intersectionLineCylinderOld(Line3 line, Cylinder cylinder, Vector3d result) {
+        Vector3d x1 = cylinder.position;
+        Vector3d x2 = new Vector3d(x1).add(cylinder.axis);
+
+        Vector3d u1 = new Vector3d(x1).cross(x2);
+        Vector3d u2 = new Vector3d(x1).cross(line.position);
+        Vector3d u3 = new Vector3d(line.position).cross(x2);
+
+        Vector3d u4 = new Vector3d(x1).cross(line.displacement);
+        Vector3d u5 = new Vector3d(line.displacement).cross(x2);
+
+        Vector3d A = new Vector3d(u1).sub(u2).sub(u3);
+        Vector3d B = new Vector3d(u4).add(u5);
+
+        double u6 = new Vector3d(x1).sub(x2).lengthSquared() * cylinder.getRadius() * cylinder.getRadius();
+
+        double a = B.x*B.x + B.y*B.y + B.z*B.z;
+        double b = -2 * (A.x*B.x + A.y*B.y + A.z*B.z);
+        double c = A.x*A.x + A.y*A.y + A.z*A.z - u6;
+
+        double discrim = b*b - 4*a*c;
+        if (discrim < 0) {
+            System.out.println("Discrim");
+            return false;
+        }
+
+        double t1 = (-b - discrim) / (2*a);
+        double t2 = (-b + discrim) / (2*a);
+
+        System.out.printf("ts %f %f\n", t1, t2);
+
+        if (t1 < 0) t1 = t2;
+        if (t2 < 0) t2 = t1;
+        double t = Math.min(t1, t2);
+
+        if (t < 0 || t > 1) {
+            System.out.println("t");
+            return false;
+        }
+
+        result.set(line.displacement).mul(t).add(line.position);
+
+        Vector3d u7 = new Vector3d(result).sub(x1);
+        Vector3d u8 = new Vector3d(x2).sub(x1);
+        double check = u7.dot(u8);
+        if (check < 0 || check > u8.lengthSquared()) {
+            System.out.println("check");
+            return false;
+        }
 
         return true;
     }
 
-    // Finds the intersection (x,y) closest to (b,d) of the
-    // line segment and circle given by the parametric equations
-    //  ⎡ x = at + b
-    //  ⎣ y = ct + d
-    // and
-    //  ⎡ x = r sin(s) + u
-    //  ⎣ y = r cos(s) + v
-    // where 0 ≤ t ≤ 1, 0 ≤ s ≤ 2π
-    public static boolean intersectionLineCircle(double a, double b, double c, double d, double r, double u, double v, Vector2d result) {
+    public static boolean intersectionLineSphere(Line3 line, Sphere sphere, Vector3d result) {
+        double a = line.displacement.lengthSquared();
+
+        Vector3d sphereToLine = new Vector3d();
+        line.position.sub(sphere.position, sphereToLine);
+
+        double b = 2 * line.displacement.dot(sphereToLine);
+        double c = sphereToLine.lengthSquared() - sphere.getRadius()*sphere.getRadius();
+
+        double discrim = b*b - 4*a*c;
+        if (discrim < 0) {
+            return false;
+        }
+
+        double t1 = (-b - discrim) / (2*a);
+        double t2 = (-b + discrim) / (2*a);
+
+        if (t1 < 0) t1 = t2;
+        if (t2 < 0) t2 = t1;
+        double t = Math.min(t1, t2);
+
+        if (t < 0 || t > 1) {
+            return false;
+        }
+
+        result.set(line.displacement).mul(t).add(line.position);
+        return true;
+    }
+
+    public static boolean intersectionLineCircleT(double a, double b, double c, double d, double r, double u, double v, Vector3d result) {
         if (a == 0 && c == 0) {
             return false;
         }
@@ -49,7 +210,6 @@ public class Geometry {
         double D = B*B - 4*A*C;
         if (D < 0) {
             return false;
-
         }
 
         double sqrtD = Math.sqrt(D);
@@ -64,18 +224,38 @@ public class Geometry {
             if (!t1Within && !t2Within) {
                 return false;
             }
-//            System.out.printf("bruh t2=%f within=%b\n", t2, withinEpsilon(t2, 0));
         }
 
         double x1 = a*t1 + b;
         double y1 = c*t1 + d;
         double x2 = a*t2 + b;
         double y2 = c*t2 + d;
+        System.out.printf("x1: %f, y1: %f\n", x1, y1);
+        System.out.printf("x2: %f, y2: %f\n", x2, y2);
         if (Math.hypot(x1-b, y1-d) <= Math.hypot(x2-b, y2-d)) {
-            result.set(x1, y1);
+            result.set(x1, y1, t1);
         } else {
-            result.set(x2, y2);
+            result.set(x2, y2, t2);
         }
+        return true;
+    }
+
+    public static boolean intersectionLineCircleT(Line2 line, Circle circle, Vector3d result) {
+        return intersectionLineCircleT(line.displacement.x, line.position.x, line.displacement.y, line.position.y, circle.radius, circle.position.x, circle.position.y, result);
+    }
+
+    // Finds the intersection (x,y) closest to (b,d) of the
+    // line segment and circle given by the parametric equations
+    //  ⎡ x = at + b
+    //  ⎣ y = ct + d
+    // and
+    //  ⎡ x = r sin(s) + u
+    //  ⎣ y = r cos(s) + v
+    // where 0 ≤ t ≤ 1, 0 ≤ s ≤ 2π
+    public static boolean intersectionLineCircle(double a, double b, double c, double d, double r, double u, double v, Vector2d result) {
+        Vector3d resultT = new Vector3d();
+        intersectionLineCircleT(a, b, c, d, r, u, v, resultT);
+        result.set(resultT.x, resultT.y);
         return true;
     }
 
@@ -155,5 +335,8 @@ public class Geometry {
     }
     public static double distance(Vector2d a, Vector2d b) {
         return Math.hypot(b.x-a.x, b.y-a.y);
+    }
+    public static double distance(Vector3d a, Vector3d b) {
+        return Math.sqrt((b.x-a.x)*(b.x-a.x) + (b.y-a.y)*(b.y-a.y) + (b.z-a.z)*(b.z-a.z));
     }
 }

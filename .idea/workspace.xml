@@ -10,9 +10,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
+      <change afterPath="$PROJECT_DIR$/src/geometry/CollisionCylinder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/geometry/CollisionHandler3.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/geometry/CollisionObject3.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/geometry/CollisionPlane.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/geometry/CollisionSphere.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/geometry/Cylinder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/shaders/sobel_filter.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/assets/shaders/sobel_filter.glsl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/shaders/sobel_filter_instanced.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/assets/shaders/sobel_filter_instanced.glsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game/LevelScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/LevelScene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/geometry/Circle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/Circle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/geometry/Geometry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/Geometry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/geometry/Line2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/Line2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/geometry/Line3.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/Line3.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/geometry/Plane.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/Plane.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/physics/CollisionCircle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/CollisionCircle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/physics/CollisionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/CollisionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/physics/CollisionLineX.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/CollisionLineX.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/physics/CollisionLineY.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/CollisionLineY.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/physics/CollisionObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/CollisionObject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/util/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/Util.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,31 +60,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/potatoritos/Tilt&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.ide.settings.new.ui&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Downloaded.Files.Path.Enabled": "false",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/home/potatoritos/Tilt",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "SDKs",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.editor",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/assets/levels" />
@@ -74,6 +92,9 @@
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/assets/levels" />
       <recent name="$PROJECT_DIR$/assets/shader" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="geometry" />
     </key>
   </component>
   <component name="RunManager">
@@ -159,7 +180,17 @@
       <workItem from="1685382866253" duration="63000" />
       <workItem from="1685382935415" duration="94000" />
       <workItem from="1685383035548" duration="3804000" />
-      <workItem from="1685547534166" duration="4735000" />
+      <workItem from="1685547534166" duration="9480000" />
+      <workItem from="1685622396446" duration="4494000" />
+      <workItem from="1685627164041" duration="13082000" />
+      <workItem from="1685643602792" duration="2463000" />
+      <workItem from="1685648119215" duration="7199000" />
+      <workItem from="1685893743597" duration="613000" />
+      <workItem from="1685969647921" duration="2357000" />
+      <workItem from="1686122915748" duration="8994000" />
+      <workItem from="1686227849224" duration="2633000" />
+      <workItem from="1686573393978" duration="4947000" />
+      <workItem from="1686580481230" duration="9925000" />
     </task>
     <servers />
   </component>
@@ -181,5 +212,9 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Remove color from Mesh" />
     <option name="LAST_COMMIT_MESSAGE" value="Remove color from Mesh" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

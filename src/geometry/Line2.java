@@ -26,4 +26,7 @@ public class Line2 {
     public double y2() {
         return position.y + displacement.y;
     }
+    public String toString() {
+        return "Line2 pos=" + position + " d=" + displacement;
+    }
 }

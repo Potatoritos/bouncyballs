@@ -1,8 +1,7 @@
-package physics;
+package geometry;
 
 import game.Ball;
 import game.Box;
-import geometry.Line2;
 import org.joml.Vector2d;
 
 import java.util.ArrayList;

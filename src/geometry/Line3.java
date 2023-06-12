@@ -14,6 +14,11 @@ public class Line3 {
         this.position.set(position);
         this.displacement.set(displacement);
     }
+    public Line3(Line3 line) {
+        this();
+        this.position.set(line.position);
+        this.displacement.set(line.displacement);
+    }
     public double x1() {
         return position.x;
     }
@@ -31,5 +36,8 @@ public class Line3 {
     }
     public double z2() {
         return position.z + displacement.z;
+    }
+    public String toString() {
+        return "Line3 pos=" + position + " d=" + displacement;
     }
 }

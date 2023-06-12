@@ -17,4 +17,10 @@ public class Plane {
         this.displacement1.set(displacement1);
         this.displacement2.set(displacement2);
     }
+
+    public Vector3d getNormal() {
+        Vector3d normal = new Vector3d(displacement1);
+        normal.cross(displacement2);
+        return normal;
+    }
 }

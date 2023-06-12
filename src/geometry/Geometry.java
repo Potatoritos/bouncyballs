@@ -202,48 +202,32 @@ public class Geometry {
         return true;
     }
 
-    public static boolean intersectionLineCircleT(double a, double b, double c, double d, double r, double u, double v, Vector3d result) {
-        if (a == 0 && c == 0) {
-            return false;
+    public static double intersectionLineCircle(Line2 line, Circle circle) {
+        if (line.displacement.x == 0 && line.displacement.y == 0) {
+            return -1;
         }
+        Vector2d lineToCircle = new Vector2d(line.position).sub(circle.position);
         Quadratic q = new Quadratic(
-            a*a + c*c,
-            2*a*(b-u) + 2*c*(d-v),
-            (b-u)*(b-u) + (d-v)*(d-v) - r*r
+                line.displacement.lengthSquared(),
+                2*line.displacement.dot(lineToCircle),
+                lineToCircle.lengthSquared() - circle.radius*circle.radius
         );
         if (q.discriminant() < 0) {
-            return false;
+            return -1;
         }
 
         double t = minNonNegativeClipped(q.solution1(), q.solution2());
         if (t < 0 || t > 1) {
-            return false;
+            return -1;
         }
-        result.set(a*t + b, c*t + d, t);
-        return true;
-    }
-
-    public static boolean intersectionLineCircleT(Line2 line, Circle circle, Vector3d result) {
-        return intersectionLineCircleT(line.displacement.x, line.position.x, line.displacement.y, line.position.y, circle.radius, circle.position.x, circle.position.y, result);
-    }
-
-    // Finds the intersection (x,y) closest to (b,d) of the
-    // line segment and circle given by the parametric equations
-    //  ⎡ x = at + b
-    //  ⎣ y = ct + d
-    // and
-    //  ⎡ x = r sin(s) + u
-    //  ⎣ y = r cos(s) + v
-    // where 0 ≤ t ≤ 1, 0 ≤ s ≤ 2π
-    public static boolean intersectionLineCircle(double a, double b, double c, double d, double r, double u, double v, Vector2d result) {
-        Vector3d resultT = new Vector3d();
-        boolean intersects = intersectionLineCircleT(a, b, c, d, r, u, v, resultT);
-        result.set(resultT.x, resultT.y);
-        return intersects;
+        return t;
     }
 
     public static boolean intersectionLineCircle(Line2 line, Circle circle, Vector2d result) {
-        return intersectionLineCircle(line.displacement.x, line.position.x, line.displacement.y, line.position.y, circle.radius, circle.position.x, circle.position.y, result);
+        double t = intersectionLineCircle(line, circle);
+        if (t == -1) return false;
+        result.set(line.displacement).mul(t).add(line.position);
+        return true;
     }
 
     // Finds the intersection (x,y) of the

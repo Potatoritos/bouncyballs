@@ -100,13 +100,12 @@ public class Geometry {
         Circle circle = new Circle(cylinder.radius, new Vector2d(cylinderPositionXY));
 
         // Find the intersection of the projected lines and cylinder (now a circle)
-        Vector3d circleIntersectionResult = new Vector3d();
-        if (!intersectionLineCircleT(lineXY, circle, circleIntersectionResult)) {
+        double t = intersectionLineCircle(lineXY, circle);
+        if (t == -1) {
             return false;
         }
 
         // Check if the intersection is on the cylinder (in the z-direction)
-        double t = circleIntersectionResult.z;
         double intersectionZ = rotatedLine.position.z + t*rotatedLine.displacement.z;
         double bottom = rotatedCylinderAxis.position.z;
         double top = bottom + rotatedCylinderAxis.displacement.z;
@@ -117,87 +116,21 @@ public class Geometry {
         result.set(line.displacement).mul(t).add(line.position);
         return true;
     }
-    public static boolean intersectionLineCylinderOld(Line3 line, Cylinder cylinder, Vector3d result) {
-        Vector3d x1 = cylinder.position;
-        Vector3d x2 = new Vector3d(x1).add(cylinder.axis);
-
-        Vector3d u1 = new Vector3d(x1).cross(x2);
-        Vector3d u2 = new Vector3d(x1).cross(line.position);
-        Vector3d u3 = new Vector3d(line.position).cross(x2);
-
-        Vector3d u4 = new Vector3d(x1).cross(line.displacement);
-        Vector3d u5 = new Vector3d(line.displacement).cross(x2);
-
-        Vector3d A = new Vector3d(u1).sub(u2).sub(u3);
-        Vector3d B = new Vector3d(u4).add(u5);
-
-        double u6 = new Vector3d(x1).sub(x2).lengthSquared() * cylinder.getRadius() * cylinder.getRadius();
-
-        double a = B.x*B.x + B.y*B.y + B.z*B.z;
-        double b = -2 * (A.x*B.x + A.y*B.y + A.z*B.z);
-        double c = A.x*A.x + A.y*A.y + A.z*A.z - u6;
-
-        double discrim = b*b - 4*a*c;
-        if (discrim < 0) {
-            System.out.println("Discrim");
-            return false;
-        }
-
-        double t1 = (-b - discrim) / (2*a);
-        double t2 = (-b + discrim) / (2*a);
-
-        System.out.printf("ts %f %f\n", t1, t2);
-
-        if (t1 < 0) t1 = t2;
-        if (t2 < 0) t2 = t1;
-        double t = Math.min(t1, t2);
-
-        if (t < 0 || t > 1) {
-            System.out.println("t");
-            return false;
-        }
-
-        result.set(line.displacement).mul(t).add(line.position);
-
-        Vector3d u7 = new Vector3d(result).sub(x1);
-        Vector3d u8 = new Vector3d(x2).sub(x1);
-        double check = u7.dot(u8);
-        if (check < 0 || check > u8.lengthSquared()) {
-            System.out.println("check");
-            return false;
-        }
-
-        return true;
-    }
 
     public static boolean intersectionLineSphere(Line3 line, Sphere sphere, Vector3d result) {
-        double a = line.displacement.lengthSquared();
-
-        Vector3d sphereToLine = new Vector3d();
-        line.position.sub(sphere.position, sphereToLine);
-
-        double b = 2 * line.displacement.dot(sphereToLine);
-        double c = sphereToLine.lengthSquared() - sphere.getRadius()*sphere.getRadius();
-
-        double discrim = b*b - 4*a*c;
-        if (discrim < 0) {
+        Vector3d lineToSphere = new Vector3d(line.position).sub(sphere.position);
+        Quadratic q = new Quadratic(
+                line.displacement.lengthSquared(),
+                2 * line.displacement.dot(lineToSphere),
+                lineToSphere.lengthSquared() - sphere.getRadius()*sphere.getRadius()
+        );
+        if (q.discriminant() < 0) {
             return false;
         }
-        discrim = Math.sqrt(discrim);
-
-        double t1 = (-b - discrim) / (2*a);
-        double t2 = (-b + discrim) / (2*a);
-
-        System.out.printf("t1=%f, t2=%f\n", t1, t2);
-
-        if (t1 < 0) t1 = t2;
-        if (t2 < 0) t2 = t1;
-        double t = Math.min(t1, t2);
-
+        double t = minNonNegativeClipped(q.solution1(), q.solution2());
         if (t < 0 || t > 1) {
             return false;
         }
-
         result.set(line.displacement).mul(t).add(line.position);
         return true;
     }
@@ -215,7 +148,6 @@ public class Geometry {
         if (q.discriminant() < 0) {
             return -1;
         }
-
         double t = minNonNegativeClipped(q.solution1(), q.solution2());
         if (t < 0 || t > 1) {
             return -1;

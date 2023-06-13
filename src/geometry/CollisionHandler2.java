@@ -9,15 +9,15 @@ import java.util.ArrayList;
 import static geometry.Geometry.*;
 import static math.MathUtil.withinEpsilon;
 
-public class CollisionHandler {
+public class CollisionHandler2 {
     private Ball ball;
     private final Line2 ballMotion;
-    private final ArrayList<CollisionObject> collisionObjects;
+    private final ArrayList<CollisionObject2> collisionObjects;
 
     private double minDistance;
     private final Vector2d minIntersection;
-    private CollisionObject minCollisionObject;
-    public CollisionHandler() {
+    private CollisionObject2 minCollisionObject;
+    public CollisionHandler2() {
         collisionObjects = new ArrayList<>();
         ballMotion = new Line2();
         minIntersection = new Vector2d();
@@ -30,7 +30,7 @@ public class CollisionHandler {
         ballMotion.position.set(ball.position.x, ball.position.y);
         ballMotion.displacement.set(ball.velocity.x, ball.velocity.y);
     }
-    private void addCollisionObject(CollisionObject object) {
+    private void addCollisionObject(CollisionObject2 object) {
         double distance = object.distance(ballMotion.position), length = ballMotion.displacement.length();
         if (distance <= length+0.2) {
             collisionObjects.add(object);
@@ -55,7 +55,7 @@ public class CollisionHandler {
 //        while (ballMotion.displacement.lengthSquared() > 0 && ++i < 7) {
         while (i++ < 7) {
             minDistance = Double.POSITIVE_INFINITY;
-            for (CollisionObject object : collisionObjects) {
+            for (CollisionObject2 object : collisionObjects) {
                 boolean intersects = object.intersect(ballMotion, intersection);
                 if (!intersects) {
                     continue;

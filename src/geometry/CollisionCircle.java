@@ -5,7 +5,7 @@ import org.joml.Vector2d;
 
 import static geometry.Geometry.*;
 
-public class  CollisionCircle extends CollisionObject {
+public class  CollisionCircle extends CollisionObject2 {
     private final Circle circle;
     public CollisionCircle(GameObject parent, double radius, Vector2d position) {
         super(parent);

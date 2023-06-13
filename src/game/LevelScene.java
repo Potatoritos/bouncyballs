@@ -2,7 +2,7 @@ package game;
 
 import graphics.EmptyFbo;
 import graphics.FrameBufferObject;
-import geometry.CollisionHandler;
+import geometry.CollisionHandler2;
 import graphics.GameObjectMesh;
 import graphics.ShaderProgram;
 import org.joml.Vector3d;
@@ -39,7 +39,7 @@ public class LevelScene extends Scene {
     private final ArrayList<Box> wallYTiles;
     private final ArrayList<Ball> balls;
     private final Ball ball;
-    private final CollisionHandler collisionHandler;
+    private final CollisionHandler2 collisionHandler;
     private long timer;
     public LevelScene(int windowWidth, int windowHeight) {
         super();
@@ -78,7 +78,7 @@ public class LevelScene extends Scene {
         edgeSourceFbo = new EmptyFbo(windowWidth, windowHeight);
         handleWindowResize(windowWidth, windowHeight);
 
-        collisionHandler = new CollisionHandler();
+        collisionHandler = new CollisionHandler2();
     }
     @Override
     public void handleWindowResize(int width, int height) {

@@ -5,7 +5,7 @@ import org.joml.Vector2d;
 
 import static geometry.Geometry.*;
 
-public class CollisionLineX extends CollisionObject {
+public class CollisionLineX extends CollisionObject2 {
     public final Line2 line;
     public final double directionSign;
     public CollisionLineX(GameObject parent, Vector2d position, Vector2d displacement, double directionSign) {

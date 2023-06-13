@@ -1,12 +1,11 @@
 package geometry;
 
 import game.GameObject;
-import geometry.Line2;
 import org.joml.Vector2d;
 
-public abstract class CollisionObject {
+public abstract class CollisionObject2 {
     public final GameObject parent;
-    public CollisionObject(GameObject parent) {
+    public CollisionObject2(GameObject parent) {
         this.parent = parent;
     }
     public abstract void reflectLine(Line2 line, Vector2d intersection, double length);

@@ -9,7 +9,7 @@ public class CollisionSphere extends CollisionObject3 {
     private final Sphere sphere;
     public CollisionSphere(GameObject parent, Sphere sphere) {
         super(parent);
-        this.sphere = sphere;
+        this.sphere = new Sphere(sphere);
     }
 
     @Override
@@ -19,18 +19,12 @@ public class CollisionSphere extends CollisionObject3 {
         Vector3d parallel1 = new Vector3d(-(normal.y + normal.z)/normal.x, 1, 1);
         Vector3d parallel2 = new Vector3d(normal).cross(parallel1);
 
-        project(line.displacement, parallel1, parallel1);
-        project(line.displacement, parallel2, parallel2);
-        project(line.displacement, normal, normal);
-        normal.negate().mul(0.5);
-
-        line.displacement.set(parallel1).add(parallel2).add(normal);
-        line.position.set(intersection);
+        Geometry.reflectLine(line, intersection, normal, parallel1, parallel2, 0.5);
     }
 
     @Override
-    public double approximateDistance(Vector3d point) {
-        return distance(sphere.position, point) - sphere.getRadius();
+    public boolean isNearby(Sphere ballSphere) {
+        return distance(sphere.position, ballSphere.position) <= sphere.getRadius() + ballSphere.getRadius();
     }
 
     @Override

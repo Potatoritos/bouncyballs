@@ -7,27 +7,24 @@ import static geometry.Geometry.*;
 
 public class CollisionPlane extends CollisionObject3 {
     private final Plane plane;
+    private final Vector3d midpoint;
     public CollisionPlane(GameObject parent, Plane plane) {
         super(parent);
-        this.plane = plane;
+        this.plane = new Plane(plane);
+        midpoint = new Vector3d(plane.displacement1).mul(0.5).add(new Vector3d(plane.displacement2).mul(0.5)).add(plane.position);
     }
 
     @Override
     public void reflectLine(Line3 line, Vector3d intersection, double length) {
-        Vector3d parallel1 = new Vector3d(), parallel2 = new Vector3d();
-        project(line.displacement, plane.displacement1, parallel1);
-        project(line.displacement, plane.displacement2, parallel2);
+        Vector3d parallel1 = new Vector3d(plane.displacement1);
+        Vector3d parallel2 = new Vector3d(plane.displacement2);
         Vector3d normal = plane.getNormal();
-        project(line.displacement, normal, normal);
-        normal.negate().mul(0.5);
-
-        line.displacement.set(parallel1).add(parallel2).add(normal);
-        line.position.set(intersection);
+        Geometry.reflectLine(line, intersection, normal, parallel1, parallel2, 0.5);
     }
 
     @Override
-    public double approximateDistance(Vector3d point) {
-        return distance(plane.position, point) - Math.max(plane.displacement1.length(), plane.displacement2.length());
+    public boolean isNearby(Sphere ballSphere) {
+        return distance(midpoint, ballSphere.position) <= ballSphere.getRadius() + Math.max(plane.displacement1.length(), plane.displacement2.length());
     }
 
     @Override

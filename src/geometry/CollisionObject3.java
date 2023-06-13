@@ -10,6 +10,6 @@ public abstract class CollisionObject3 {
         this.parent = parent;
     }
     public abstract void reflectLine(Line3 line, Vector3d intersection, double length);
-    public abstract double approximateDistance(Vector3d point);
+    public abstract boolean isNearby(Sphere ballSphere);
     public abstract boolean intersect(Line3 line, Vector3d result);
 }

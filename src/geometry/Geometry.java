@@ -23,6 +23,20 @@ public class Geometry {
         result.mul(a.dot(b) / b.lengthSquared());
     }
 
+    // Reflects a line off of a surface
+    // intersection: the point where the line collides with the surface
+    // normal, parallel1, parallel2: a normal and 2 parallels to the point of intersection
+    // restitution: the ratio between the initial and final "velocity" of the line after hitting the surface
+    public static void reflectLine(Line3 line, Vector3d intersection, Vector3d normal, Vector3d parallel1, Vector3d parallel2, double restitution) {
+        project(line.displacement, normal, normal);
+        project(line.displacement, parallel1, parallel1);
+        project(line.displacement, parallel2, parallel2);
+
+        normal.negate().mul(restitution);
+        line.displacement.set(parallel1).add(parallel2).add(normal);
+        line.position.set(intersection);
+    }
+
     // If t is not -1, sets result to line.pos + t*line.displacement and returns true
     // Otherwise, returns false
     public static boolean scaleLine(Line3 line, double t, Vector3d result) {

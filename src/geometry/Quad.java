@@ -15,11 +15,19 @@ public class Quad {
         c = new Vector3f();
         d = new Vector3f();
     }
+    public Quad(Vector3f v) {
+        this();
+        this.a.set(v);
+        this.b.set(v);
+        this.c.set(v);
+        this.d.set(v);
+    }
     public Quad(Vector3f a, Vector3f b, Vector3f c, Vector3f d) {
-        this.a = a;
-        this.b = b;
-        this.c = c;
-        this.d = d;
+        this();
+        this.a.set(a);
+        this.b.set(b);
+        this.c.set(c);
+        this.d.set(d);
     }
     public void addToList(ArrayList<Vector3f> list) {
         list.add(a);

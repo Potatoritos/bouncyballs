@@ -17,14 +17,14 @@ import util.Deletable;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
-import static geometry.MeshGeometry.generateGeodesicPolyhedronMesh;
-import static geometry.MeshGeometry.rectangularPrismMesh;
+import static geometry.MeshGeometry.*;
 import static org.lwjgl.opengl.GL30.*;
 
 public class LevelScene extends Scene {
     private Level level;
 
     private final GameObjectMesh floorMesh;
+    private final GameObjectMesh holeMesh;
     private final GameObjectMesh wallXMesh;
     private final GameObjectMesh wallYMesh;
     private final GameObjectMesh ballMesh;
@@ -38,18 +38,26 @@ public class LevelScene extends Scene {
     private final Vector3d rotation;
 
     private final ArrayList<Box> floorTiles;
+    private final ArrayList<Box> holeTiles;
     private final ArrayList<Box> wallXTiles;
     private final ArrayList<Box> wallYTiles;
     private final ArrayList<Ball> balls;
     private final Ball ball;
     private final CollisionHandler3 collisionHandler;
     private long timer;
+    private final double floorTileHeight = 0.5;
     public LevelScene(int windowWidth, int windowHeight) {
         super();
         floorMesh = rectangularPrismMesh(
                 new Vector3f(0, 0, 0),
-                new Vector3f(1, 1, 0.25f),
+                new Vector3f(1, 1, (float)floorTileHeight),
                 new Vector3f(0.8f, 0.8f, 0.8f)
+        );
+        holeMesh = holeTileMesh(
+                new Vector3f(0.8f, 0.8f, 0.8f),
+                new Vector3f(1, 0, 0),
+                30,
+                0.4
         );
         wallXMesh = rectangularPrismMesh(
                 new Vector3f(0, 0, 0),
@@ -71,12 +79,13 @@ public class LevelScene extends Scene {
         rotation = new Vector3d();
 
         floorTiles = new ArrayList<>();
+        holeTiles = new ArrayList<>();
         wallXTiles = new ArrayList<>();
         wallYTiles = new ArrayList<>();
         balls = new ArrayList<>();
 
         camera.position.z = 6;
-        ball = new Ball(new Sphere(new Vector3d(1.5, -0.5, 0.5), 0.4));
+        ball = new Ball(new Sphere(new Vector3d(1.5, -0.5, 0.5), 0.35));
         balls.add(ball);
         edgeSourceFbo = new EmptyFbo(windowWidth, windowHeight);
         handleWindowResize(windowWidth, windowHeight);
@@ -147,6 +156,9 @@ public class LevelScene extends Scene {
     private void renderGameObjects(ShaderProgram shader) {
         setViewMatrices(shader, wallXTiles);
         wallXMesh.renderInstanced(wallXTiles.size());
+
+        setViewMatrices(shader, holeTiles);
+        holeMesh.renderInstanced(holeTiles.size());
 
         setViewMatrices(shader, wallYTiles);
         wallYMesh.renderInstanced(wallYTiles.size());
@@ -235,17 +247,27 @@ public class LevelScene extends Scene {
         this.level = level;
 
         floorTiles.clear();
+        holeTiles.clear();
         wallXTiles.clear();
         wallYTiles.clear();
 
         for (int i = 0; i < level.getRows(); i++) {
             for (int j = 0; j < level.getColumns(); j++) {
-                if (level.getFloorState(i, j)) {
-                    Box tile = new Box(new Line3(
-                            new Vector3d(level.getPosX(j), level.getPosY(i), -0.25),
-                            new Vector3d(1, 1, 0.25)
-                    ));
-                    floorTiles.add(tile);
+                switch(level.getFloorState(i, j)) {
+                    case FLOOR -> {
+                        Box tile = new Box(new Line3(
+                                new Vector3d(level.getPosX(j), level.getPosY(i), -floorTileHeight),
+                                new Vector3d(1, 1, floorTileHeight)
+                        ));
+                        floorTiles.add(tile);
+                    }
+                    case HOLE -> {
+                        Box tile = new Box(new Line3(
+                                new Vector3d(level.getPosX(j), level.getPosY(i), -floorTileHeight),
+                                new Vector3d(1, 1, floorTileHeight)
+                        ));
+                        holeTiles.add(tile);
+                    }
                 }
             }
             for (int j = 0; j < level.getColumns()+1; j++) {

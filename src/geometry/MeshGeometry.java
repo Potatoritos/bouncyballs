@@ -1,6 +1,7 @@
 package geometry;
 
 import graphics.GameObjectMesh;
+import graphics.Mesh;
 import graphics.Texture;
 import graphics.TextureMesh;
 import org.joml.Vector2f;
@@ -133,6 +134,149 @@ public class MeshGeometry {
         }
 
         return new GameObjectMesh(vertices, normals, colors, indices);
+    }
+
+    public static GameObjectMesh holeTileMesh(Vector3f surfaceColor, Vector3f holeColor, int cylinderFaces, double radius) {
+        MeshBuilder builder = new MeshBuilder();
+        Quad pzNormals = new Quad(new Vector3f(0, 0, 1));
+        Quad surfaceColors = new Quad(surfaceColor, surfaceColor, surfaceColor, surfaceColor);
+        float height = 0.5f;
+
+        // two rectangles at the top and bottom of the hole
+        float circleTop = (float)(0.5-radius);
+        builder.addQuad(
+                new Quad(
+                        new Vector3f(0, 0, height),
+                        new Vector3f(1, 0, height),
+                        new Vector3f(1, circleTop, height),
+                        new Vector3f(0, circleTop, height)
+                ),
+                pzNormals,
+                surfaceColors
+        );
+        builder.addQuad(
+                new Quad(
+                        new Vector3f(0, 1-circleTop, height),
+                        new Vector3f(1, 1-circleTop, height),
+                        new Vector3f(1, 1, height),
+                        new Vector3f(0, 1, height)
+                ),
+                pzNormals,
+                surfaceColors
+        );
+
+        // rectangle at the bottom of the tile
+        builder.addQuad(
+                new Quad(
+                        new Vector3f(0, 0, 0),
+                        new Vector3f(1, 0, 0),
+                        new Vector3f(1, 1, 0),
+                        new Vector3f(0, 1, 0)
+                ),
+                new Quad(new Vector3f(0, 0, -1)),
+                new Quad(holeColor)
+        );
+
+        // side faces
+        builder.addQuad(
+                new Quad(
+                        new Vector3f(0, 0, 0),
+                        new Vector3f(1, 0, 0),
+                        new Vector3f(1, 0, height),
+                        new Vector3f(0, 0, height)
+                ),
+                new Quad(new Vector3f(0, -1, 0)),
+                surfaceColors
+        );
+        builder.addQuad(
+                new Quad(
+                        new Vector3f(1, 1, 0),
+                        new Vector3f(0, 1, 0),
+                        new Vector3f(0, 1, height),
+                        new Vector3f(1, 1, height)
+                ),
+                new Quad(new Vector3f(0, 1, 0)),
+                surfaceColors
+        );
+        builder.addQuad(
+                new Quad(
+                        new Vector3f(0, 1, 0),
+                        new Vector3f(0, 0, 0),
+                        new Vector3f(0, 0, height),
+                        new Vector3f(0, 1, height)
+                ),
+                new Quad(new Vector3f(-1, 0, 0)),
+                surfaceColors
+        );
+        builder.addQuad(
+                new Quad(
+                        new Vector3f(1, 0, 0),
+                        new Vector3f(1, 1, 0),
+                        new Vector3f(1, 1, height),
+                        new Vector3f(1, 0, height)
+                ),
+                new Quad(new Vector3f(1, 0, 0)),
+                surfaceColors
+        );
+
+        // the hole and the rest of the polygons on the top face
+        for (int i = 0; i < cylinderFaces; i++) {
+            double angle1 = i*Math.PI/cylinderFaces;
+            double angle2 = (i+1)*Math.PI/cylinderFaces;
+
+            float x1 = (float)(radius*Math.sin(angle1)), x2 = (float)(radius*Math.sin(angle2));
+            float y1 = (float)(radius*Math.cos(angle1)), y2 = (float)(radius*Math.cos(angle2));
+
+            Vector3f t1 = new Vector3f(x1 + 0.5f, y1 + 0.5f, height);
+            Vector3f t2 = new Vector3f(x2 + 0.5f, y2 + 0.5f, height);
+
+            Vector3f n1 = new Vector3f(x1, y1, 0).negate();
+            Vector3f n2 = new Vector3f(x2, y2, 0).negate();
+
+            builder.addQuad(
+                    new Quad(
+                            new Vector3f(t1).sub(0, 0, height),
+                            new Vector3f(t2).sub(0, 0, height),
+                            t2,
+                            t1
+                    ),
+                    new Quad(n1, n2, n2, n1),
+                    new Quad(holeColor, holeColor, surfaceColor, surfaceColor)
+            );
+            builder.addQuad(
+                    new Quad(
+                            t1,
+                            t2,
+                            new Vector3f(1, y2+0.5f, height),
+                            new Vector3f(1, y1+0.5f, height)),
+                    pzNormals,
+                    surfaceColors
+            );
+
+            t1.set(-x1 + 0.5f, y1 + 0.5f, height);
+            t2.set(-x2 + 0.5f, y2 + 0.5f, height);
+            builder.addQuad(
+                    new Quad(
+                            new Vector3f(t2).sub(0, 0, height),
+                            new Vector3f(t1).sub(0, 0, height),
+                            t1,
+                            t2
+                    ),
+                    new Quad(n1, n2, n2, n1),
+                    new Quad(holeColor, holeColor, surfaceColor, surfaceColor)
+            );
+            builder.addQuad(
+                    new Quad(
+                            t2,
+                            t1,
+                            new Vector3f(0, y1+0.5f, height),
+                            new Vector3f(0, y2+0.5f, height)
+                    ),
+                    pzNormals,
+                    surfaceColors
+            );
+        }
+        return builder.createMesh();
     }
 
     public static GameObjectMesh rectangularPrismMesh(Vector3f position, Vector3f dimensions, Vector3f color) {

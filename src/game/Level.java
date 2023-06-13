@@ -6,13 +6,13 @@ import java.util.ArrayList;
 public class Level {
     private final int rows;
     private final int columns;
-    private final boolean[][] floorState;
+    private final FloorTile[][] floorState;
     private final boolean[][] wallXState;
     private final boolean[][] wallYState;
     private Level(int rows, int columns) {
         this.rows = rows;
         this.columns = columns;
-        this.floorState = new boolean[rows][columns];
+        this.floorState = new FloorTile[rows][columns];
         this.wallXState = new boolean[rows][columns+1];
         this.wallYState = new boolean[rows+1][columns];
     }
@@ -28,10 +28,10 @@ public class Level {
     public float getPosY(int row) {
         return row - rows/2f;
     }
-    public boolean getFloorState(int row, int column) {
+    public FloorTile getFloorState(int row, int column) {
         return floorState[row][column];
     }
-    public void setFloorState(int row, int column, boolean value) {
+    public void setFloorState(int row, int column, FloorTile value) {
         floorState[row][column] = value;
     }
     public boolean getWallXState(int row, int column) {
@@ -68,7 +68,11 @@ public class Level {
                 String row = br.readLine();
                 if (row.length() != columns) new RuntimeException("Invalid level file");
                 for (int j = 0; j < row.length(); j++) {
-                    if (row.charAt(j) == '#') level.setFloorState(rows-1-i, j, true);
+                    switch(row.charAt(j)) {
+                        case '.' -> level.setFloorState(rows-1-i, j, FloorTile.NONE);
+                        case '#' -> level.setFloorState(rows-1-i, j, FloorTile.FLOOR);
+                        case 'o' -> level.setFloorState(rows-1-i, j, FloorTile.HOLE);
+                    }
                 }
             }
             for (int i = 0; i < rows; i++) {

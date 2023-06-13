@@ -1,8 +1,11 @@
-package geometry;
+package collision;
 
 import game.Ball;
 import game.Box;
+import geometry.Cylinder;
 import geometry.Line3;
+import geometry.Plane;
+import geometry.Sphere;
 import org.joml.Vector3d;
 
 import java.util.ArrayList;

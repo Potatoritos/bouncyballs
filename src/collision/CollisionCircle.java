@@ -1,6 +1,8 @@
-package geometry;
+package collision;
 
 import game.GameObject;
+import geometry.Circle;
+import geometry.Line2;
 import org.joml.Vector2d;
 
 import static geometry.Geometry.*;

@@ -1,6 +1,8 @@
-package geometry;
+package collision;
 
 import game.GameObject;
+import geometry.Line3;
+import geometry.Sphere;
 import org.joml.Vector2d;
 import org.joml.Vector3d;
 

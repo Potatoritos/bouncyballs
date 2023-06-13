@@ -1,11 +1,10 @@
 package game;
 
-import geometry.CollisionHandler3;
+import collision.CollisionHandler3;
 import geometry.Line3;
 import geometry.Sphere;
 import graphics.EmptyFbo;
 import graphics.FrameBufferObject;
-import geometry.CollisionHandler2;
 import graphics.GameObjectMesh;
 import graphics.ShaderProgram;
 import org.joml.Vector3d;
@@ -17,7 +16,7 @@ import util.Deletable;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
-import static geometry.MeshGeometry.*;
+import static mesh.MeshGeometry.*;
 import static org.lwjgl.opengl.GL30.*;
 
 public class LevelScene extends Scene {

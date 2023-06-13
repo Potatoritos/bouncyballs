@@ -8,7 +8,7 @@ import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import math.MathUtil;
 
-import static geometry.MeshGeometry.*;
+import static mesh.MeshGeometry.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL30.*;
 

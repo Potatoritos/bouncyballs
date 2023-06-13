@@ -1,4 +1,4 @@
-package geometry;
+package mesh;
 
 import graphics.GameObjectMesh;
 import org.joml.Vector3f;

@@ -1,12 +1,10 @@
-package geometry;
+package mesh;
 
 import graphics.GameObjectMesh;
-import graphics.Mesh;
 import graphics.Texture;
 import graphics.TextureMesh;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-import math.MathUtil.*;
 
 import java.util.ArrayList;
 

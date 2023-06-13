@@ -76,7 +76,7 @@ public class LevelScene extends Scene {
         balls = new ArrayList<>();
 
         camera.position.z = 6;
-        ball = new Ball(new Sphere(new Vector3d(1.5, -0.5, 0.4), 0.4));
+        ball = new Ball(new Sphere(new Vector3d(1.5, -0.5, 0.5), 0.4));
         balls.add(ball);
         edgeSourceFbo = new EmptyFbo(windowWidth, windowHeight);
         handleWindowResize(windowWidth, windowHeight);
@@ -102,6 +102,8 @@ public class LevelScene extends Scene {
         ball.velocity.x = MathUtil.cutMaxMin(ball.velocity.x, -0.2f, 0.2f);
         ball.velocity.y += -Math.sin(rotation.x * 0.002);
         ball.velocity.y = MathUtil.cutMaxMin(ball.velocity.y, -0.2f, 0.2f);
+
+        ball.velocity.z -= 0.001;
 
         if (ball.velocity.length() > 0.1f) {
             ball.velocity.normalize(0.1f);
@@ -133,6 +135,9 @@ public class LevelScene extends Scene {
         }
         for (Box box : wallYTiles) {
             collisionHandler.addWallBox(box);
+        }
+        for (Box box : floorTiles) {
+            collisionHandler.addFloorBox(box);
         }
         collisionHandler.processCollisions();
 

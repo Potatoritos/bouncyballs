@@ -13,6 +13,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/game/LevelScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/LevelScene.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/geometry/CollisionHandler3.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/CollisionHandler3.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/geometry/Geometry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/Geometry.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -175,7 +176,7 @@
       <workItem from="1686227849224" duration="2633000" />
       <workItem from="1686573393978" duration="4947000" />
       <workItem from="1686580481230" duration="15148000" />
-      <workItem from="1686608537403" duration="24207000" />
+      <workItem from="1686608537403" duration="25019000" />
     </task>
     <servers />
   </component>

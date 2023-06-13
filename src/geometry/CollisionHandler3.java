@@ -150,7 +150,6 @@ public class CollisionHandler3 {
         ));
     }
     public void processCollisions() {
-        System.out.println(collisionObjects.size());
         int i = 0;
         Vector3d intersection = new Vector3d();
         while (++i < 7) {
@@ -172,8 +171,6 @@ public class CollisionHandler3 {
             }
             minCollisionObject.reflectLine(ballMotion, minIntersection, minDistance);
         }
-
-        System.out.printf("----------- i=%d\n", i);
 
         ball.geometry.position.set(ballMotion.position);
         ball.velocity.set(ballMotion.displacement);

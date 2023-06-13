@@ -103,7 +103,7 @@ public class LevelScene extends Scene {
         ball.velocity.y += -Math.sin(rotation.x * 0.002);
         ball.velocity.y = MathUtil.cutMaxMin(ball.velocity.y, -0.2f, 0.2f);
 
-        ball.velocity.z -= 0.001;
+        ball.velocity.z -= 0.003;
 
         if (ball.velocity.length() > 0.1f) {
             ball.velocity.normalize(0.1f);
@@ -131,10 +131,10 @@ public class LevelScene extends Scene {
         collisionHandler.reset();
         collisionHandler.setBall(ball);
         for (Box box : wallXTiles) {
-            collisionHandler.addWallBox(box);
+            collisionHandler.addFloorBox(box);
         }
         for (Box box : wallYTiles) {
-            collisionHandler.addWallBox(box);
+            collisionHandler.addFloorBox(box);
         }
         for (Box box : floorTiles) {
             collisionHandler.addFloorBox(box);

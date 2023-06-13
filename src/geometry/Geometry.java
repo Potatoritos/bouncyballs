@@ -34,6 +34,9 @@ public class Geometry {
         project(line.displacement, parallel2, parallel2);
 
         normal.negate().mul(restitution);
+        if (normal.length() <= 0.004) {
+            normal.set(0,0,0);
+        }
         line.displacement.set(parallel1).add(parallel2).add(normal);
         line.position.set(intersection);
     }

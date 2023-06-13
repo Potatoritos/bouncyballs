@@ -17,7 +17,7 @@ public class CollisionCylinder extends CollisionObject3 {
     @Override
     public void reflectLine(Line3 line, Vector3d intersection, double length) {
         // Project the intersection onto the cylinder's axis
-        Vector3d normal = cylinder.getNormal(intersection);
+        Vector3d normal = cylinder.normal(intersection);
         Vector3d parallel1 = new Vector3d(cylinder.axis).cross(normal);
         Vector3d parallel2 = new Vector3d(cylinder.axis);
 
@@ -32,7 +32,6 @@ public class CollisionCylinder extends CollisionObject3 {
     @Override
     public boolean intersect(Line3 line, Vector3d result) {
         boolean intersects = intersectionLineCylinder(line, cylinder, result);
-        // Return false if line.displacement is moving away from the surface (i.e, when it is within 90° of the normal)
-        return intersects && cylinder.getNormal(result).dot(line.displacement) < 0;
+        return intersects && cylinder.normal(result).dot(line.displacement) < 0;
     }
 }

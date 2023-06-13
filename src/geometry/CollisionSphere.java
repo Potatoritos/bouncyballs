@@ -14,8 +14,7 @@ public class CollisionSphere extends CollisionObject3 {
 
     @Override
     public void reflectLine(Line3 line, Vector3d intersection, double length) {
-        Vector3d normal = new Vector3d(intersection);
-        normal.sub(sphere.position);
+        Vector3d normal = sphere.normal(intersection);
         Vector3d parallel1 = new Vector3d(-(normal.y + normal.z)/normal.x, 1, 1);
         Vector3d parallel2 = new Vector3d(normal).cross(parallel1);
 
@@ -29,6 +28,7 @@ public class CollisionSphere extends CollisionObject3 {
 
     @Override
     public boolean intersect(Line3 line, Vector3d result) {
-        return intersectionLineSphere(line, sphere, result);
+        boolean intersects = intersectionLineSphere(line, sphere, result);
+        return intersects && sphere.normal(result).dot(line.displacement) < 0;
     }
 }

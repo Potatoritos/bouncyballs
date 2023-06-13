@@ -18,7 +18,7 @@ public class CollisionPlane extends CollisionObject3 {
     public void reflectLine(Line3 line, Vector3d intersection, double length) {
         Vector3d parallel1 = new Vector3d(plane.displacement1);
         Vector3d parallel2 = new Vector3d(plane.displacement2);
-        Vector3d normal = plane.getNormal();
+        Vector3d normal = plane.normal();
         Geometry.reflectLine(line, intersection, normal, parallel1, parallel2, 0.5);
     }
 
@@ -30,7 +30,7 @@ public class CollisionPlane extends CollisionObject3 {
     @Override
     public boolean intersect(Line3 line, Vector3d result) {
         // Return false if line.displacement is moving away from the surface (i.e, when it is within 90° of the normal)
-        if (plane.getNormal().dot(line.displacement) > 0) {
+        if (plane.normal().dot(line.displacement) > 0) {
             return false;
         }
 

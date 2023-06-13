@@ -30,6 +30,10 @@ public class Sphere {
     public void setRadius(double value) {
         radius = value;
     }
+    // Get the normal vector of a point on the sphere
+    public Vector3d normal(Vector3d point) {
+        return new Vector3d(point).sub(position);
+    }
     public String toString() {
         return String.format("[Sphere pos=%s r=%s]", position, radius);
     }

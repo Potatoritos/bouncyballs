@@ -28,7 +28,7 @@ public class Plane {
         set(plane.position, plane.displacement1, plane.displacement2);
     }
 
-    public Vector3d getNormal() {
+    public Vector3d normal() {
         return new Vector3d(displacement1).cross(displacement2);
     }
     public String toString() {

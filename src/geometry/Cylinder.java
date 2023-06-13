@@ -35,7 +35,8 @@ public class Cylinder {
     public void setRadius(double value) {
         radius = value;
     }
-    public Vector3d getNormal(Vector3d point) {
+    // Get the normal vector of a point on the cylinder
+    public Vector3d normal(Vector3d point) {
         Vector3d u = new Vector3d(point).sub(position);
         Vector3d projection = new Vector3d();
         project(u, axis, projection);

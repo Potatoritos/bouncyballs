@@ -1,9 +1,6 @@
 package game;
 
-import game.GameObject;
 import geometry.Line3;
-import org.joml.Matrix4f;
-import org.joml.Vector2f;
 import org.joml.Vector3d;
 
 public class Box extends GameObject {

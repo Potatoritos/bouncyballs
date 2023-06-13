@@ -7,6 +7,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import math.MathUtil;
+import scene.LevelScene;
 
 import static mesh.MeshGeometry.*;
 import static org.lwjgl.glfw.GLFW.*;

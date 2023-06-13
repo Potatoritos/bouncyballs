@@ -1,7 +1,6 @@
 package game;
 
 import java.io.*;
-import java.util.ArrayList;
 
 public class Level {
     private final int rows;

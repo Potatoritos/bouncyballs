@@ -1,5 +1,6 @@
-package game;
+package scene;
 
+import game.InputState;
 import graphics.PerspectiveCamera;
 import util.Deletable;
 

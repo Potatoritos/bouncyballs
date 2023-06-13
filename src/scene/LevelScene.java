@@ -1,12 +1,17 @@
-package game;
+package scene;
 
 import collision.CollisionHandler3;
+import game.InputState;
 import geometry.Line3;
 import geometry.Sphere;
 import graphics.EmptyFbo;
 import graphics.FrameBufferObject;
 import graphics.GameObjectMesh;
 import graphics.ShaderProgram;
+import game.Ball;
+import game.Box;
+import game.GameObject;
+import game.Level;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 import org.lwjgl.system.MemoryUtil;

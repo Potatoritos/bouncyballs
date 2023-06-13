@@ -1,10 +1,7 @@
 package game;
 
-import game.GameObject;
 import geometry.Sphere;
 import org.joml.Matrix4f;
-import org.joml.Vector2f;
-import org.joml.Vector3f;
 import org.joml.Vector3d;
 
 public class Ball extends GameObject {

@@ -46,6 +46,7 @@ public class LevelScene extends Scene {
     private final CollisionHandler3 collisionHandler;
     private long timer;
     private final double floorTileHeight = 0.5;
+    private final double wallHeight = 0.75;
     public LevelScene(int windowWidth, int windowHeight) {
         super();
         floorMesh = rectangularPrismMesh(
@@ -61,12 +62,12 @@ public class LevelScene extends Scene {
         );
         wallXMesh = rectangularPrismMesh(
                 new Vector3f(0, 0, 0),
-                new Vector3f(0.1f, 1, 0.5f),
+                new Vector3f(0.1f, 1.1f, (float)(floorTileHeight+wallHeight)),
                 new Vector3f(0.8f, 0.8f, 0.8f)
         );
         wallYMesh = rectangularPrismMesh(
                 new Vector3f(0, -0, 0),
-                new Vector3f(1, 0.1f, 0.5f),
+                new Vector3f(1.1f, 0.1f, (float)(floorTileHeight+wallHeight)),
                 new Vector3f(0.8f, 0.8f, 0.8f)
         );
         ballMesh = generateGeodesicPolyhedronMesh(3, new Vector3f(0.6f, 0.6f, 0.6f));
@@ -273,8 +274,8 @@ public class LevelScene extends Scene {
             for (int j = 0; j < level.getColumns()+1; j++) {
                 if (level.getWallXState(i, j)) {
                     Box tile = new Box(new Line3(
-                            new Vector3d(level.getPosX(j)-0.05, level.getPosY(i), 0),
-                            new Vector3d(0.1, 1, 0.5)
+                            new Vector3d(level.getPosX(j)-0.05, level.getPosY(i)-0.05, -floorTileHeight),
+                            new Vector3d(0.1, 1.1, floorTileHeight+wallHeight)
                     ));
                     wallXTiles.add(tile);
                 }
@@ -284,8 +285,8 @@ public class LevelScene extends Scene {
             for (int j = 0; j < level.getColumns(); j++) {
                 if (level.getWallYState(i, j)) {
                     Box tile = new Box(new Line3(
-                            new Vector3d(level.getPosX(j), level.getPosY(i)-0.05, 0),
-                            new Vector3d(1, 0.1, 0.5)
+                            new Vector3d(level.getPosX(j)-0.05, level.getPosY(i)-0.05, -floorTileHeight),
+                            new Vector3d(1.1, 0.1, floorTileHeight+wallHeight)
                     ));
                     wallYTiles.add(tile);
                 }

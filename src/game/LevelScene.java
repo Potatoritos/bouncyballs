@@ -1,5 +1,6 @@
 package game;
 
+import geometry.CollisionHandler3;
 import geometry.Line3;
 import geometry.Sphere;
 import graphics.EmptyFbo;
@@ -41,7 +42,7 @@ public class LevelScene extends Scene {
     private final ArrayList<Box> wallYTiles;
     private final ArrayList<Ball> balls;
     private final Ball ball;
-    private final CollisionHandler2 collisionHandler;
+    private final CollisionHandler3 collisionHandler;
     private long timer;
     public LevelScene(int windowWidth, int windowHeight) {
         super();
@@ -75,12 +76,12 @@ public class LevelScene extends Scene {
         balls = new ArrayList<>();
 
         camera.position.z = 6;
-        ball = new Ball(new Sphere(new Vector3d(0.95, 0.2, 0.4), 0.4));
+        ball = new Ball(new Sphere(new Vector3d(1.5, -0.5, 0.4), 0.4));
         balls.add(ball);
         edgeSourceFbo = new EmptyFbo(windowWidth, windowHeight);
         handleWindowResize(windowWidth, windowHeight);
 
-        collisionHandler = new CollisionHandler2();
+        collisionHandler = new CollisionHandler3();
     }
     @Override
     public void handleWindowResize(int width, int height) {
@@ -92,9 +93,9 @@ public class LevelScene extends Scene {
         rotation.x = (MathUtil.cutMaxMin(input.getMousePosition().y, 0, 1)-0.5) * Math.PI/3;
         rotation.y = (MathUtil.cutMaxMin(input.getMousePosition().x, 0, 1)-0.5) * Math.PI/3;
 
-//        if (timer >= 60) {
-//            ball.velocity.x = -0.01;
-//            ball.velocity.y = 0.01;
+//        if (timer == 10) {
+//            ball.velocity.x = -0.04;
+//            ball.velocity.y = 0.04;
 //        }
 
         ball.velocity.x += Math.sin(rotation.y * 0.002);
@@ -128,10 +129,10 @@ public class LevelScene extends Scene {
         collisionHandler.reset();
         collisionHandler.setBall(ball);
         for (Box box : wallXTiles) {
-            collisionHandler.addBox(box);
+            collisionHandler.addWallBox(box);
         }
         for (Box box : wallYTiles) {
-            collisionHandler.addBox(box);
+            collisionHandler.addWallBox(box);
         }
         collisionHandler.processCollisions();
 

@@ -30,4 +30,7 @@ public class Sphere {
     public void setRadius(double value) {
         radius = value;
     }
+    public String toString() {
+        return String.format("[Sphere pos=%s r=%s]", position, radius);
+    }
 }

@@ -17,22 +17,22 @@ public class CollisionCylinder extends CollisionObject3 {
     @Override
     public void reflectLine(Line3 line, Vector3d intersection, double length) {
         // Project the intersection onto the cylinder's axis
-        Vector3d projection = new Vector3d(intersection).sub(cylinder.position);
-        project(projection, cylinder.axis, projection);
-
-        Vector3d normal = new Vector3d(intersection).sub(projection);
+        Vector3d normal = cylinder.getNormal(intersection);
         Vector3d parallel1 = new Vector3d(cylinder.axis).cross(normal);
         Vector3d parallel2 = new Vector3d(cylinder.axis);
+
         Geometry.reflectLine(line, intersection, normal, parallel1, parallel2, 0.5);
     }
 
     @Override
     public boolean isNearby(Sphere ballSphere) {
-        return distance(midpoint, ballSphere.position) <= ballSphere.getRadius() + cylinder.axis.length() + cylinder.getRadius() + 0.2;
+        return distance(midpoint, ballSphere.position) <= ballSphere.getRadius() + cylinder.axis.length() + cylinder.getRadius();
     }
 
     @Override
     public boolean intersect(Line3 line, Vector3d result) {
-        return intersectionLineCylinder(line, cylinder, result);
+        boolean intersects = intersectionLineCylinder(line, cylinder, result);
+        // Return false if line.displacement is moving away from the surface (i.e, when it is within 90° of the normal)
+        return intersects && cylinder.getNormal(result).dot(line.displacement) < 0;
     }
 }

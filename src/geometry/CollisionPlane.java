@@ -24,11 +24,20 @@ public class CollisionPlane extends CollisionObject3 {
 
     @Override
     public boolean isNearby(Sphere ballSphere) {
-        return distance(midpoint, ballSphere.position) <= ballSphere.getRadius() + Math.max(plane.displacement1.length(), plane.displacement2.length()) + 0.2;
+        return distance(midpoint, ballSphere.position) <= ballSphere.getRadius() + Math.max(plane.displacement1.length(), plane.displacement2.length());
     }
 
     @Override
     public boolean intersect(Line3 line, Vector3d result) {
+        // Return false if line.displacement is moving away from the surface (i.e, when it is within 90° of the normal)
+        if (plane.getNormal().dot(line.displacement) > 0) {
+            return false;
+        }
+
         return intersectionLinePlane(line, plane, result);
+    }
+
+    public String toString() {
+        return plane.toString();
     }
 }

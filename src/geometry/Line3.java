@@ -43,6 +43,6 @@ public class Line3 {
         return position.z + displacement.z;
     }
     public String toString() {
-        return "Line3 pos=" + position + " d=" + displacement;
+        return String.format("[Line2 pos=%s d=%s]", position, displacement);
     }
 }

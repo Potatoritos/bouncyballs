@@ -1,8 +1,5 @@
 import game.Game;
-import geometry.Cylinder;
-import geometry.Line3;
-import geometry.Plane;
-import geometry.Sphere;
+import geometry.*;
 import org.joml.Vector3d;
 
 import static geometry.Geometry.*;
@@ -28,6 +25,7 @@ public class Main {
 //        Vector3d result = new Vector3d();
 //        System.out.println(intersectionLineSphere(line, sphere, result));
 //        System.out.println(result);
+
         Game game = new Game();
         game.run();
         game.close();

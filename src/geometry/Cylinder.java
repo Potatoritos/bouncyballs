@@ -2,6 +2,8 @@ package geometry;
 
 import org.joml.Vector3d;
 
+import static geometry.Geometry.project;
+
 public class Cylinder {
     public final Vector3d position;
     public final Vector3d axis;
@@ -33,7 +35,14 @@ public class Cylinder {
     public void setRadius(double value) {
         radius = value;
     }
+    public Vector3d getNormal(Vector3d point) {
+        Vector3d u = new Vector3d(point).sub(position);
+        Vector3d projection = new Vector3d();
+        project(u, axis, projection);
+        projection.add(position);
+        return u.set(point).sub(projection);
+    }
     public String toString() {
-        return "Cylinder pos=" + position + " axis=" + axis + " r=" + radius;
+        return String.format("[Cylinder pos=%s axis=%s r=%s]", position, axis, radius);
     }
 }

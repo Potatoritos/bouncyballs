@@ -37,6 +37,6 @@ public class Line2 {
         return position.y + displacement.y;
     }
     public String toString() {
-        return "Line2 pos=" + position + " d=" + displacement;
+        return String.format("[Line2 pos=%s d=%s]", position, displacement);
     }
 }

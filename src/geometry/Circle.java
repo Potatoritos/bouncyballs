@@ -31,6 +31,6 @@ public class Circle {
         radius = value;
     }
     public String toString() {
-        return "Circle pos=" + position + " r=" + radius;
+        return String.format("[Circle pos=%s r=%s]", position, radius);
     }
 }

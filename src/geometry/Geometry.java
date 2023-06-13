@@ -14,6 +14,7 @@ public class Geometry {
     private static final Vector3d zHat = new Vector3d(0, 0, 1);
 
     // Stores the projection of a onto b in result
+    // note: result should not be the same variable as a
     public static void project(Vector3d a, Vector3d b, Vector3d result) {
         result.set(b);
         result.mul(a.dot(b) / b.lengthSquared());
@@ -98,8 +99,8 @@ public class Geometry {
         // Only works for axis-aligned cylinders (too lazy to figure out the proper way of doing this)
         Line3 rotatedLine = new Line3(line);
         Line3 rotatedCylinderAxis = new Line3(cylinder.position, cylinder.axis);
-        Matrix3d rotationMatrix = new Matrix3d();
         if (cylinder.axis.z == 0) {
+            Matrix3d rotationMatrix = new Matrix3d();
             if (cylinder.axis.x == 0) {
                 rotationMatrix.rotationX(Math.PI/2);
             } else if (cylinder.axis.y == 0) {

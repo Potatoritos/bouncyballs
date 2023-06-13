@@ -29,8 +29,9 @@ public class Plane {
     }
 
     public Vector3d getNormal() {
-        Vector3d normal = new Vector3d(displacement1);
-        normal.cross(displacement2);
-        return normal;
+        return new Vector3d(displacement1).cross(displacement2);
+    }
+    public String toString() {
+        return String.format("[Plane pos=%s d1=%s d2=%s]", position, displacement1, displacement2);
     }
 }

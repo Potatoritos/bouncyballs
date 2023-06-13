@@ -28,7 +28,7 @@ public class CollisionCylinder extends CollisionObject3 {
 
     @Override
     public boolean isNearby(Sphere ballSphere) {
-        return distance(midpoint, ballSphere.position) <= ballSphere.getRadius() + cylinder.axis.length() + cylinder.getRadius();
+        return distance(midpoint, ballSphere.position) <= ballSphere.getRadius() + cylinder.axis.length() + cylinder.getRadius() + 0.2;
     }
 
     @Override

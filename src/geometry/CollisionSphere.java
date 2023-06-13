@@ -24,7 +24,7 @@ public class CollisionSphere extends CollisionObject3 {
 
     @Override
     public boolean isNearby(Sphere ballSphere) {
-        return distance(sphere.position, ballSphere.position) <= sphere.getRadius() + ballSphere.getRadius();
+        return distance(sphere.position, ballSphere.position) <= sphere.getRadius() + ballSphere.getRadius() + 0.2;
     }
 
     @Override

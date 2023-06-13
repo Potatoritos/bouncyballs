@@ -13,12 +13,19 @@ public class Plane {
     }
     public Plane(Vector3d position, Vector3d displacement1, Vector3d displacement2) {
         this();
+        set(position, displacement1, displacement2);
+    }
+    public Plane(Plane plane) {
+        this();
+        set(plane);
+    }
+    public void set(Vector3d position, Vector3d displacement1, Vector3d displacement2) {
         this.position.set(position);
         this.displacement1.set(displacement1);
         this.displacement2.set(displacement2);
     }
-    public Plane(Plane plane) {
-        this(plane.position, plane.displacement1, plane.displacement2);
+    public void set(Plane plane) {
+        set(plane.position, plane.displacement1, plane.displacement2);
     }
 
     public Vector3d getNormal() {

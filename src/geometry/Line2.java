@@ -11,11 +11,18 @@ public class Line2 {
     }
     public Line2(Vector2d position, Vector2d displacement) {
         this();
+        set(position, displacement);
+    }
+    public Line2(Line2 line) {
+        this();
+        set(line);
+    }
+    public void set(Vector2d position, Vector2d displacement) {
         this.position.set(position);
         this.displacement.set(displacement);
     }
-    public Line2(Line2 line) {
-        this(line.position, line.displacement);
+    public void set(Line2 line) {
+        set(line.position, line.displacement);
     }
     public double x1() {
         return position.x;

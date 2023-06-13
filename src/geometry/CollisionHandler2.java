@@ -27,7 +27,7 @@ public class CollisionHandler2 {
     }
     public void setBall(Ball ball) {
         this.ball = ball;
-        ballMotion.position.set(ball.position.x, ball.position.y);
+        ballMotion.position.set(ball.geometry.position.x, ball.geometry.position.y);
         ballMotion.displacement.set(ball.velocity.x, ball.velocity.y);
     }
     private void addCollisionObject(CollisionObject2 object) {
@@ -38,15 +38,15 @@ public class CollisionHandler2 {
     }
 
     public void addBox(Box box) {
-        addCollisionObject(new CollisionLineX(box, new Vector2d(box.position.x-ball.getRadius(), box.position.y), new Vector2d(0, box.dimensions.y), 1));
-        addCollisionObject(new CollisionLineX(box, new Vector2d(box.position.x+box.dimensions.x+ball.getRadius(), box.position.y), new Vector2d(0, box.dimensions.y), -1));
-        addCollisionObject(new CollisionLineY(box, new Vector2d(box.position.x, box.position.y-ball.getRadius()), new Vector2d(box.dimensions.x, 0), 1));
-        addCollisionObject(new CollisionLineY(box, new Vector2d(box.position.x, box.position.y+box.dimensions.y+ball.getRadius()), new Vector2d(box.dimensions.x, 0), -1));
+        addCollisionObject(new CollisionLineX(box, new Vector2d(box.geometry.position.x-ball.getRadius(), box.geometry.position.y), new Vector2d(0, box.geometry.displacement.y), 1));
+        addCollisionObject(new CollisionLineX(box, new Vector2d(box.geometry.position.x+box.geometry.displacement.x+ball.getRadius(), box.geometry.position.y), new Vector2d(0, box.geometry.displacement.y), -1));
+        addCollisionObject(new CollisionLineY(box, new Vector2d(box.geometry.position.x, box.geometry.position.y-ball.getRadius()), new Vector2d(box.geometry.displacement.x, 0), 1));
+        addCollisionObject(new CollisionLineY(box, new Vector2d(box.geometry.position.x, box.geometry.position.y+box.geometry.displacement.y+ball.getRadius()), new Vector2d(box.geometry.displacement.x, 0), -1));
 
-        addCollisionObject(new CollisionCircle(box, ball.getRadius(), new Vector2d(box.position.x, box.position.y)));
-        addCollisionObject(new CollisionCircle(box, ball.getRadius(), new Vector2d(box.position.x+box.dimensions.x, box.position.y)));
-        addCollisionObject(new CollisionCircle(box, ball.getRadius(), new Vector2d(box.position.x, box.position.y+box.dimensions.y)));
-        addCollisionObject(new CollisionCircle(box, ball.getRadius(), new Vector2d(box.position.x+box.dimensions.x, box.position.y+box.dimensions.y)));
+        addCollisionObject(new CollisionCircle(box, ball.getRadius(), new Vector2d(box.geometry.position.x, box.geometry.position.y)));
+        addCollisionObject(new CollisionCircle(box, ball.getRadius(), new Vector2d(box.geometry.position.x+box.geometry.displacement.x, box.geometry.position.y)));
+        addCollisionObject(new CollisionCircle(box, ball.getRadius(), new Vector2d(box.geometry.position.x, box.geometry.position.y+box.geometry.displacement.y)));
+        addCollisionObject(new CollisionCircle(box, ball.getRadius(), new Vector2d(box.geometry.position.x+box.geometry.displacement.x, box.geometry.position.y+box.geometry.displacement.y)));
     }
 
     public void processCollisions() {
@@ -74,8 +74,8 @@ public class CollisionHandler2 {
             minCollisionObject.reflectLine(ballMotion, minIntersection, minDistance);
         }
 
-        ball.position.x = ballMotion.position.x;
-        ball.position.y = ballMotion.position.y;
+        ball.geometry.position.x = ballMotion.position.x;
+        ball.geometry.position.y = ballMotion.position.y;
         ball.velocity.x = ballMotion.displacement.x;
         ball.velocity.y = ballMotion.displacement.y;
     }

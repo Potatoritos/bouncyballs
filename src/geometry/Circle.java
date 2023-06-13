@@ -11,11 +11,18 @@ public class Circle {
     }
     public Circle(double radius, Vector2d position) {
         this();
+        set(radius, position);
+    }
+    public Circle(Circle circle) {
+        this();
+        set(circle);
+    }
+    public void set(double radius, Vector2d position) {
         this.radius = radius;
         this.position.set(position);
     }
-    public Circle(Circle circle) {
-        this(circle.radius, circle.position);
+    public void set(Circle circle) {
+        set(circle.radius, circle.position);
     }
     public double getRadius() {
         return radius;

@@ -1,6 +1,7 @@
 package game;
 
 import game.GameObject;
+import geometry.Sphere;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -8,23 +9,30 @@ import org.joml.Vector3d;
 
 public class Ball extends GameObject {
     public Vector3d velocity;
-    private double radius;
-    public Ball(Vector3d position, double radius) {
-        super(position);
+    public final Sphere geometry;
+    public Ball() {
+        super();
         velocity = new Vector3d();
-        this.radius = radius;
+        geometry = new Sphere();
+    }
+    public Ball(Sphere geometry) {
+        this();
+        this.geometry.set(geometry);
     }
     public double getRadius() {
-        return radius;
+        return geometry.getRadius();
     }
     public void update() {
-        position.add(velocity);
+        geometry.position.add(velocity);
+    }
+    public Vector3d getPosition() {
+        return geometry.position;
     }
     public Matrix4f getWorldMatrix(Vector3d globalRotation) {
         return worldMatrix.identity()
                 .rotateX((float)globalRotation.x)
                 .rotateY((float)globalRotation.y)
-                .translate((float)position.x, (float)position.y, (float)position.z)
-                .scale((float)radius);
+                .translate((float)getPosition().x, (float)getPosition().y, (float)getPosition().z)
+                .scale((float)getRadius());
     }
 }

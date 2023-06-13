@@ -1,5 +1,7 @@
 package game;
 
+import geometry.Line3;
+import geometry.Sphere;
 import graphics.EmptyFbo;
 import graphics.FrameBufferObject;
 import geometry.CollisionHandler2;
@@ -73,7 +75,7 @@ public class LevelScene extends Scene {
         balls = new ArrayList<>();
 
         camera.position.z = 6;
-        ball = new Ball(new Vector3d(0.95, 0.2, 0.4), 0.4);
+        ball = new Ball(new Sphere(new Vector3d(0.95, 0.2, 0.4), 0.4));
         balls.add(ball);
         edgeSourceFbo = new EmptyFbo(windowWidth, windowHeight);
         handleWindowResize(windowWidth, windowHeight);
@@ -106,20 +108,20 @@ public class LevelScene extends Scene {
 
         float border = 3;
 
-        if (ball.position.x > border) {
-            ball.position.x = border;
+        if (ball.geometry.position.x > border) {
+            ball.geometry.position.x = border;
             ball.velocity.x = 0;
         }
-        if (ball.position.x < -border) {
-            ball.position.x = -border;
+        if (ball.geometry.position.x < -border) {
+            ball.geometry.position.x = -border;
             ball.velocity.x = 0;
         }
-        if (ball.position.y > border) {
-            ball.position.y = border;
+        if (ball.geometry.position.y > border) {
+            ball.geometry.position.y = border;
             ball.velocity.y = 0;
         }
-        if (ball.position.y < -border) {
-            ball.position.y = -border;
+        if (ball.geometry.position.y < -border) {
+            ball.geometry.position.y = -border;
             ball.velocity.y = 0;
         }
 
@@ -233,19 +235,19 @@ public class LevelScene extends Scene {
         for (int i = 0; i < level.getRows(); i++) {
             for (int j = 0; j < level.getColumns(); j++) {
                 if (level.getFloorState(i, j)) {
-                    Box tile = new Box(
+                    Box tile = new Box(new Line3(
                             new Vector3d(level.getPosX(j), level.getPosY(i), -0.25),
                             new Vector3d(1, 1, 0.25)
-                    );
+                    ));
                     floorTiles.add(tile);
                 }
             }
             for (int j = 0; j < level.getColumns()+1; j++) {
                 if (level.getWallXState(i, j)) {
-                    Box tile = new Box(
+                    Box tile = new Box(new Line3(
                             new Vector3d(level.getPosX(j)-0.05, level.getPosY(i), 0),
                             new Vector3d(0.1, 1, 0.5)
-                    );
+                    ));
                     wallXTiles.add(tile);
                 }
             }
@@ -253,10 +255,10 @@ public class LevelScene extends Scene {
         for (int i = 0; i < level.getRows()+1; i++) {
             for (int j = 0; j < level.getColumns(); j++) {
                 if (level.getWallYState(i, j)) {
-                    Box tile = new Box(
+                    Box tile = new Box(new Line3(
                             new Vector3d(level.getPosX(j), level.getPosY(i)-0.05, 0),
                             new Vector3d(1, 0.1, 0.5)
-                    );
+                    ));
                     wallYTiles.add(tile);
                 }
             }

@@ -13,12 +13,19 @@ public class Cylinder {
     }
     public Cylinder(Vector3d position, Vector3d axis, double radius) {
         this();
+        set(position, axis, radius);
+    }
+    public Cylinder(Cylinder cylinder) {
+        this();
+        set(cylinder);
+    }
+    public void set(Vector3d position, Vector3d axis, double radius) {
         this.position.set(position);
         this.axis.set(axis);
         this.radius = radius;
     }
-    public Cylinder(Cylinder cylinder) {
-        this(cylinder.position, cylinder.axis, cylinder.radius);
+    public void set(Cylinder cylinder) {
+        set(cylinder.position, cylinder.axis, cylinder.radius);
     }
     public double getRadius() {
         return radius;

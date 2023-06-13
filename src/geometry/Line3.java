@@ -11,13 +11,18 @@ public class Line3 {
     }
     public Line3(Vector3d position, Vector3d displacement) {
         this();
-        this.position.set(position);
-        this.displacement.set(displacement);
+        set(position, displacement);
     }
     public Line3(Line3 line) {
         this();
-        this.position.set(line.position);
-        this.displacement.set(line.displacement);
+        set(line);
+    }
+    public void set(Vector3d position, Vector3d displacement) {
+        this.position.set(position);
+        this.displacement.set(displacement);
+    }
+    public void set(Line3 line) {
+        set(line.position, line.displacement);
     }
     public double x1() {
         return position.x;

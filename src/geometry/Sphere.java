@@ -11,13 +11,23 @@ public class Sphere {
     }
     public Sphere(Vector3d position, double radius) {
         this();
+        set(position, radius);
+    }
+    public Sphere(Sphere sphere) {
+        this();
+        set(sphere);
+    }
+    public void set(Vector3d position, double radius) {
         this.position.set(position);
         this.radius = radius;
     }
-    public Sphere(Sphere sphere) {
-        this(sphere.position, sphere.radius);
+    public void set(Sphere sphere) {
+        set(sphere.position, sphere.radius);
     }
     public double getRadius() {
         return radius;
+    }
+    public void setRadius(double value) {
+        radius = value;
     }
 }

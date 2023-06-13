@@ -1,5 +1,7 @@
 package math;
 
+import org.joml.Vector3f;
+
 public class MathUtil {
     public static final double EPSILON = 0.00001;
     public static boolean withinEpsilon(float a, float b) {
@@ -50,5 +52,11 @@ public class MathUtil {
     }
     public static float cutMaxMin(float a, float min, float max) {
         return java.lang.Math.max(java.lang.Math.min(a, max), min);
+    }
+
+    public static void insertVector(float[] arr, int index, Vector3f vector) {
+        arr[3*index] = vector.x;
+        arr[3*index + 1] = vector.y;
+        arr[3*index + 2] = vector.z;
     }
 }

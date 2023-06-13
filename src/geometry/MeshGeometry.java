@@ -5,10 +5,12 @@ import graphics.Texture;
 import graphics.TextureMesh;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import math.MathUtil.*;
 
 import java.util.ArrayList;
 
 import static java.lang.Math.sqrt;
+import static math.MathUtil.insertVector;
 
 public class MeshGeometry {
     private final static Vector3f u;
@@ -100,11 +102,6 @@ public class MeshGeometry {
         }
         return faces;
     }
-    private static void insertVector(float[] arr, int index, Vector3f vector) {
-        arr[3*index] = vector.x;
-        arr[3*index + 1] = vector.y;
-        arr[3*index + 2] = vector.z;
-    }
 
     public static GameObjectMesh generateGeodesicPolyhedronMesh(int iterations, Vector3f color) {
         ArrayList<Vector3f> faces = generateGeodesicPolyhedronFaces(iterations);
@@ -130,8 +127,6 @@ public class MeshGeometry {
             indices[i+1] = i+1;
             indices[i+2] = i+2;
         }
-
-//        computeFaceNormals(normals, vertices, indices);
 
         for (int i = 0; i < faces.size(); i++) {
             insertVector(colors, i, color);

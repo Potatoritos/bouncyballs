@@ -57,7 +57,7 @@ public class LevelScene extends Scene {
         holeMesh = holeTileMesh(
                 new Vector3f(0.8f, 0.8f, 0.8f),
                 new Vector3f(1, 0, 0),
-                30,
+                20,
                 0.4
         );
         wallXMesh = rectangularPrismMesh(

@@ -10,7 +10,7 @@ import org.joml.Vector3d;
 import static geometry.Geometry.*;
 
 public class CollisionPlane extends CollisionObject3 {
-    private final Plane plane;
+    protected final Plane plane;
     private final Vector3d midpoint;
     public CollisionPlane(GameObject parent, Plane plane) {
         super(parent);
@@ -20,7 +20,7 @@ public class CollisionPlane extends CollisionObject3 {
 
     @Override
     public void reflectLine(Line3 line, Vector3d intersection, double length) {
-        Geometry.reflectLine(line, intersection, plane.normal(), 0.5);
+        parent.reflectLine(line, intersection, plane.normal());
     }
 
     @Override
@@ -36,9 +36,5 @@ public class CollisionPlane extends CollisionObject3 {
         }
 
         return intersectionLinePlane(line, plane, result);
-    }
-
-    public String toString() {
-        return plane.toString();
     }
 }

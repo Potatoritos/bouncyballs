@@ -114,12 +114,15 @@ public class LevelScene extends Scene {
         rotation.x = (MathUtil.cutMaxMin(input.getMousePosition().y, 0, 1)-0.5) * Math.PI/3;
         rotation.y = (MathUtil.cutMaxMin(input.getMousePosition().x, 0, 1)-0.5) * Math.PI/3;
 
-//        if (timer == 10) {
-//            ball.velocity.x = -0.04;
-//            ball.velocity.y = 0.04;
+//        if (timer == 5) {
+//            balls.get(0).geometry.position.set(-0.2, 2.1, 0.35);
+//            balls.get(1).geometry.position.set(-1.2, 1.1, 0.35);
+//            balls.get(1).velocity.set(0.04, 0.04, 0);
 //        }
 
+        int i = 1;
         for (Ball ball : balls) {
+//            System.out.printf("---- ball %d\n", i++);
             if (ball.geometry.position.z <= -1) {
                 ball.geometry.position.set(1.5, -0.5, 0.5);
                 ball.velocity.set(0,0,0);
@@ -149,6 +152,10 @@ public class LevelScene extends Scene {
             }
             for (HoleBox box : holeTiles) {
                 collisionHandler.addHoleBox(box);
+            }
+            for (Ball collisionBall : balls) {
+                if (ball == collisionBall) continue;
+                collisionHandler.addBallCollision(collisionBall);
             }
             collisionHandler.processCollisions();
 

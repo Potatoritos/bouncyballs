@@ -21,7 +21,7 @@ public class CollisionCylinder extends CollisionObject3 {
     @Override
     public void reflectLine(Line3 line, Vector3d intersection, double length) {
         // Project the intersection onto the cylinder's axis
-        Geometry.reflectLine(line, intersection, cylinder.normal(intersection), 0.5);
+        parent.reflectLine(line, intersection, cylinder.normal(intersection));
     }
 
     @Override

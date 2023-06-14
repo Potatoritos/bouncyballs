@@ -1,5 +1,6 @@
 package math;
 
+import org.joml.Vector3d;
 import org.joml.Vector3f;
 
 public class MathUtil {
@@ -10,6 +11,9 @@ public class MathUtil {
     public static boolean withinEpsilon(double a, double b) {
 //        return Math.abs(a - b) <= Math.max(Math.abs(a), Math.abs(b)) * EPSILON;
         return java.lang.Math.abs(a-b) <= EPSILON;
+    }
+    public static boolean withinEpsilon(Vector3d a, Vector3d b) {
+        return withinEpsilon(a.x, b.x) && withinEpsilon(a.y, b.y) && withinEpsilon(a.z, b.z);
     }
     public static double clipWithinEpsilon(double a, double b) {
         if (withinEpsilon(a, b)) {

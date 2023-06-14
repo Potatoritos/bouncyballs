@@ -32,12 +32,18 @@ public class Geometry {
         Vector3d normalComponent = new Vector3d();
         project(line.displacement, normal, normalComponent);
 
-        // Set restitution to 0 if the rebound is small
+        // Nullify the rebound if it is small
         if (normalComponent.length()*restitution <= 0.004) {
             restitution = 0;
         }
 
         line.displacement.sub(normalComponent.mul(1 + restitution));
+        line.position.set(intersection);
+    }
+    public static void reflectLineFixedRebound(Line3 line, Vector3d intersection, Vector3d normal, double reboundVelocity) {
+        Vector3d normalComponent = new Vector3d();
+        project(line.displacement, normal, normalComponent);
+        line.displacement.sub(normalComponent.mul(1 + reboundVelocity/normalComponent.length()));
         line.position.set(intersection);
     }
 

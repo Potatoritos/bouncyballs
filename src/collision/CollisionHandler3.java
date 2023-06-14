@@ -12,6 +12,7 @@ import org.joml.Vector3d;
 import java.util.ArrayList;
 
 import static geometry.Geometry.distance;
+import static math.MathUtil.withinEpsilon;
 
 public class CollisionHandler3 {
     private Ball ball;
@@ -296,10 +297,20 @@ public class CollisionHandler3 {
 
         addFloorBoxSides(box);
     }
+    public void addBallCollision(Ball ball) {
+        addCollisionObject(new CollisionSphere(ball,
+                new Sphere(
+                        ball.getPosition(),
+                        ball.getRadius() + this.ball.getRadius()
+                )
+        ));
+    }
     public void processCollisions() {
         int i = 0;
         Vector3d intersection = new Vector3d();
-        while (++i < 7) {
+        Vector3d prevIntersection = new Vector3d();
+        boolean needsSep = false;
+        while (i++ < 10) {
             double minDistance = Double.POSITIVE_INFINITY;
             for (CollisionObject3 object : collisionObjects) {
                 if (!object.intersect(ballMotion, intersection)) {
@@ -313,11 +324,16 @@ public class CollisionHandler3 {
                 }
             }
             if (minDistance == Double.POSITIVE_INFINITY) {
-                i--;
                 break;
             }
+            if (i >= 6) {
+                System.out.printf("motion=%s, int=%s\n", ballMotion, minIntersection);
+                needsSep = true;
+            }
+            prevIntersection.set(minIntersection);
             minCollisionObject.reflectLine(ballMotion, minIntersection, minDistance);
         }
+        if (needsSep) System.out.println("-------");
 
         ball.geometry.position.set(ballMotion.position);
         ball.velocity.set(ballMotion.displacement);

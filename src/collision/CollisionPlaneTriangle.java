@@ -9,23 +9,9 @@ import org.joml.Vector3d;
 
 import static geometry.Geometry.*;
 
-public class CollisionPlaneTriangle extends CollisionObject3 {
-    private final Plane plane;
-    private final Vector3d midpoint;
+public class CollisionPlaneTriangle extends CollisionPlane {
     public CollisionPlaneTriangle(GameObject parent, Plane plane) {
-        super(parent);
-        this.plane = new Plane(plane);
-        midpoint = new Vector3d(plane.displacement1).mul(0.5).add(new Vector3d(plane.displacement2).mul(0.5)).add(plane.position);
-    }
-
-    @Override
-    public void reflectLine(Line3 line, Vector3d intersection, double length) {
-        Geometry.reflectLine(line, intersection, plane.normal(), 0.5);
-    }
-
-    @Override
-    public boolean isNearby(Sphere ballSphere) {
-        return distance(midpoint, ballSphere.position) <= ballSphere.getRadius() + Math.max(plane.displacement1.length(), plane.displacement2.length());
+        super(parent, plane);
     }
 
     @Override

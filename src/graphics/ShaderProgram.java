@@ -94,8 +94,11 @@ public class ShaderProgram implements Deletable {
             System.err.println("Warning validating shader: " + glGetProgramInfoLog(id, 1024));
         }
     }
-    public void setUniform(String name, FloatBuffer buffer) {
+    public void setUniformMatrix4fv(String name, FloatBuffer buffer) {
         glUniformMatrix4fv(uniforms.get(name), false, buffer);
+    }
+    public void setUniform3fv(String name, FloatBuffer buffer) {
+        glUniform3fv(uniforms.get(name), buffer);
     }
     public void setUniform(String name, ArrayList<Matrix4f> values) {
         FloatBuffer buffer = MemoryUtil.memAllocFloat(16*values.size());

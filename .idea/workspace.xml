@@ -10,11 +10,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
-      <change afterPath="$PROJECT_DIR$/src/collision/CollisionPlaneTriangle.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/game/HoleBox.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/collision/CollisionHandler3.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/CollisionHandler3.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/geometry/Geometry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/Geometry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/levels/level0.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/level0.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/shaders/sobel_filter_instanced.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/assets/shaders/sobel_filter_instanced.glsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game/FloorTile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/FloorTile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game/GameObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/GameObject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game/Level.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Level.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/ShaderProgram.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/ShaderProgram.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/scene/LevelScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/scene/LevelScene.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -182,7 +184,7 @@
       <workItem from="1686669314774" duration="10000" />
       <workItem from="1686673852895" duration="7715000" />
       <workItem from="1686686941668" duration="11359000" />
-      <workItem from="1686762325246" duration="6833000" />
+      <workItem from="1686762325246" duration="13310000" />
     </task>
     <servers />
   </component>

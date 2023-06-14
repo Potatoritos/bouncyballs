@@ -3,5 +3,6 @@ package game;
 public enum FloorTile {
     NONE,
     FLOOR,
-    HOLE
+    GOAL1,
+    GOAL2
 }

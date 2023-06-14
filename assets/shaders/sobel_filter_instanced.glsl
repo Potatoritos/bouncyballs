@@ -8,10 +8,12 @@ out vec3 color;
 
 uniform mat4 viewMatrices[100];
 uniform mat4 projectionMatrix;
+uniform vec3 color1[100];
+uniform vec3 color2[100];
 
 void main() {
     gl_Position = projectionMatrix * viewMatrices[gl_InstanceID] * vec4(position, 1.0);
-    color = inColor;
+    color = vec3(mix(color1[gl_InstanceID], color2[gl_InstanceID], inColor.r));
 }
 
 /// Fragment
@@ -22,7 +24,6 @@ out vec4 fragColor;
 
 uniform sampler2D normalTexture;
 uniform sampler2D depthTexture;
-//uniform vec3 color;
 
 mat3 sobelX = mat3(
     1.0, 2.0, 1.0,

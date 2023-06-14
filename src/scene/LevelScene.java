@@ -1,17 +1,13 @@
 package scene;
 
 import collision.CollisionHandler3;
-import game.InputState;
+import game.*;
 import geometry.Line3;
 import geometry.Sphere;
 import graphics.EmptyFbo;
 import graphics.FrameBufferObject;
 import graphics.GameObjectMesh;
 import graphics.ShaderProgram;
-import game.Ball;
-import game.Box;
-import game.GameObject;
-import game.Level;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 import org.lwjgl.system.MemoryUtil;
@@ -42,7 +38,7 @@ public class LevelScene extends Scene {
     private final Vector3d rotation;
 
     private final ArrayList<Box> floorTiles;
-    private final ArrayList<Box> holeTiles;
+    private final ArrayList<HoleBox> holeTiles;
     private final ArrayList<Box> wallXTiles;
     private final ArrayList<Box> wallYTiles;
     private final ArrayList<Ball> balls;
@@ -103,7 +99,7 @@ public class LevelScene extends Scene {
         edgeSourceFbo.resize(width, height);
     }
     public void update(InputState input) {
-        timer++;
+//        timer++;
         rotation.x = (MathUtil.cutMaxMin(input.getMousePosition().y, 0, 1)-0.5) * Math.PI/3;
         rotation.y = (MathUtil.cutMaxMin(input.getMousePosition().x, 0, 1)-0.5) * Math.PI/3;
 
@@ -112,12 +108,17 @@ public class LevelScene extends Scene {
 //            ball.velocity.y = 0.04;
 //        }
 
+        if (ball.geometry.position.z <= -1) {
+            ball.geometry.position.set(1.5, -0.5, 0.5);
+            ball.velocity.set(0,0,0);
+        }
+
         ball.velocity.x += Math.sin(rotation.y * 0.002);
         ball.velocity.x = MathUtil.cutMaxMin(ball.velocity.x, -0.2f, 0.2f);
         ball.velocity.y += -Math.sin(rotation.x * 0.002);
         ball.velocity.y = MathUtil.cutMaxMin(ball.velocity.y, -0.2f, 0.2f);
 
-        ball.velocity.z -= 0.003;
+        ball.velocity.z -= 0.002;
 
         if (ball.velocity.length() > 0.1f) {
             ball.velocity.normalize(0.1f);
@@ -152,6 +153,9 @@ public class LevelScene extends Scene {
         }
         for (Box box : floorTiles) {
             collisionHandler.addFloorBox(box);
+        }
+        for (HoleBox box : holeTiles) {
+            collisionHandler.addHoleBox(box);
         }
         collisionHandler.processCollisions();
 
@@ -268,10 +272,10 @@ public class LevelScene extends Scene {
                         floorTiles.add(tile);
                     }
                     case HOLE -> {
-                        Box tile = new Box(new Line3(
+                        HoleBox tile = new HoleBox(new Line3(
                                 new Vector3d(level.getPosX(j), level.getPosY(i), -floorTileHeight),
                                 new Vector3d(1, 1, floorTileHeight)
-                        ));
+                        ), 0.4);
                         holeTiles.add(tile);
                     }
                 }

@@ -10,8 +10,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
+      <change afterPath="$PROJECT_DIR$/src/collision/CollisionPlaneTriangle.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/HoleBox.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mesh/MeshGeometry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/mesh/MeshGeometry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/collision/CollisionHandler3.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/CollisionHandler3.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/geometry/Geometry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/Geometry.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/scene/LevelScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/scene/LevelScene.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -179,7 +182,7 @@
       <workItem from="1686669314774" duration="10000" />
       <workItem from="1686673852895" duration="7715000" />
       <workItem from="1686686941668" duration="11359000" />
-      <workItem from="1686762325246" duration="855000" />
+      <workItem from="1686762325246" duration="6833000" />
     </task>
     <servers />
   </component>

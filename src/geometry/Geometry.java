@@ -54,9 +54,10 @@ public class Geometry {
         return true;
     }
 
-    public static double intersectionLinePlane(Line3 line, Plane plane) {
+    public static void intersectionLinePlaneTUV(Line3 line, Plane plane, Vector3d result) {
         if (line.displacement.lengthSquared() == 0) {
-            return -1;
+            result.x = -1;
+            return;
         }
         // set t = (plane.d1 × plane.d2) • (line.pos - plane.pos) / -line.d • (plane.d1 × plane.d2)
         Vector3d r = new Vector3d();
@@ -84,6 +85,25 @@ public class Geometry {
         t = clipWithinEpsilon(t, 0, 1);
         u = clipWithinEpsilon(u, 0, 1);
         v = clipWithinEpsilon(v, 0, 1);
+        result.set(t, u, v);
+    }
+    public static double intersectionLinePlaneTriangle(Line3 line, Plane plane) {
+        Vector3d result = new Vector3d();
+        intersectionLinePlaneTUV(line, plane, result);
+        double t = result.x, u = result.y, v = result.z;
+        if (t < 0 || t > 1 || u < 0 || u > 1 || v < 0 || v > 1 || (u+v) > 1) {
+            return -1;
+        }
+        return t;
+    }
+    public static boolean intersectionLinePlaneTriangle(Line3 line, Plane plane, Vector3d result) {
+        return scaleLine(line, intersectionLinePlaneTriangle(line, plane), result);
+    }
+
+    public static double intersectionLinePlane(Line3 line, Plane plane) {
+        Vector3d result = new Vector3d();
+        intersectionLinePlaneTUV(line, plane, result);
+        double t = result.x, u = result.y, v = result.z;
         if (t < 0 || t > 1 || u < 0 || u > 1 || v < 0 || v > 1) {
             return -1;
         }
@@ -108,6 +128,9 @@ public class Geometry {
                 rotationMatrix.rotationX(Math.PI/2);
             } else if (cylinder.axis.y == 0) {
                 rotationMatrix.rotationY(Math.PI/2);
+            } else {
+                rotationMatrix.rotationZ(cylinder.axis.angle(xHat));
+                rotationMatrix.rotateY(Math.PI/2);
             }
             rotatedLine.position.mul(rotationMatrix);
             rotatedLine.displacement.mul(rotationMatrix);

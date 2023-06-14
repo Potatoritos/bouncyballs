@@ -279,86 +279,89 @@ public class MeshGeometry {
 
     public static GameObjectMesh rectangularPrismMesh(Vector3f position, Vector3f dimensions, Vector3f color) {
         Vector3f p = position, d = dimensions;
-        Vector3f center = new Vector3f(p.x+d.x/2, p.y+d.y/2, p.z+d.z/2);
-//        center.set(position);
-//        p.half(d, center);
-        float[] vertices = new float[] {
-                p.x,        p.y,        p.z,
-                p.x+d.x,    p.y,        p.z,
-                p.x,        p.y+d.y,    p.z,
-                p.x+d.x,    p.y+d.y,    p.z,
+        Quad colors = new Quad(color);
 
-                p.x+d.x,    p.y,        p.z+d.z,
-                p.x,        p.y,        p.z+d.z,
-                p.x+d.x,    p.y+d.y,    p.z+d.z,
-                p.x,        p.y+d.y,    p.z+d.z,
+        MeshBuilder builder = new MeshBuilder();
+        builder.addQuad(
+                new Quad(
+                        new Vector3f(p.x, p.y, p.z),
+                        new Vector3f(p.x+d.x, p.y, p.z),
+                        new Vector3f(p.x+d.x, p.y+d.y, p.z),
+                        new Vector3f(p.x, p.y+d.y, p.z)
+                ),
+                new Quad(new Vector3f(0, 0, -1)),
+                colors
+        );
+        builder.addQuad(
+                new Quad(
+                        new Vector3f(p.x, p.y, p.z+d.z),
+                        new Vector3f(p.x+d.x, p.y, p.z+d.z),
+                        new Vector3f(p.x+d.x, p.y+d.y, p.z+d.z),
+                        new Vector3f(p.x, p.y+d.y, p.z+d.z)
+                ),
+                new Quad(new Vector3f(0, 0, 1)),
+                colors
+        );
+        builder.addQuad(
+                new Quad(
+                        new Vector3f(p.x, p.y, p.z),
+                        new Vector3f(p.x, p.y, p.z+d.z),
+                        new Vector3f(p.x, p.y+d.y, p.z+d.z),
+                        new Vector3f(p.x, p.y+d.y, p.z)
+                ),
+                new Quad(new Vector3f(-1, 0, 0)),
+                colors
+        );
+        builder.addQuad(
+                new Quad(
+                        new Vector3f(p.x+d.x, p.y, p.z+d.z),
+                        new Vector3f(p.x+d.x, p.y, p.z),
+                        new Vector3f(p.x+d.x, p.y+d.y, p.z),
+                        new Vector3f(p.x+d.x, p.y+d.y, p.z+d.z)
+                ),
+                new Quad(new Vector3f(1, 0, 0)),
+                colors
+        );
+        builder.addQuad(
+                new Quad(
+                        new Vector3f(p.x, p.y, p.z),
+                        new Vector3f(p.x+d.x, p.y, p.z),
+                        new Vector3f(p.x+d.x, p.y, p.z+d.z),
+                        new Vector3f(p.x, p.y, p.z+d.z)
+                ),
+                new Quad(new Vector3f(0, -1, 0)),
+                colors
+        );
+        builder.addQuad(
+                new Quad(
+                        new Vector3f(p.x+d.x, p.y+d.y, p.z),
+                        new Vector3f(p.x, p.y+d.y, p.z),
+                        new Vector3f(p.x, p.y+d.y, p.z+d.z),
+                        new Vector3f(p.x+d.x, p.y+d.y, p.z+d.z)
+                ),
+                new Quad(new Vector3f(0, -1, 0)),
+                colors
+        );
+        return builder.createMesh();
+//
+//        float l = (float)sqrt(1f/3);
+////        float[] normals = new float[] {
+////                -l, -l, -l,   l, -l, -l,   -l, l, -l,   l, l, -l,
+////                l, -l, l,    -l, -l, l,    l, l, l,    -l, l, l,
+////                -l, -l, l,   -l, -l, -l,   -l, l, l,   -l, l, -l,
+////                l, -l, -l,    l, -l, l,    l, l, -l,    l, l, l,
+////                -l, -l, l,   l, -l, l,   -l, -l, -l,   l, -l, -l,
+////                -l, l, -l,    l, l, -l,    -l, l, l,    l, l, l
+////        };
 
-                p.x,        p.y,        p.z+d.z,
-                p.x,        p.y,        p.z,
-                p.x,        p.y+d.y,    p.z+d.z,
-                p.x,        p.y+d.y,    p.z,
-
-                p.x+d.x,    p.y,        p.z,
-                p.x+d.x,    p.y,        p.z+d.z,
-                p.x+d.x,    p.y+d.y,    p.z,
-                p.x+d.x,    p.y+d.y,    p.z+d.z,
-
-                p.x,        p.y,        p.z+d.z,
-                p.x+d.x,    p.y,        p.z+d.z,
-                p.x,        p.y,        p.z,
-                p.x+d.x,    p.y,        p.z,
-
-                p.x,        p.y+d.y,    p.z,
-                p.x+d.x,    p.y+d.y,    p.z,
-                p.x,        p.y+d.y,    p.z+d.z,
-                p.x+d.x,    p.y+d.y,    p.z+d.z
-        };
-        float l = (float)sqrt(1f/3);
 //        float[] normals = new float[] {
-//                -l, -l, -l,   l, -l, -l,   -l, l, -l,   l, l, -l,
-//                l, -l, l,    -l, -l, l,    l, l, l,    -l, l, l,
-//                -l, -l, l,   -l, -l, -l,   -l, l, l,   -l, l, -l,
-//                l, -l, -l,    l, -l, l,    l, l, -l,    l, l, l,
-//                -l, -l, l,   l, -l, l,   -l, -l, -l,   l, -l, -l,
-//                -l, l, -l,    l, l, -l,    -l, l, l,    l, l, l
+//                0, 0, -1,   0, 0, -1,   0, 0, -1,   0, 0, -1,
+//                0, 0, 1,    0, 0, 1,    0, 0, 1,    0, 0, 1,
+//                -1, 0, 0,   -1, 0, 0,   -1, 0, 0,   -1, 0, 0,
+//                1, 0, 0,    1, 0, 0,    1, 0, 0,    1, 0, 0,
+//                0, -1, 0,   0, -1, 0,   0, -1, 0,   0, -1, 0,
+//                0, 1, 0,    0, 1, 0,    0, 1, 0,    0, 1, 0
 //        };
-        int[] indices = new int[] {
-                0, 1, 2, 1, 3, 2,
-                4, 5, 6, 5, 7, 6,
-                8, 9, 10, 9, 11, 10,
-                12, 13, 14, 13, 15, 14,
-                16, 17, 18, 17, 19, 18,
-                20, 21, 22, 21, 23, 22
-        };
-//        float[] normals = new  float[vertices.length];
-//        for (int i = 0; i < vertices.length/3; i++) {
-//            u.set(vertices[3*i], vertices[3*i+1], vertices[3*i+2]).sub(center).normalize();
-//            insertVector(normals, i, u);
-//        }
-
-        float[] normals = new float[] {
-                0, 0, -1,   0, 0, -1,   0, 0, -1,   0, 0, -1,
-                0, 0, 1,    0, 0, 1,    0, 0, 1,    0, 0, 1,
-                -1, 0, 0,   -1, 0, 0,   -1, 0, 0,   -1, 0, 0,
-                1, 0, 0,    1, 0, 0,    1, 0, 0,    1, 0, 0,
-                0, -1, 0,   0, -1, 0,   0, -1, 0,   0, -1, 0,
-                0, 1, 0,    0, 1, 0,    0, 1, 0,    0, 1, 0
-        };
-//        float[] normals = new float[] {
-//                0, 0, 0,   0, 0, 0,   0, 0, 0,   0, 0, 0,
-//                0, 0, 0,    0, 0, 0,    0, 0, 0,    0, 0, 0,
-//                0, 0, 0,   0, 0, 0,   0, 0, 0,   0, 0, 0,
-//                0, 0, 0,    0, 0, 0,    0, 0, 0,    0, 0, 0,
-//                0, 0, 0,   0, 0, 0,   0, 0, 0,   0, 0, 0,
-//                0, 0, 0,    0, 0, 0,    0, 0, 0,    0, 0, 0
-//        };
-//        float[] normals = new float[3*indices.length];
-//        computeFaceNormals(normals, vertices, indices);
-        float[] colors = new float[vertices.length];
-        for (int i = 0; i < vertices.length/3; i++) {
-            insertVector(colors, i, color);
-        }
-        return new GameObjectMesh(vertices, normals, colors, indices);
     }
     public static TextureMesh texturedRectangle(Vector2f position, Vector2f dimensions, Texture texture) {
         float[] vertices = new float[] {

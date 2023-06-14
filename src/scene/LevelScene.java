@@ -190,6 +190,7 @@ public class LevelScene extends Scene {
 //        glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 //        glStencilMask(0xFF);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+        glEnable(GL_CULL_FACE);
 
 //        glStencilFunc(GL_ALWAYS, 1, 0xFF);
 //        glStencilMask(0xFF);

@@ -28,16 +28,16 @@ public class Geometry {
     // intersection: the point where the line collides with the surface
     // normal, parallel1, parallel2: a normal and 2 parallels to the point of intersection
     // restitution: the ratio between the initial and final "velocity" of the line after hitting the surface
-    public static void reflectLine(Line3 line, Vector3d intersection, Vector3d normal, Vector3d parallel1, Vector3d parallel2, double restitution) {
-        project(line.displacement, normal, normal);
-        project(line.displacement, parallel1, parallel1);
-        project(line.displacement, parallel2, parallel2);
+    public static void reflectLine(Line3 line, Vector3d intersection, Vector3d normal, double restitution) {
+        Vector3d normalComponent = new Vector3d();
+        project(line.displacement, normal, normalComponent);
 
-        normal.negate().mul(restitution);
-        if (normal.length() <= 0.004) {
-            normal.set(0,0,0);
+        // Set restitution to 0 if the rebound is small
+        if (normalComponent.length()*restitution <= 0.004) {
+            restitution = 0;
         }
-        line.displacement.set(parallel1).add(parallel2).add(normal);
+
+        line.displacement.sub(normalComponent.mul(1 + restitution));
         line.position.set(intersection);
     }
 

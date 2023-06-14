@@ -17,11 +17,7 @@ public class CollisionSphere extends CollisionObject3 {
 
     @Override
     public void reflectLine(Line3 line, Vector3d intersection, double length) {
-        Vector3d normal = sphere.normal(intersection);
-        Vector3d parallel1 = new Vector3d(-(normal.y + normal.z)/normal.x, 1, 1);
-        Vector3d parallel2 = new Vector3d(normal).cross(parallel1);
-
-        Geometry.reflectLine(line, intersection, normal, parallel1, parallel2, 0.5);
+        Geometry.reflectLine(line, intersection, sphere.normal(intersection), 0.5);
     }
 
     @Override

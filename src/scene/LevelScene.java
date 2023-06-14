@@ -48,15 +48,13 @@ public class LevelScene extends Scene {
     private final double floorTileHeight = 0.5;
     private final double wallHeight = 0.75;
 
-    private final Vector3f tileColor = new Vector3f(219f/255, 215f/255, 184f/255);
-    private final Vector3f bgColor = new Vector3f(143f/255, 133f/255, 17f/255);
-    private final Vector3f yellow = new Vector3f(219f/255, 203f/255, 15f/255);
-    private final Vector3f cyan = new Vector3f(38f/255, 181f/255, 219f/255);
-    private final Vector3f magenta = new Vector3f(219f/255, 59f/255, 111f/255);
+    private final Vector3f tileColor = new Vector3f(238f/255, 240f/255, 242f/255);
+    private final Vector3f bgColor = new Vector3f(94f/255, 67f/255, 82f/255);
+    private final Vector3f red = new Vector3f(255f/255, 91f/255, 91f/255);
+    private final Vector3f blue = new Vector3f(136f/255, 132f/255, 255f/255);
+    private final Vector3f green = new Vector3f(106f/255, 181f/255, 71f/255);
     public LevelScene(int windowWidth, int windowHeight) {
         super();
-        tileColor.set(yellow);
-        bgColor.set(new Vector3f(0f, 0f, 0f));
         floorMesh = rectangularPrismMesh(
                 new Vector3f(0, 0, 0),
                 new Vector3f(1, 1, (float)floorTileHeight),
@@ -312,7 +310,7 @@ public class LevelScene extends Scene {
                                 new Vector3d(1, 1, floorTileHeight)
                         ), 0.4);
                         tile.color1.set(tileColor);
-                        tile.color2.set(magenta);
+                        tile.color2.set(red);
                         holeTiles.add(tile);
                     }
                     case GOAL2 -> {
@@ -321,7 +319,7 @@ public class LevelScene extends Scene {
                                 new Vector3d(1, 1, floorTileHeight)
                         ), 0.4);
                         tile.color1.set(tileColor);
-                        tile.color2.set(cyan);
+                        tile.color2.set(blue);
                         holeTiles.add(tile);
                     }
                 }
@@ -352,7 +350,7 @@ public class LevelScene extends Scene {
             }
         }
 
-        Vector3f[] ballColors = new Vector3f[] { magenta, cyan };
+        Vector3f[] ballColors = new Vector3f[] { red, blue };
         for (int i = 0; i < level.numberBalls(); i++) {
             Ball ball = new Ball(
                     new Sphere(new Vector3d(level.getBallPosX(i), level.getBallPosY(i), 0.5), 0.35)

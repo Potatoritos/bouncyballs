@@ -20,4 +20,7 @@ public abstract class GameObject {
                 .rotateY((float)globalRotation.y)
                 .translate((float)getPosition().x, (float)getPosition().y, (float)getPosition().z);
     }
+    public void onCollision(Vector3d intersection) {
+
+    }
 }

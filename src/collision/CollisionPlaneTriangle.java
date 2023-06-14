@@ -20,10 +20,7 @@ public class CollisionPlaneTriangle extends CollisionObject3 {
 
     @Override
     public void reflectLine(Line3 line, Vector3d intersection, double length) {
-        Vector3d parallel1 = new Vector3d(plane.displacement1);
-        Vector3d parallel2 = new Vector3d(plane.displacement2);
-        Vector3d normal = plane.normal();
-        Geometry.reflectLine(line, intersection, normal, parallel1, parallel2, 0.5);
+        Geometry.reflectLine(line, intersection, plane.normal(), 0.5);
     }
 
     @Override

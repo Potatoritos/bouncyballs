@@ -113,6 +113,9 @@ public class LevelScene extends Scene {
 //        timer++;
         rotation.x = (MathUtil.cutMaxMin(input.getMousePosition().y, 0, 1)-0.5) * Math.PI/3;
         rotation.y = (MathUtil.cutMaxMin(input.getMousePosition().x, 0, 1)-0.5) * Math.PI/3;
+        if (rotation.length() > Math.PI/6) {
+            rotation.normalize(Math.PI/6);
+        }
 
 //        if (timer == 5) {
 //            balls.get(0).geometry.position.set(-0.2, 2.1, 0.35);

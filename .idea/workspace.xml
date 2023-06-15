@@ -10,13 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/Tilt_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/Tilt_jar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tilt.iml" beforeDir="false" afterPath="$PROJECT_DIR$/BouncyBalls.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/Ball.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Ball.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/geometry/Geometry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/geometry/Geometry.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/scene/LevelScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/scene/LevelScene.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -185,7 +179,7 @@
       <workItem from="1686673852895" duration="7715000" />
       <workItem from="1686686941668" duration="11359000" />
       <workItem from="1686762325246" duration="23509000" />
-      <workItem from="1686787112391" duration="1212000" />
+      <workItem from="1686787112391" duration="1747000" />
     </task>
     <servers />
   </component>

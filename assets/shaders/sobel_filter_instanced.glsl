@@ -65,7 +65,7 @@ void main() {
     float gradientNormal = max(max(gradient(r), gradient(g)), gradient(b));
     float gradientDepth = gradient(depth);
 
-    if (gradientDepth > 0.015 || gradientNormal > 1) {
+    if (gradientDepth > 0.015 || gradientNormal > 1.25) {
         fragColor = vec4(0, 0, 0, 1);
     } else {
         fragColor = vec4(color, 1);

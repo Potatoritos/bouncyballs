@@ -253,6 +253,9 @@ public class MeshGeometry {
 
             t1.set(-x1 + 0.5f, y1 + 0.5f, height);
             t2.set(-x2 + 0.5f, y2 + 0.5f, height);
+
+            n1.set(-x1, y1, 0).negate();
+            n2.set(-x2, y2, 0).negate();
             builder.addQuad(
                     new Quad(
                             new Vector3f(t2).sub(0, 0, height),
@@ -260,7 +263,7 @@ public class MeshGeometry {
                             t1,
                             t2
                     ),
-                    new Quad(n1, n2, n2, n1),
+                    new Quad(n2, n1, n1, n2),
                     new Quad(holeColor, holeColor, surfaceColor, surfaceColor)
             );
             builder.addQuad(

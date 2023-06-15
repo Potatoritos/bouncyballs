@@ -28,10 +28,9 @@ public class LevelScene extends Scene {
     private final GameObjectMesh wallXMesh;
     private final GameObjectMesh wallYMesh;
     private final GameObjectMesh ballMesh;
+    private final GameObjectMesh[] gameObjectMeshes;
 
-    private final ShaderProgram colorNormals;
     private final ShaderProgram colorNormalsInstanced;
-    private final ShaderProgram outline;
     private final ShaderProgram outlineInstanced;
     private final ShaderProgram sobelFilterInstanced;
     private final EmptyFbo edgeSourceFbo;
@@ -42,7 +41,7 @@ public class LevelScene extends Scene {
     private final ArrayList<Box> wallXTiles;
     private final ArrayList<Box> wallYTiles;
     private final ArrayList<Ball> balls;
-//    private final Ball ball;
+    private final ArrayList<? extends GameObject>[] gameObjects;
     private final CollisionHandler3 collisionHandler;
     private long timer;
     private final double floorTileHeight = 0.5;
@@ -77,9 +76,9 @@ public class LevelScene extends Scene {
                 new Vector3f(0f, 0f, 0f)
         );
         ballMesh = generateGeodesicPolyhedronMesh(3, new Vector3f(0f, 0f, 0f));
-        colorNormals = ShaderProgram.fromFile("color_normals.glsl");
+        gameObjectMeshes = new GameObjectMesh[] {floorMesh, holeMesh, wallXMesh, wallYMesh, ballMesh};
+
         colorNormalsInstanced = ShaderProgram.fromFile("color_normals_instanced.glsl");
-        outline = ShaderProgram.fromFile("outline.glsl");
         outlineInstanced = ShaderProgram.fromFile("outline_instanced.glsl");
         sobelFilterInstanced = ShaderProgram.fromFile("sobel_filter_instanced.glsl");
 
@@ -90,14 +89,9 @@ public class LevelScene extends Scene {
         wallXTiles = new ArrayList<>();
         wallYTiles = new ArrayList<>();
         balls = new ArrayList<>();
+        gameObjects = new ArrayList[] {floorTiles, holeTiles, wallXTiles, wallYTiles, balls};
 
         camera.position.z = 6;
-
-//        ball = new Ball(new Sphere(new Vector3d(1.5, -0.5, 0.5), 0.35));
-//        ball.color1.set(magenta);
-//        ball.color2.set(magenta);
-//
-//        balls.add(ball);
 
         edgeSourceFbo = new EmptyFbo(windowWidth, windowHeight);
         handleWindowResize(windowWidth, windowHeight);
@@ -167,41 +161,17 @@ public class LevelScene extends Scene {
     }
 
     private void renderGameObjects(ShaderProgram shader) {
-        setViewMatrices(shader, wallXTiles);
-        wallXMesh.renderInstanced(wallXTiles.size());
-
-        setViewMatrices(shader, holeTiles);
-        holeMesh.renderInstanced(holeTiles.size());
-
-        setViewMatrices(shader, wallYTiles);
-        wallYMesh.renderInstanced(wallYTiles.size());
-
-        setViewMatrices(shader, floorTiles);
-        floorMesh.renderInstanced(floorTiles.size());
-
-        setViewMatrices(shader, balls);
-        ballMesh.renderInstanced(balls.size());
+        for (int i = 0; i < gameObjects.length; i++) {
+            setViewMatrices(shader, gameObjects[i]);
+            gameObjectMeshes[i].renderInstanced(gameObjects[i].size());
+        }
     }
     private void renderGameObjectsColor(ShaderProgram shader) {
-        setViewMatrices(shader, wallXTiles);
-        setColors(shader, wallXTiles);
-        wallXMesh.renderInstanced(wallXTiles.size());
-
-        setViewMatrices(shader, holeTiles);
-        setColors(shader, holeTiles);
-        holeMesh.renderInstanced(holeTiles.size());
-
-        setViewMatrices(shader, wallYTiles);
-        setColors(shader, wallYTiles);
-        wallYMesh.renderInstanced(wallYTiles.size());
-
-        setViewMatrices(shader, floorTiles);
-        setColors(shader, floorTiles);
-        floorMesh.renderInstanced(floorTiles.size());
-
-        setViewMatrices(shader, balls);
-        setColors(shader, balls);
-        ballMesh.renderInstanced(balls.size());
+        for (int i = 0; i < gameObjects.length; i++) {
+            setViewMatrices(shader, gameObjects[i]);
+            setColors(shader, gameObjects[i]);
+            gameObjectMeshes[i].renderInstanced(gameObjects[i].size());
+        }
     }
     private void setViewMatrices(ShaderProgram shader, ArrayList<? extends GameObject> objects) {
         FloatBuffer buffer = MemoryUtil.memAllocFloat(16*objects.size());
@@ -242,11 +212,6 @@ public class LevelScene extends Scene {
         edgeSourceFbo.bind();
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-//        colorNormals.bind();
-//        colorNormals.setUniform("projectionMatrix", camera.getProjectionMatrix());
-//        colorNormals.setUniform("viewMatrix", camera.getViewMatrix(ball.getWorldMatrix(rotation)));
-//        ballMesh.render();
 
         colorNormalsInstanced.bind();
         colorNormalsInstanced.setUniform("projectionMatrix", camera.getProjectionMatrix());

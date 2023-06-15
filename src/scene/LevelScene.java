@@ -125,12 +125,12 @@ public class LevelScene extends Scene {
                 ball.velocity.set(0,0,0);
             }
 
-            ball.velocity.x += Math.sin(rotation.y * 0.00035);
+            ball.velocity.x += Math.sin(rotation.y * 0.0004);
             ball.velocity.x = MathUtil.cutMaxMin(ball.velocity.x, -0.04f, 0.04f);
-            ball.velocity.y += -Math.sin(rotation.x * 0.00035);
+            ball.velocity.y += -Math.sin(rotation.x * 0.0004);
             ball.velocity.y = MathUtil.cutMaxMin(ball.velocity.y, -0.04f, 0.04f);
 
-            ball.velocity.z -= 0.0004;
+            ball.velocity.z -= 0.00048;
 
             if (ball.velocity.length() > 0.04f) {
                 ball.velocity.normalize(0.04f);

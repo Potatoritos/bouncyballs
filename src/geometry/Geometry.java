@@ -33,7 +33,7 @@ public class Geometry {
         project(line.displacement, normal, normalComponent);
 
         // Nullify the rebound if it is small
-        if (normalComponent.length()*restitution <= 0.004) {
+        if (normalComponent.length()*restitution <= 0.0018) {
             restitution = 0;
         }
 

@@ -254,10 +254,13 @@ public class Game {
     private void loop() {
         long previousTime = System.nanoTime(), currentTime;
         long updateDelta = 0, renderDelta = 0;
-        long nsPerUpdate = (long)(1e9 / 60), nsPerRender = (long)(1e9 / 60);
+        long nsPerUpdate = (long)(1e9 / 144), nsPerRender = (long)(1e9 / 144);
 
         int updateCount = 0, renderCount = 0;
         long previousFPSCalcTime = System.nanoTime();
+
+        long updateTime = 0;
+        int updateTimeCounter = 0;
 
         while (isRunning) {
             currentTime = System.nanoTime();
@@ -266,9 +269,19 @@ public class Game {
             renderDelta += currentTime - previousTime;
 
             while (updateDelta >= nsPerUpdate) {
+                long time = System.nanoTime();
                 update();
+                updateTime += System.nanoTime() - time;
+                updateTimeCounter++;
+
                 updateDelta -= nsPerUpdate;
 //                updateCount++;
+            }
+
+            if (updateTimeCounter == 60) {
+                System.out.printf("avg update time: %fms\n", 1.0*updateTime/updateTimeCounter / 1e6);
+                updateTimeCounter = 0;
+                updateTime = 0;
             }
 
             if (renderDelta >= nsPerRender) {

@@ -46,7 +46,7 @@ public class Ball extends GameObject {
     }
     @Override
     public void reflectLine(Line3 line, Vector3d intersection, Vector3d normal) {
-        Geometry.reflectLineFixedRebound(line, intersection, normal, 0.05);
+        Geometry.reflectLineFixedRebound(line, intersection, normal, 0.022);
 //        Geometry.reflectLine(line, intersection, normal, 0.5);
 
         // Rebound self as well
@@ -55,7 +55,7 @@ public class Ball extends GameObject {
         project(deferredVelocity, normal, normalComponent);
         deferredVelocity.sub(normalComponent);
 
-        normalComponent.set(normal).normalize(0.05);
+        normalComponent.set(normal).normalize(0.022);
         deferredVelocity.sub(normalComponent);
         velocityDeferred = true;
     }

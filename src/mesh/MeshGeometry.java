@@ -366,6 +366,11 @@ public class MeshGeometry {
 //                0, 1, 0,    0, 1, 0,    0, 1, 0,    0, 1, 0
 //        };
     }
+    public static GameObjectMesh quadMesh(Quad quad, Vector3f color) {
+        MeshBuilder builder = new MeshBuilder();
+        builder.addQuad(quad, new Quad(triangleNormal(quad.a, quad.b, quad.c)), new Quad(color));
+        return builder.createMesh();
+    }
     public static TextureMesh texturedRectangle(Vector2f position, Vector2f dimensions, Texture texture) {
         float[] vertices = new float[] {
                 position.x, position.y, 0,

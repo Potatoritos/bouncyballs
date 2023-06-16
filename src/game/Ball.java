@@ -49,6 +49,7 @@ public class Ball extends GameObject {
     public double getRadius() {
         return geometry.getRadius();
     }
+    @Override
     public void update() {
         geometry.position.add(velocity);
         if (velocityDeferred) {

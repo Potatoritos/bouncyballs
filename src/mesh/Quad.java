@@ -4,6 +4,7 @@ import org.joml.Vector3f;
 
 import java.util.ArrayList;
 
+// A quadrilateral defined by 4 points
 public class Quad {
     public final Vector3f a;
     public final Vector3f b;

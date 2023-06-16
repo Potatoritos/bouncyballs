@@ -1,5 +1,8 @@
 package game;
 
+import collision.CollisionObject3;
+import collision.CollisionObjectContainer;
+import collision.CollisionTrigger;
 import shape.Line3;
 import org.joml.Matrix4f;
 import org.joml.Vector3d;
@@ -20,6 +23,9 @@ public abstract class GameObject {
                 .rotateX((float)globalRotation.x)
                 .rotateY((float)globalRotation.y)
                 .translate((float)getPosition().x, (float)getPosition().y, (float)getPosition().z);
+    }
+    public void update() {
+
     }
     public void reflectLine(Line3 line, Vector3d intersection, Vector3d normal) {
 

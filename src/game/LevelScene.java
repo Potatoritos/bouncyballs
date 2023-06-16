@@ -2,6 +2,7 @@ package game;
 
 import collision.CollisionHandler3;
 import collision.DeathTrigger;
+import mesh.Quad;
 import shape.Line3;
 import shape.Plane;
 import shape.Sphere;
@@ -26,6 +27,7 @@ public class LevelScene extends Scene {
 
     private final GameObjectMesh floorMesh;
     private final GameObjectMesh holeMesh;
+    private final GameObjectMesh holeCoverMesh;
     private final GameObjectMesh wallXMesh;
     private final GameObjectMesh wallYMesh;
     private final GameObjectMesh ballMesh;
@@ -39,12 +41,12 @@ public class LevelScene extends Scene {
 
     private final ArrayList<Box> floorTiles;
     private final ArrayList<HoleBox> holeTiles;
+    private final ArrayList<HoleBoxCover> coverTiles;
     private final ArrayList<Box> wallXTiles;
     private final ArrayList<Box> wallYTiles;
     private final ArrayList<Ball> balls;
     private final ArrayList<? extends GameObject>[] gameObjects;
     private final CollisionHandler3 collisionHandler;
-    private long timer;
     private final double floorTileHeight = 0.5;
     private final double wallHeight = 0.75;
 
@@ -66,6 +68,15 @@ public class LevelScene extends Scene {
                 20,
                 0.4
         );
+        holeCoverMesh = quadMesh(
+                new Quad(
+                        new Vector3f(0, 0, 0),
+                        new Vector3f(1, 0, 0),
+                        new Vector3f(1, 1, 0),
+                        new Vector3f(0, 1, 0)
+                ),
+                new Vector3f(0, 0, 0)
+        );
         wallXMesh = rectangularPrismMesh(
                 new Vector3f(0, 0, 0),
                 new Vector3f(0.1f, 1.1f, (float)(floorTileHeight+wallHeight)),
@@ -77,7 +88,7 @@ public class LevelScene extends Scene {
                 new Vector3f(0f, 0f, 0f)
         );
         ballMesh = generateGeodesicPolyhedronMesh(3, new Vector3f(0f, 0f, 0f));
-        gameObjectMeshes = new GameObjectMesh[] {floorMesh, holeMesh, wallXMesh, wallYMesh, ballMesh};
+        gameObjectMeshes = new GameObjectMesh[] {floorMesh, holeMesh, holeCoverMesh, wallXMesh, wallYMesh, ballMesh};
 
         colorNormalsInstanced = ShaderProgram.fromFile("color_normals_instanced.glsl");
         outlineInstanced = ShaderProgram.fromFile("outline_instanced.glsl");
@@ -87,10 +98,12 @@ public class LevelScene extends Scene {
 
         floorTiles = new ArrayList<>();
         holeTiles = new ArrayList<>();
+        coverTiles = new ArrayList<>();
         wallXTiles = new ArrayList<>();
         wallYTiles = new ArrayList<>();
         balls = new ArrayList<>();
-        gameObjects = new ArrayList[] {floorTiles, holeTiles, wallXTiles, wallYTiles, balls};
+        gameObjects = new ArrayList[] {floorTiles, holeTiles, coverTiles, wallXTiles, wallYTiles, balls, };
+
 
         camera.position.z = 6;
 
@@ -105,18 +118,11 @@ public class LevelScene extends Scene {
         edgeSourceFbo.resize(width, height);
     }
     public void update(InputState input) {
-//        timer++;
-        rotation.x = (MathUtil.cutMaxMin(input.getMousePosition().y, 0, 1)-0.5) * Math.PI/3;
-        rotation.y = (MathUtil.cutMaxMin(input.getMousePosition().x, 0, 1)-0.5) * Math.PI/3;
+        rotation.x = (MathUtil.cutMaxMin(input.getMousePosition().y*1.2 - 0.1, 0, 1)-0.5) * Math.PI/3;
+        rotation.y = (MathUtil.cutMaxMin(input.getMousePosition().x*1.2 - 0.1, 0, 1)-0.5) * Math.PI/3;
         if (rotation.length() > Math.PI/6) {
             rotation.normalize(Math.PI/6);
         }
-
-//        if (timer == 5) {
-//            balls.get(0).geometry.position.set(-0.2, 2.1, 0.35);
-//            balls.get(1).geometry.position.set(-1.2, 1.1, 0.35);
-//            balls.get(1).velocity.set(0.04, 0.04, 0);
-//        }
 
         for (Ball ball : balls) {
             if (ball.isDead()) {
@@ -131,10 +137,6 @@ public class LevelScene extends Scene {
             ball.velocity.y = MathUtil.cutMaxMin(ball.velocity.y, -0.04f, 0.04f);
 
             ball.velocity.z -= 0.00048;
-
-            if (ball.velocity.length() > 0.04f) {
-                ball.velocity.normalize(0.04f);
-            }
 
             collisionHandler.reset();
             collisionHandler.setBall(ball);
@@ -258,6 +260,7 @@ public class LevelScene extends Scene {
 
         floorTiles.clear();
         holeTiles.clear();
+        coverTiles.clear();
         wallXTiles.clear();
         wallYTiles.clear();
         balls.clear();
@@ -282,6 +285,7 @@ public class LevelScene extends Scene {
                         tile.color2.set(red);
                         tile.setHoleColor(1);
                         holeTiles.add(tile);
+                        coverTiles.add(tile.cover);
                     }
                     case GOAL2 -> {
                         HoleBox tile = new HoleBox(new Line3(
@@ -292,6 +296,7 @@ public class LevelScene extends Scene {
                         tile.color2.set(blue);
                         tile.setHoleColor(2);
                         holeTiles.add(tile);
+                        coverTiles.add(tile.cover);
                     }
                 }
             }
@@ -331,7 +336,7 @@ public class LevelScene extends Scene {
         }
     }
     public void delete() {
-        for (Deletable obj : new Deletable[] {floorMesh, wallXMesh, wallYMesh, colorNormalsInstanced, outlineInstanced}) {
+        for (Deletable obj : new Deletable[] {floorMesh, holeMesh, holeCoverMesh, wallXMesh, wallYMesh, colorNormalsInstanced, outlineInstanced}) {
             obj.delete();
         }
     }

@@ -9,28 +9,28 @@ import shape.Plane;
 import shape.Sphere;
 import org.joml.Vector3d;
 
+import java.util.ArrayList;
+
 import static math.Geometry.distance;
 
 public class CollisionHandler3 {
     private Ball ball;
     private final Line3 ballMotion;
-    private final CollisionObjectContainer<CollisionObject3> collisions;
-    private final CollisionObjectContainer<CollisionTrigger> triggers;
-//    private final ArrayList<CollisionObject3> collisionObjects;
-//    private final ArrayList<CollisionTrigger> triggers;
+    private final ArrayList<CollisionObject3> collisionObjects;
+    private final ArrayList<CollisionTrigger> triggers;
     private final Vector3d minIntersection;
     private CollisionObject3 minCollisionObject;
     private final Sphere ballSphere;
     public CollisionHandler3() {
         ballMotion = new Line3();
-        collisions = new CollisionObjectContainer<>();
-        triggers = new CollisionObjectContainer<>();
+        collisionObjects = new ArrayList<>();
+        triggers = new ArrayList<>();
         minIntersection = new Vector3d();
         ballSphere = new Sphere();
     }
     public void reset() {
-        collisions.objects.clear();
-        triggers.objects.clear();
+        collisionObjects.clear();
+        triggers.clear();
     }
     public void setBall(Ball ball) {
         this.ball = ball;
@@ -38,13 +38,23 @@ public class CollisionHandler3 {
         ballMotion.position.set(ball.geometry.position);
         ballMotion.displacement.set(ball.velocity);
     }
+    private void addCollisionObject(CollisionObject3 object) {
+        if (object.isNearby(ballSphere)) {
+            collisionObjects.add(object);
+        }
+    }
+    private void addTrigger(CollisionTrigger trigger) {
+        if (trigger.collisionObject.isNearby(ballSphere)) {
+            triggers.add(trigger);
+        }
+    }
     public void processCollisions() {
         int i = 0;
         Vector3d intersection = new Vector3d();
         // Limit the max. number of iterations to avoid infinite loops
         while (i++ < 10) {
             // See if the ball collides with any triggers
-            for (CollisionTrigger trigger : triggers.objects) {
+            for (CollisionTrigger trigger : triggers) {
                 if (trigger.isActive() && trigger.collisionObject.intersect(ballMotion, intersection)) {
                     trigger.onCollision(ball);
                     trigger.disable();
@@ -53,7 +63,7 @@ public class CollisionHandler3 {
 
             // Get the collision object that collides with the ball at the closest point to the ball
             double minDistance = Double.POSITIVE_INFINITY;
-            for (CollisionObject3 object : collisions.objects) {
+            for (CollisionObject3 object : collisionObjects) {
                 if (object.intersect(ballMotion, intersection)) {
                     double distance = distance(intersection, ballMotion.position);
                     if (distance <= minDistance) {
@@ -77,7 +87,7 @@ public class CollisionHandler3 {
     }
 
     public void addFallDeathTrigger() {
-        triggers.add(ballSphere, new DeathTrigger(new CollisionPlane(null, new Plane(
+        addTrigger(new DeathTrigger(new CollisionPlane(null, new Plane(
                 new Vector3d(-100, -100, -2),
                 new Vector3d(200, 0, 0),
                 new Vector3d(0, 200, 0)
@@ -85,45 +95,102 @@ public class CollisionHandler3 {
     }
 
     public void addWallBox(Box box) {
+        Vector3d up = new Vector3d(0, 0, box.geometry.displacement.z);
+        addCollisionObject(new CollisionPlane(box,
+                new Plane(
+                        new Vector3d(box.geometry.x1(), box.geometry.y1()-ball.getRadius(), box.geometry.z1()),
+                        new Vector3d(box.geometry.displacement.x, 0, 0),
+                        up
+                )
+        ));
+        addCollisionObject(new CollisionPlane(box,
+                new Plane(
+                        new Vector3d(box.geometry.x2()+ball.getRadius(), box.geometry.y1(), box.geometry.z1()),
+                        new Vector3d(0, box.geometry.displacement.y, 0),
+                        up
+                )
+        ));
+        addCollisionObject(new CollisionPlane(box,
+                new Plane(
+                        new Vector3d(box.geometry.x2(), box.geometry.y2()+ball.getRadius(), box.geometry.z1()),
+                        new Vector3d(-box.geometry.displacement.x, 0, 0),
+                        up
+                )
+        ));
+        addCollisionObject(new CollisionPlane(box,
+                new Plane(
+                        new Vector3d(box.geometry.x1()-ball.getRadius(), box.geometry.y2(), box.geometry.z1()),
+                        new Vector3d(0, -box.geometry.displacement.y, 0),
+                        up
+                )
+        ));
 
+        addCollisionObject(new CollisionCylinder(box,
+                new Cylinder(
+                         box.geometry.position,
+                        up,
+                        ball.getRadius()
+                )
+        ));
+        addCollisionObject(new CollisionCylinder(box,
+                new Cylinder(
+                        new Vector3d(box.geometry.x2(), box.geometry.y1(), box.geometry.z1()),
+                        up,
+                        ball.getRadius()
+                )
+        ));
+        addCollisionObject(new CollisionCylinder(box,
+                new Cylinder(
+                        new Vector3d(box.geometry.x2(), box.geometry.y2(), box.geometry.z1()),
+                        up,
+                        ball.getRadius()
+                )
+        ));
+        addCollisionObject(new CollisionCylinder(box,
+                new Cylinder(
+                        new Vector3d(box.geometry.x1(), box.geometry.y2(), box.geometry.z1()),
+                        up,
+                        ball.getRadius()
+                )
+        ));
     }
     public void addFloorBoxSides(Box box) {
         addWallBox(box);
 
-        collisions.add(ballSphere, new CollisionSphere(box,
+        addCollisionObject(new CollisionSphere(box,
                 new Sphere(new Vector3d(box.geometry.x1(), box.geometry.y1(), box.geometry.z2()), ball.getRadius())
         ));
-        collisions.add(ballSphere, new CollisionSphere(box,
+        addCollisionObject(new CollisionSphere(box,
                 new Sphere(new Vector3d(box.geometry.x1(), box.geometry.y2(), box.geometry.z2()), ball.getRadius())
         ));
-        collisions.add(ballSphere, new CollisionSphere(box,
+        addCollisionObject(new CollisionSphere(box,
                 new Sphere(new Vector3d(box.geometry.x2(), box.geometry.y2(), box.geometry.z2()), ball.getRadius())
         ));
-        collisions.add(ballSphere, new CollisionSphere(box,
+        addCollisionObject(new CollisionSphere(box,
                 new Sphere(new Vector3d(box.geometry.x2(), box.geometry.y1(), box.geometry.z2()), ball.getRadius())
         ));
-        collisions.add(ballSphere, new CollisionCylinder(box,
+        addCollisionObject(new CollisionCylinder(box,
                 new Cylinder(
                         new Vector3d(box.geometry.x1(), box.geometry.y1(), box.geometry.z2()),
                         new Vector3d(box.geometry.displacement.x, 0, 0),
                         ball.getRadius()
                 )
         ));
-        collisions.add(ballSphere, new CollisionCylinder(box,
+        addCollisionObject(new CollisionCylinder(box,
                 new Cylinder(
                         new Vector3d(box.geometry.x2(), box.geometry.y1(), box.geometry.z2()),
                         new Vector3d(0, box.geometry.displacement.y, 0),
                         ball.getRadius()
                 )
         ));
-        collisions.add(ballSphere, new CollisionCylinder(box,
+        addCollisionObject(new CollisionCylinder(box,
                 new Cylinder(
                         new Vector3d(box.geometry.x2(), box.geometry.y2(), box.geometry.z2()),
                         new Vector3d(-box.geometry.displacement.x, 0, 0),
                         ball.getRadius()
                 )
         ));
-        collisions.add(ballSphere, new CollisionCylinder(box,
+        addCollisionObject(new CollisionCylinder(box,
                 new Cylinder(
                         new Vector3d(box.geometry.x1(), box.geometry.y2(), box.geometry.z2()),
                         new Vector3d(0, -box.geometry.displacement.y, 0),
@@ -134,7 +201,7 @@ public class CollisionHandler3 {
     public void addFloorBox(Box box) {
         addFloorBoxSides(box);
 
-        collisions.add(ballSphere, new CollisionPlane(box,
+        addCollisionObject(new CollisionPlane(box,
                 new Plane(
                         new Vector3d(box.geometry.x1(), box.geometry.y1(), box.geometry.z2() + ball.getRadius()),
                         new Vector3d(box.geometry.displacement.x, 0, 0),
@@ -151,28 +218,28 @@ public class CollisionHandler3 {
         double top = box.geometry.z2()+ball.getRadius();
 
         // Planes surrounding the hole (horizontal and vertical)
-        collisions.add(ballSphere, new CollisionPlane(box,
+        addCollisionObject(new CollisionPlane(box,
                 new Plane(
                         new Vector3d(box.geometry.x1(), box.geometry.y1(), top),
                         new Vector3d(box.geometry.displacement.x, 0, 0),
                         new Vector3d(0, circleTop, 0)
                 )
         ));
-        collisions.add(ballSphere, new CollisionPlane(box,
+        addCollisionObject(new CollisionPlane(box,
                 new Plane(
                         new Vector3d(box.geometry.x1(), box.geometry.y1(), top),
                         new Vector3d(0, box.geometry.displacement.y, 0),
                         new Vector3d(circleTop, 0, 0)
                 )
         ));
-        collisions.add(ballSphere, new CollisionPlane(box,
+        addCollisionObject(new CollisionPlane(box,
                 new Plane(
                         new Vector3d(box.geometry.x2(), box.geometry.y2(), top),
                         new Vector3d(-box.geometry.displacement.x, 0, 0),
                         new Vector3d(0, -circleTop, 0)
                 )
         ));
-        collisions.add(ballSphere, new CollisionPlane(box,
+        addCollisionObject(new CollisionPlane(box,
                 new Plane(
                         new Vector3d(box.geometry.x2(), box.geometry.y2(), top),
                         new Vector3d(0, -box.geometry.displacement.y, 0),
@@ -182,28 +249,28 @@ public class CollisionHandler3 {
 
         // Cylinders surrounding the hole (horizontal and vertical)
         double cylinderLength = 2*box.getRadius();
-        collisions.add(ballSphere, new CollisionCylinder(box,
+        addCollisionObject(new CollisionCylinder(box,
                 new Cylinder(
                         new Vector3d(box.geometry.x1()+circleTop, box.geometry.y1()+circleTop, box.geometry.z2()),
                         new Vector3d(cylinderLength, 0, 0),
                         ball.getRadius()
                 )
         ));
-        collisions.add(ballSphere, new CollisionCylinder(box,
+        addCollisionObject(new CollisionCylinder(box,
                 new Cylinder(
                         new Vector3d(box.geometry.x1()+circleTop, box.geometry.y1()+circleTop, box.geometry.z2()),
                         new Vector3d(0, cylinderLength, 0),
                         ball.getRadius()
                 )
         ));
-        collisions.add(ballSphere, new CollisionCylinder(box,
+        addCollisionObject(new CollisionCylinder(box,
                 new Cylinder(
                         new Vector3d(box.geometry.x2()-circleTop, box.geometry.y2()-circleTop, box.geometry.z2()),
                         new Vector3d(-cylinderLength, 0, 0),
                         ball.getRadius()
                 )
         ));
-        collisions.add(ballSphere, new CollisionCylinder(box,
+        addCollisionObject(new CollisionCylinder(box,
                 new Cylinder(
                         new Vector3d(box.geometry.x2()-circleTop, box.geometry.y2()-circleTop, box.geometry.z2()),
                         new Vector3d(0, -cylinderLength, 0),
@@ -213,28 +280,28 @@ public class CollisionHandler3 {
 
         // Triangles surrounding the hole (diagonal)
         double s = box.getRadius()/(Math.sqrt(2)/2 + 1);
-        collisions.add(ballSphere, new CollisionPlane(box,
+        addCollisionObject(new CollisionPlane(box,
                 new Plane(
                         new Vector3d(box.geometry.x1()+circleTop, box.geometry.y1()+circleTop, top),
                         new Vector3d(s, 0, 0),
                         new Vector3d(0, s, 0)
                 )
         ));
-        collisions.add(ballSphere, new CollisionPlane(box,
+        addCollisionObject(new CollisionPlane(box,
                 new Plane(
                         new Vector3d(box.geometry.x2()-circleTop, box.geometry.y1()+circleTop, top),
                         new Vector3d(-s, 0, 0),
                         new Vector3d(0, s, 0)
                 )
         ));
-        collisions.add(ballSphere, new CollisionPlane(box,
+        addCollisionObject(new CollisionPlane(box,
                 new Plane(
                         new Vector3d(box.geometry.x2()-circleTop, box.geometry.y2()-circleTop, top),
                         new Vector3d(-s, 0, 0),
                         new Vector3d(0, -s, 0)
                 )
         ));
-        collisions.add(ballSphere, new CollisionPlane(box,
+        addCollisionObject(new CollisionPlane(box,
                 new Plane(
                         new Vector3d(box.geometry.x1()+circleTop, box.geometry.y2()-circleTop, top),
                         new Vector3d(s, 0, 0),
@@ -243,28 +310,28 @@ public class CollisionHandler3 {
         ));
 
         // Cylinders surrounding the hole (diagonal)
-        collisions.add(ballSphere, new CollisionCylinder(box,
+        addCollisionObject(new CollisionCylinder(box,
                 new Cylinder(
                         new Vector3d(box.geometry.x1()+circleTop, box.geometry.y1()+circleTop+s, box.geometry.z2()),
                         new Vector3d(s, -s, 0),
                         ball.getRadius()
                 )
         ));
-        collisions.add(ballSphere, new CollisionCylinder(box,
+        addCollisionObject(new CollisionCylinder(box,
                 new Cylinder(
                         new Vector3d(box.geometry.x2()-circleTop-s, box.geometry.y1()+circleTop, box.geometry.z2()),
                         new Vector3d(s, s, 0),
                         ball.getRadius()
                 )
         ));
-        collisions.add(ballSphere, new CollisionCylinder(box,
+        addCollisionObject(new CollisionCylinder(box,
                 new Cylinder(
                         new Vector3d(box.geometry.x2()-circleTop, box.geometry.y2()-circleTop-s, box.geometry.z2()),
                         new Vector3d(-s, s, 0),
                         ball.getRadius()
                 )
         ));
-        collisions.add(ballSphere, new CollisionCylinder(box,
+        addCollisionObject(new CollisionCylinder(box,
                 new Cylinder(
                         new Vector3d(box.geometry.x1()+circleTop+s, box.geometry.y2()-circleTop, box.geometry.z2()),
                         new Vector3d(-s, -s, 0),
@@ -273,7 +340,7 @@ public class CollisionHandler3 {
         ));
 
         // Inverted cylinder through the hole
-        collisions.add(ballSphere, new CollisionCylinderInverted(box,
+        addCollisionObject(new CollisionCylinderInverted(box,
                 new Cylinder(
                         new Vector3d(box.geometry.x1()+0.5, box.geometry.x2()+0.5, box.geometry.z1()-ball.getRadius()),
                         new Vector3d(0, 0, box.geometry.displacement.z+ball.getRadius()),
@@ -283,14 +350,14 @@ public class CollisionHandler3 {
 
         addFloorBoxSides(box);
 
-        triggers.add(ballSphere, new GoalTrigger(new CollisionPlane(box, new Plane(
+        addTrigger(new GoalTrigger(new CollisionPlane(box, new Plane(
                 box.geometry.position,
                 new Vector3d(box.geometry.displacement.x, 0, 0),
                 new Vector3d(0, box.geometry.displacement.y, 0)
         )), box));
     }
     public void addBallCollision(Ball ball) {
-        collisions.add(ballSphere, new CollisionSphere(ball,
+        addCollisionObject(new CollisionSphere(ball,
                 new Sphere(
                         ball.getPosition(),
                         ball.getRadius() + this.ball.getRadius()

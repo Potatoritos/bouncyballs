@@ -10,21 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
-      <change afterPath="$PROJECT_DIR$/src/collision/CollisionObjectContainer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/collision/HasCollisionObject.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/game/FrameTimer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/game/HoleBoxCover.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/collision/CollisionHandler3.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/CollisionHandler3.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/collision/CollisionObject3.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/CollisionObject3.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/collision/CollisionTrigger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/CollisionTrigger.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/Ball.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Ball.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/Box.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Box.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/GameObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/GameObject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/HoleBox.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/HoleBox.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/LevelScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/LevelScene.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mesh/MeshGeometry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/mesh/MeshGeometry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mesh/Quad.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/mesh/Quad.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,7 +31,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="4940e49914608d80a45ec3b887ad5b417d4f2b8d" />
+        <entry key="$PROJECT_DIR$" value="1eee9a7396577457ba02704b323058ae672ba796" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -108,6 +95,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main" />

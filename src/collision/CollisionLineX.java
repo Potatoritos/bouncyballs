@@ -1,10 +1,10 @@
 package collision;
 
 import game.GameObject;
-import geometry.Line2;
+import shape.Line2;
 import org.joml.Vector2d;
 
-import static geometry.Geometry.*;
+import static math.Geometry.*;
 
 public class CollisionLineX extends CollisionObject2 {
     public final Line2 line;

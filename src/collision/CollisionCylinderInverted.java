@@ -1,11 +1,11 @@
 package collision;
 
 import game.GameObject;
-import geometry.Cylinder;
-import geometry.Line3;
+import shape.Cylinder;
+import shape.Line3;
 import org.joml.Vector3d;
 
-import static geometry.Geometry.intersectionLineCylinder;
+import static math.Geometry.intersectionLineCylinder;
 
 public class CollisionCylinderInverted extends CollisionCylinder {
     public CollisionCylinderInverted(GameObject parent, Cylinder cylinder) {

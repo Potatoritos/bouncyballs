@@ -1,6 +1,6 @@
 package game;
 
-import geometry.Line3;
+import shape.Line3;
 import org.joml.Matrix4f;
 import org.joml.Vector3d;
 import org.joml.Vector3f;

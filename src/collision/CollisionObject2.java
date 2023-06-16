@@ -1,7 +1,7 @@
 package collision;
 
 import game.GameObject;
-import geometry.Line2;
+import shape.Line2;
 import org.joml.Vector2d;
 
 public abstract class CollisionObject2 {

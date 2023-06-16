@@ -1,13 +1,12 @@
 package collision;
 
 import game.GameObject;
-import geometry.Geometry;
-import geometry.Line3;
-import geometry.Plane;
-import geometry.Sphere;
+import shape.Line3;
+import shape.Plane;
+import shape.Sphere;
 import org.joml.Vector3d;
 
-import static geometry.Geometry.*;
+import static math.Geometry.*;
 
 public class CollisionPlane extends CollisionObject3 {
     protected final Plane plane;

@@ -1,8 +1,4 @@
 import game.Game;
-import geometry.*;
-import org.joml.Vector3d;
-
-import static geometry.Geometry.*;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {

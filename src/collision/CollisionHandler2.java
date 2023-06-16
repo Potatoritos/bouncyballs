@@ -2,12 +2,12 @@ package collision;
 
 import game.Ball;
 import game.Box;
-import geometry.Line2;
+import shape.Line2;
 import org.joml.Vector2d;
 
 import java.util.ArrayList;
 
-import static geometry.Geometry.*;
+import static math.Geometry.*;
 import static math.MathUtil.withinEpsilon;
 
 public class CollisionHandler2 {

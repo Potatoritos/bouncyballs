@@ -1,9 +1,10 @@
-package scene;
+package game;
 
 import collision.CollisionHandler3;
-import game.*;
-import geometry.Line3;
-import geometry.Sphere;
+import collision.DeathTrigger;
+import shape.Line3;
+import shape.Plane;
+import shape.Sphere;
 import graphics.EmptyFbo;
 import graphics.FrameBufferObject;
 import graphics.GameObjectMesh;
@@ -48,7 +49,7 @@ public class LevelScene extends Scene {
     private final double wallHeight = 0.75;
 
     private final Vector3f tileColor = new Vector3f(238f/255, 240f/255, 242f/255);
-    private final Vector3f bgColor = new Vector3f(94f/255, 67f/255, 82f/255);
+    private final Vector3f bgColor = new Vector3f(180f/255, 180f/255, 190f/255);
     private final Vector3f red = new Vector3f(255f/255, 91f/255, 91f/255);
     private final Vector3f blue = new Vector3f(136f/255, 132f/255, 255f/255);
     private final Vector3f green = new Vector3f(106f/255, 181f/255, 71f/255);
@@ -117,12 +118,11 @@ public class LevelScene extends Scene {
 //            balls.get(1).velocity.set(0.04, 0.04, 0);
 //        }
 
-        int i = 1;
         for (Ball ball : balls) {
-//            System.out.printf("---- ball %d\n", i++);
-            if (ball.geometry.position.z <= -1) {
+            if (ball.isDead()) {
                 ball.geometry.position.set(1.5, -0.5, 0.5);
                 ball.velocity.set(0,0,0);
+                ball.setIsDead(false);
             }
 
             ball.velocity.x += Math.sin(rotation.y * 0.0004);
@@ -138,22 +138,17 @@ public class LevelScene extends Scene {
 
             collisionHandler.reset();
             collisionHandler.setBall(ball);
-            for (Box box : wallXTiles) {
-                collisionHandler.addFloorBox(box);
-            }
-            for (Box box : wallYTiles) {
-                collisionHandler.addFloorBox(box);
-            }
-            for (Box box : floorTiles) {
-                collisionHandler.addFloorBox(box);
-            }
-            for (HoleBox box : holeTiles) {
-                collisionHandler.addHoleBox(box);
-            }
+            for (Box box : wallXTiles) collisionHandler.addFloorBox(box);
+            for (Box box : wallYTiles) collisionHandler.addFloorBox(box);
+            for (Box box : floorTiles) collisionHandler.addFloorBox(box);
+            for (HoleBox box : holeTiles) collisionHandler.addHoleBox(box);
+
             for (Ball collisionBall : balls) {
                 if (ball == collisionBall) continue;
                 collisionHandler.addBallCollision(collisionBall);
             }
+            collisionHandler.addFallDeathTrigger();
+
             collisionHandler.processCollisions();
 
             ball.update();
@@ -276,7 +271,6 @@ public class LevelScene extends Scene {
                                 new Vector3d(1, 1, floorTileHeight)
                         ));
                         tile.color1.set(tileColor);
-                        tile.color2.set(tileColor);
                         floorTiles.add(tile);
                     }
                     case GOAL1 -> {
@@ -286,6 +280,7 @@ public class LevelScene extends Scene {
                         ), 0.4);
                         tile.color1.set(tileColor);
                         tile.color2.set(red);
+                        tile.setHoleColor(1);
                         holeTiles.add(tile);
                     }
                     case GOAL2 -> {
@@ -295,6 +290,7 @@ public class LevelScene extends Scene {
                         ), 0.4);
                         tile.color1.set(tileColor);
                         tile.color2.set(blue);
+                        tile.setHoleColor(2);
                         holeTiles.add(tile);
                     }
                 }
@@ -306,7 +302,6 @@ public class LevelScene extends Scene {
                             new Vector3d(0.1, 1.1, floorTileHeight+wallHeight)
                     ));
                     tile.color1.set(tileColor);
-                    tile.color2.set(tileColor);
                     wallXTiles.add(tile);
                 }
             }
@@ -319,7 +314,6 @@ public class LevelScene extends Scene {
                             new Vector3d(1.1, 0.1, floorTileHeight+wallHeight)
                     ));
                     tile.color1.set(tileColor);
-                    tile.color2.set(tileColor);
                     wallYTiles.add(tile);
                 }
             }
@@ -332,6 +326,7 @@ public class LevelScene extends Scene {
             );
             ball.color1.set(ballColors[i]);
             ball.color2.set(ballColors[i]);
+            ball.setHoleColor(i+1);
             balls.add(ball);
         }
     }

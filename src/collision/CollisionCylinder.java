@@ -1,13 +1,12 @@
 package collision;
 
 import game.GameObject;
-import geometry.Cylinder;
-import geometry.Geometry;
-import geometry.Line3;
-import geometry.Sphere;
+import shape.Cylinder;
+import shape.Line3;
+import shape.Sphere;
 import org.joml.Vector3d;
 
-import static geometry.Geometry.*;
+import static math.Geometry.*;
 
 public class CollisionCylinder extends CollisionObject3 {
     protected final Cylinder cylinder;

@@ -10,10 +10,37 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
+      <change afterPath="$PROJECT_DIR$/src/collision/CollisionTrigger.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/collision/DeathTrigger.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/collision/GoalTrigger.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/level0.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/level0.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/collision/CollisionCircle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/CollisionCircle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/collision/CollisionCylinder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/CollisionCylinder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/collision/CollisionCylinderInverted.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/CollisionCylinderInverted.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/collision/CollisionHandler2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/CollisionHandler2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/collision/CollisionHandler3.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/CollisionHandler3.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/collision/CollisionLineX.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/CollisionLineX.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/collision/CollisionLineY.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/CollisionLineY.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/collision/CollisionObject2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/CollisionObject2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/collision/CollisionObject3.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/CollisionObject3.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/collision/CollisionPlane.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/CollisionPlane.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/collision/CollisionPlaneTriangle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/CollisionPlaneTriangle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/collision/CollisionSphere.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/CollisionSphere.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game/Ball.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Ball.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game/Box.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Box.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/game/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scene/LevelScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/scene/LevelScene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game/GameObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/GameObject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game/HoleBox.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/HoleBox.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/geometry/Circle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/shape/Circle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/geometry/Cylinder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/shape/Cylinder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/geometry/Geometry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/math/Geometry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/geometry/Line2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/shape/Line2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/geometry/Line3.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/shape/Line3.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/geometry/Plane.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/shape/Plane.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/geometry/Sphere.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/shape/Sphere.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scene/LevelScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/LevelScene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scene/Scene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Scene.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -188,6 +215,7 @@
       <workItem from="1686673852895" duration="7715000" />
       <workItem from="1686686941668" duration="11359000" />
       <workItem from="1686762325246" duration="23009000" />
+      <workItem from="1686931234113" duration="4237000" />
     </task>
     <servers />
   </component>

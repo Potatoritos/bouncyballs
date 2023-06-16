@@ -1,28 +1,50 @@
 package game;
 
-import geometry.Geometry;
-import geometry.Line3;
-import geometry.Sphere;
+import math.Geometry;
+import shape.Line3;
+import shape.Sphere;
 import org.joml.Matrix4f;
 import org.joml.Vector3d;
 
-import static geometry.Geometry.project;
+import static math.Geometry.project;
 
 public class Ball extends GameObject {
     public final Vector3d velocity;
     public final Sphere geometry;
     private final Vector3d deferredVelocity;
     private boolean velocityDeferred;
+    private boolean hasReachedGoal;
+    private boolean isDead;
+    private int holeColor;
     public Ball() {
         super();
         velocity = new Vector3d();
         geometry = new Sphere();
         deferredVelocity = new Vector3d(0, 0, 0);
         velocityDeferred = false;
+        hasReachedGoal = false;
     }
     public Ball(Sphere geometry) {
         this();
         this.geometry.set(geometry);
+    }
+    public void setHasReachedGoal(boolean value) {
+        hasReachedGoal = value;
+    }
+    public boolean hasReachedGoal() {
+        return hasReachedGoal;
+    }
+    public void setHoleColor(int value) {
+        holeColor = value;
+    }
+    public void setIsDead(boolean value) {
+        isDead = value;
+    }
+    public boolean isDead() {
+        return isDead;
+    }
+    public int getHoleColor() {
+        return holeColor;
     }
     public double getRadius() {
         return geometry.getRadius();
@@ -46,10 +68,11 @@ public class Ball extends GameObject {
     }
     @Override
     public void reflectLine(Line3 line, Vector3d intersection, Vector3d normal) {
+        // Rebound the ball colliding into this one
         Geometry.reflectLineFixedRebound(line, intersection, normal, 0.022);
-//        Geometry.reflectLine(line, intersection, normal, 0.5);
 
         // Rebound self as well
+        // Velocity is deferred to the next frame to ensure that collisions are handled before the velocity adds to position
         Vector3d normalComponent = new Vector3d();
         deferredVelocity.set(velocity);
         project(deferredVelocity, normal, normalComponent);

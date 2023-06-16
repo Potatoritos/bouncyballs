@@ -1,8 +1,8 @@
 package collision;
 
 import game.GameObject;
-import geometry.Line3;
-import geometry.Sphere;
+import shape.Line3;
+import shape.Sphere;
 import org.joml.Vector3d;
 
 public abstract class CollisionObject3 {

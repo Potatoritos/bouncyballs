@@ -1,8 +1,8 @@
-package geometry;
+package shape;
 
 import org.joml.Vector3d;
 
-import static geometry.Geometry.project;
+import static math.Geometry.project;
 
 public class Cylinder {
     public final Vector3d position;

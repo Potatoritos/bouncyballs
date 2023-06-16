@@ -1,9 +1,10 @@
-package geometry;
+package math;
 
 import math.Quadratic;
 import org.joml.Matrix3d;
 import org.joml.Vector2d;
 import org.joml.Vector3d;
+import shape.*;
 
 import static math.MathUtil.*;
 

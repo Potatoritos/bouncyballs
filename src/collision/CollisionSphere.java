@@ -1,12 +1,11 @@
 package collision;
 
 import game.GameObject;
-import geometry.Geometry;
-import geometry.Line3;
-import geometry.Sphere;
+import shape.Line3;
+import shape.Sphere;
 import org.joml.Vector3d;
 
-import static geometry.Geometry.*;
+import static math.Geometry.*;
 
 public class CollisionSphere extends CollisionObject3 {
     private final Sphere sphere;

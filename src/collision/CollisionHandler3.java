@@ -3,32 +3,34 @@ package collision;
 import game.Ball;
 import game.Box;
 import game.HoleBox;
-import geometry.Cylinder;
-import geometry.Line3;
-import geometry.Plane;
-import geometry.Sphere;
+import shape.Cylinder;
+import shape.Line3;
+import shape.Plane;
+import shape.Sphere;
 import org.joml.Vector3d;
 
 import java.util.ArrayList;
 
-import static geometry.Geometry.distance;
-import static math.MathUtil.withinEpsilon;
+import static math.Geometry.distance;
 
 public class CollisionHandler3 {
     private Ball ball;
     private final Line3 ballMotion;
     private final ArrayList<CollisionObject3> collisionObjects;
+    private final ArrayList<CollisionTrigger> triggers;
     private final Vector3d minIntersection;
     private CollisionObject3 minCollisionObject;
     private final Sphere ballSphere;
     public CollisionHandler3() {
         ballMotion = new Line3();
         collisionObjects = new ArrayList<>();
+        triggers = new ArrayList<>();
         minIntersection = new Vector3d();
         ballSphere = new Sphere();
     }
     public void reset() {
         collisionObjects.clear();
+        triggers.clear();
     }
     public void setBall(Ball ball) {
         this.ball = ball;
@@ -41,6 +43,57 @@ public class CollisionHandler3 {
             collisionObjects.add(object);
         }
     }
+    private void addTrigger(CollisionTrigger trigger) {
+        if (trigger.collisionObject.isNearby(ballSphere)) {
+            triggers.add(trigger);
+        }
+    }
+    public void processCollisions() {
+        int i = 0;
+        Vector3d intersection = new Vector3d();
+        // Limit the max. number of iterations to avoid infinite loops
+        while (i++ < 10) {
+            // See if the ball collides with any triggers
+            for (CollisionTrigger trigger : triggers) {
+                if (trigger.isActive() && trigger.collisionObject.intersect(ballMotion, intersection)) {
+                    trigger.onCollision(ball);
+                    trigger.disable();
+                }
+            }
+
+            // Get the collision object that collides with the ball at the closest point to the ball
+            double minDistance = Double.POSITIVE_INFINITY;
+            for (CollisionObject3 object : collisionObjects) {
+                if (object.intersect(ballMotion, intersection)) {
+                    double distance = distance(intersection, ballMotion.position);
+                    if (distance <= minDistance) {
+                        minDistance = distance;
+                        minIntersection.set(intersection);
+                        minCollisionObject = object;
+                    }
+                }
+            }
+            // Break if the ball does not collide with any objects
+            if (minDistance == Double.POSITIVE_INFINITY) {
+                break;
+            }
+
+            // Reflect the ball off of the aforementioned closest collision object
+            minCollisionObject.reflectLine(ballMotion, minIntersection, minDistance);
+        }
+
+        ball.geometry.position.set(ballMotion.position);
+        ball.velocity.set(ballMotion.displacement);
+    }
+
+    public void addFallDeathTrigger() {
+        addTrigger(new DeathTrigger(new CollisionPlane(null, new Plane(
+                new Vector3d(-100, -100, -2),
+                new Vector3d(200, 0, 0),
+                new Vector3d(0, 200, 0)
+        ))));
+    }
+
     public void addWallBox(Box box) {
         Vector3d up = new Vector3d(0, 0, box.geometry.displacement.z);
         addCollisionObject(new CollisionPlane(box,
@@ -296,6 +349,12 @@ public class CollisionHandler3 {
         ));
 
         addFloorBoxSides(box);
+
+        addTrigger(new GoalTrigger(new CollisionPlane(box, new Plane(
+                box.geometry.position,
+                new Vector3d(box.geometry.displacement.x, 0, 0),
+                new Vector3d(0, box.geometry.displacement.y, 0)
+        )), box));
     }
     public void addBallCollision(Ball ball) {
         addCollisionObject(new CollisionSphere(ball,
@@ -304,38 +363,5 @@ public class CollisionHandler3 {
                         ball.getRadius() + this.ball.getRadius()
                 )
         ));
-    }
-    public void processCollisions() {
-        int i = 0;
-        Vector3d intersection = new Vector3d();
-        Vector3d prevIntersection = new Vector3d();
-        boolean needsSep = false;
-        while (i++ < 10) {
-            double minDistance = Double.POSITIVE_INFINITY;
-            for (CollisionObject3 object : collisionObjects) {
-                if (!object.intersect(ballMotion, intersection)) {
-                    continue;
-                }
-                double distance = distance(intersection, ballMotion.position);
-                if (distance <= minDistance) {
-                    minDistance = distance;
-                    minIntersection.set(intersection);
-                    minCollisionObject = object;
-                }
-            }
-            if (minDistance == Double.POSITIVE_INFINITY) {
-                break;
-            }
-            if (i >= 6) {
-                System.out.printf("motion=%s, int=%s\n", ballMotion, minIntersection);
-                needsSep = true;
-            }
-            prevIntersection.set(minIntersection);
-            minCollisionObject.reflectLine(ballMotion, minIntersection, minDistance);
-        }
-        if (needsSep) System.out.println("-------");
-
-        ball.geometry.position.set(ballMotion.position);
-        ball.velocity.set(ballMotion.displacement);
     }
 }

@@ -1,7 +1,7 @@
 package game;
 
-import geometry.Geometry;
-import geometry.Line3;
+import math.Geometry;
+import shape.Line3;
 import org.joml.Vector3d;
 
 public class Box extends GameObject {

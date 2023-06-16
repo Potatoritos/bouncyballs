@@ -2,14 +2,8 @@ package game;
 
 import graphics.*;
 import graphics.Window;
-import org.joml.Matrix4f;
-import org.joml.Vector2f;
-import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFWErrorCallback;
-import math.MathUtil;
-import scene.LevelScene;
 
-import static mesh.MeshGeometry.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL30.*;
 

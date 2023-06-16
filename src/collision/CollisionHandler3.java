@@ -210,6 +210,12 @@ public class CollisionHandler3 {
         ));
     }
     public void addHoleBox(HoleBox box) {
+        // Act as a regular tile if the correct ball has fallen into the hole
+        if (box.hasReachedGoal()) {
+            addFloorBox(box);
+            return;
+        }
+
         // The hole, when spherically extruded, forms a torus
         // Approximate this torus using 8 cylinders (because i am NOT figuring out how to reflect a line off of a torus)
 

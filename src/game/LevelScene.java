@@ -155,6 +155,9 @@ public class LevelScene extends Scene {
 
             ball.update();
         }
+        for (HoleBox hole : holeTiles) {
+            hole.update();
+        }
     }
 
     private void renderGameObjects(ShaderProgram shader) {
@@ -285,6 +288,7 @@ public class LevelScene extends Scene {
                         tile.color2.set(red);
                         tile.setHoleColor(1);
                         holeTiles.add(tile);
+                        tile.cover.color1.set(tileColor);
                         coverTiles.add(tile.cover);
                     }
                     case GOAL2 -> {
@@ -296,6 +300,7 @@ public class LevelScene extends Scene {
                         tile.color2.set(blue);
                         tile.setHoleColor(2);
                         holeTiles.add(tile);
+                        tile.cover.color1.set(tileColor);
                         coverTiles.add(tile.cover);
                     }
                 }

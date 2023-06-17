@@ -83,7 +83,7 @@ public class Level {
             if (rows <= 0 || rows > 100 || columns <= 0 || columns > 100) {
                 throw new RuntimeException("Invalid level dimensions");
             }
-            if (numBalls == 0 || numBalls > 2) {
+            if (numBalls == 0 || numBalls > 3) {
                 throw new RuntimeException("Invalid level number of balls");
             }
             Level level = new Level(rows, columns, numBalls);
@@ -107,6 +107,7 @@ public class Level {
                         case '#' -> level.setFloorState(rows-1-i, j, FloorTile.FLOOR);
                         case '1' -> level.setFloorState(rows-1-i, j, FloorTile.GOAL1);
                         case '2' -> level.setFloorState(rows-1-i, j, FloorTile.GOAL2);
+                        case '3' -> level.setFloorState(rows-1-i, j, FloorTile.GOAL3);
                     }
                 }
             }

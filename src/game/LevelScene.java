@@ -316,10 +316,12 @@ public class LevelScene extends Scene {
                     tile.getColor(0).set(Colors.tile);
                     floorTiles.add(tile);
 
-                } else if (level.getFloorState(i, j) == FloorTile.GOAL1 || level.getFloorState(i, j) == FloorTile.GOAL2) {
+                } else if (level.getFloorState(i, j) == FloorTile.GOAL1 || level.getFloorState(i, j) == FloorTile.GOAL2 || level.getFloorState(i, j) == FloorTile.GOAL3) {
                     int holeColor = 1;
                     if (level.getFloorState(i, j) == FloorTile.GOAL2) {
                         holeColor = 2;
+                    } else if (level.getFloorState(i, j) == FloorTile.GOAL3) {
+                        holeColor = 3;
                     }
                     HoleBox tile = new HoleBox(new Line3(
                             new Vector3d(level.getPosX(j), level.getPosY(i), -floorTileHeight),

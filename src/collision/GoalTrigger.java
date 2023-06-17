@@ -15,8 +15,7 @@ public class GoalTrigger extends CollisionTrigger {
             ball.setHasReachedGoal(true);
             parent.setHasReachedGoal(true);
         } else {
-            System.out.println("wrong hole");
-            ball.triggerExplosionAnimation();
+            ball.triggerExplosionAnimation(new Vector3d(parent.geometry.displacement).mul(0.5).add(parent.geometry.position));
         }
     }
 }

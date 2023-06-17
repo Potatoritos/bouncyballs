@@ -17,6 +17,7 @@ public class Ball extends GameObject {
     private boolean hasReachedGoal;
     private boolean isDead;
     private final FrameTimer explosionTimer;
+    private final Vector3d explosionPosition;
     private int holeColor;
     public Ball() {
         super();
@@ -24,6 +25,7 @@ public class Ball extends GameObject {
         geometry = new Sphere();
         deferredVelocity = new Vector3d(0, 0, 0);
         explosionTimer = new FrameTimer(72);
+        explosionPosition = new Vector3d();
     }
     public Ball(Sphere geometry) {
         this();
@@ -33,6 +35,7 @@ public class Ball extends GameObject {
     public void update() {
         explosionTimer.update();
         if (explosionTimer.isActive()) {
+            geometry.position.set(explosionPosition);
             geometry.setRadius(0.35 + 1.5*cubicInterpolation(explosionTimer.percentage()));
             getColor(0).w = 1 - explosionTimer.fpercentage();
             if (explosionTimer.isOnLastFrame()) {
@@ -68,7 +71,8 @@ public class Ball extends GameObject {
     public double getRadius() {
         return geometry.getRadius();
     }
-    public void triggerExplosionAnimation() {
+    public void triggerExplosionAnimation(Vector3d position) {
+        explosionPosition.set(position);
         explosionTimer.start();
     }
     public boolean isInExplosionAnimation() {

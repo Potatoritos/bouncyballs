@@ -52,12 +52,12 @@ public class GameScene extends Scene {
                 levelScene.setPaused(true);
                 levelScene.reset();
             }
-            if (swipeTimer.getFrame() == 119) {
+            if (swipeTimer.isOnLastFrame()) {
                 levelScene.setPaused(false);
                 isLevelResetting = false;
             }
         } else if (isLevelAdvancing) {
-            if (swipeTimer.getFrame() == 119) {
+            if (swipeTimer.isOnLastFrame()) {
                 isLevelAdvancing = false;
             }
         }
@@ -75,7 +75,7 @@ public class GameScene extends Scene {
             nvgBeginPath(nvg);
             if (isLevelResetting) {
                 if (swipeTimer.getFrame() <= 48) {
-                    nvgRect(nvg, 0, 0, windowWidth * cubicInterpolation((float) swipeTimer.getFrame() / 48), windowHeight);
+                    nvgRect(nvg, 0, 0, windowWidth * cubicInterpolation((float)swipeTimer.getFrame() / 48), windowHeight);
                 } else if (swipeTimer.getFrame() <= 72) {
                     nvgRect(nvg, 0, 0, windowWidth, windowHeight);
                 } else {
@@ -84,11 +84,11 @@ public class GameScene extends Scene {
                 nvgFillColor(nvg, nvgRGB((byte)0, (byte)0, (byte)0, nvgColor));
             } else if (isLevelAdvancing) {
                 if (swipeTimer.getFrame() <= 48) {
-                    nvgRect(nvg, 0, 0, windowWidth, windowHeight * cubicInterpolation((float) swipeTimer.getFrame() / 48));
+                    nvgRect(nvg, 0, 0, windowWidth, windowHeight * cubicInterpolation((float)swipeTimer.getFrame() / 48));
                 } else if (swipeTimer.getFrame() <= 72) {
                     nvgRect(nvg, 0, 0, windowWidth, windowHeight);
                 } else {
-                    nvgRect(nvg, 0, windowHeight * cubicInterpolation((float) (swipeTimer.getFrame()-72) / 48), windowWidth, windowHeight);
+                    nvgRect(nvg, 0, windowHeight * cubicInterpolation((float)(swipeTimer.getFrame()-72) / 48), windowWidth, windowHeight);
                 }
                 nvgFillColor(nvg, nvgRGB((byte)0xE7, (byte)0x84, (byte)0xFF, nvgColor));
             }

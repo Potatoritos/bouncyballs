@@ -33,6 +33,9 @@ public class MathUtil {
     public static float cubicInterpolation(float x) {
         return (x-1)*(x-1)*(x-1) + 1;
     }
+    public static double cubicInterpolation(double x) {
+        return (x-1)*(x-1)*(x-1) + 1;
+    }
 
     public static boolean withinRange(double value, double a, double b) {
         if (b < a) {

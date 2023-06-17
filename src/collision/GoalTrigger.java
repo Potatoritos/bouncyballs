@@ -2,6 +2,7 @@ package collision;
 
 import game.Ball;
 import game.HoleBox;
+import org.joml.Vector3d;
 
 public class GoalTrigger extends CollisionTrigger {
     private final HoleBox parent;
@@ -14,7 +15,8 @@ public class GoalTrigger extends CollisionTrigger {
             ball.setHasReachedGoal(true);
             parent.setHasReachedGoal(true);
         } else {
-            ball.setIsDead(true);
+            System.out.println("wrong hole");
+            ball.triggerExplosionAnimation();
         }
     }
 }

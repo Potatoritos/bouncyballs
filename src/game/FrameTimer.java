@@ -25,4 +25,13 @@ public class FrameTimer {
     public boolean isActive() {
         return frame < totalFrames;
     }
+    public double percentage() {
+        return (double)frame / totalFrames;
+    }
+    public float fpercentage() {
+        return (float)frame / totalFrames;
+    }
+    public boolean isOnLastFrame() {
+        return frame == totalFrames-1;
+    }
 }

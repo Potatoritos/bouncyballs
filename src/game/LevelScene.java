@@ -146,6 +146,10 @@ public class LevelScene extends Scene {
                 ball.geometry.position.set(0, 0, 10000);
                 continue;
             }
+            if (ball.isInExplosionAnimation()) {
+                ball.update();
+                continue;
+            }
             ball.getColor(0).w = (float)cutMaxMin(1.25 + ball.geometry.position.z, 0, 1);
 
             ball.velocity.x += Math.sin(rotation.y * 0.0004);
@@ -173,16 +177,12 @@ public class LevelScene extends Scene {
             ball.update();
         }
 
-        if (ballsWon == holeTiles.size()) {
+        if (ballsWon == balls.size()) {
             hasWon = true;
         }
 
-        int goalsReached = 0;
         for (HoleBox hole : holeTiles) {
             hole.update();
-            if (hole.hasReachedGoal()) {
-                goalsReached++;
-            }
         }
     }
 

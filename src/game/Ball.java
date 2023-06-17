@@ -7,6 +7,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector3d;
 
 import static math.Geometry.project;
+import static math.MathUtil.cubicInterpolation;
 
 public class Ball extends GameObject {
     public final Vector3d velocity;
@@ -15,18 +16,36 @@ public class Ball extends GameObject {
     private boolean velocityDeferred;
     private boolean hasReachedGoal;
     private boolean isDead;
+    private final FrameTimer explosionTimer;
     private int holeColor;
     public Ball() {
         super();
         velocity = new Vector3d();
         geometry = new Sphere();
         deferredVelocity = new Vector3d(0, 0, 0);
-        velocityDeferred = false;
-        hasReachedGoal = false;
+        explosionTimer = new FrameTimer(72);
     }
     public Ball(Sphere geometry) {
         this();
         this.geometry.set(geometry);
+    }
+    @Override
+    public void update() {
+        explosionTimer.update();
+        if (explosionTimer.isActive()) {
+            geometry.setRadius(0.35 + 1.5*cubicInterpolation(explosionTimer.percentage()));
+            getColor(0).w = 1 - explosionTimer.fpercentage();
+            if (explosionTimer.isOnLastFrame()) {
+                isDead = true;
+            }
+            return;
+        }
+
+        geometry.position.add(velocity);
+        if (velocityDeferred) {
+            velocity.set(deferredVelocity);
+            velocityDeferred = false;
+        }
     }
     public void setHasReachedGoal(boolean value) {
         hasReachedGoal = value;
@@ -49,13 +68,11 @@ public class Ball extends GameObject {
     public double getRadius() {
         return geometry.getRadius();
     }
-    @Override
-    public void update() {
-        geometry.position.add(velocity);
-        if (velocityDeferred) {
-            velocity.set(deferredVelocity);
-            velocityDeferred = false;
-        }
+    public void triggerExplosionAnimation() {
+        explosionTimer.start();
+    }
+    public boolean isInExplosionAnimation() {
+        return explosionTimer.isActive();
     }
     public Vector3d getPosition() {
         return geometry.position;

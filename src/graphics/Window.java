@@ -25,8 +25,8 @@ public class Window {
     private boolean resized;
     public Window() {
         input = new InputState();
-        width = 600;
-        height = 480;
+        width = 1200;
+        height = 960;
         resized = false;
         glfwDefaultWindowHints(); // optional, the current window hints are already the default
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // the window will stay hidden after creation

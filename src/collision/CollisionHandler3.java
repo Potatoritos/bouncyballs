@@ -52,7 +52,7 @@ public class CollisionHandler3 {
         int i = 0;
         Vector3d intersection = new Vector3d();
         // Limit the max. number of iterations to avoid infinite loops
-        while (i++ < 10) {
+        while (i++ < 11) {
             // See if the ball collides with any triggers
             for (CollisionTrigger trigger : triggers) {
                 if (trigger.isActive() && trigger.collisionObject.intersect(ballMotion, intersection)) {
@@ -210,6 +210,12 @@ public class CollisionHandler3 {
         ));
     }
     public void addHoleBox(HoleBox box) {
+        addTrigger(new GoalTrigger(new CollisionPlane(box, new Plane(
+                box.geometry.position,
+                new Vector3d(box.geometry.displacement.x, 0, 0),
+                new Vector3d(0, box.geometry.displacement.y, 0)
+        )), box));
+
         // Act as a regular tile if the correct ball has fallen into the hole
         if (box.hasReachedGoal()) {
             addFloorBox(box);
@@ -355,12 +361,6 @@ public class CollisionHandler3 {
         ));
 
         addFloorBoxSides(box);
-
-        addTrigger(new GoalTrigger(new CollisionPlane(box, new Plane(
-                box.geometry.position,
-                new Vector3d(box.geometry.displacement.x, 0, 0),
-                new Vector3d(0, box.geometry.displacement.y, 0)
-        )), box));
     }
     public void addBallCollision(Ball ball) {
         addCollisionObject(new CollisionSphere(ball,

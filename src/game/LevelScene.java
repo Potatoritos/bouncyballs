@@ -3,7 +3,6 @@ package game;
 import collision.CollisionHandler3;
 import graphics.*;
 import mesh.Quad;
-import org.joml.Vector2f;
 import shape.Line3;
 import shape.Sphere;
 import org.joml.Vector3d;
@@ -259,6 +258,7 @@ public class LevelScene extends Scene {
     public void render() {
         if (level == null) return;
 
+//        glClearColor(Colors.background.x, Colors.background.y, Colors.background.z, 1);
         glClearColor(Colors.background.x, Colors.background.y, Colors.background.z, 1);
 //        glEnable(GL_STENCIL_TEST);
 //        glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
@@ -299,12 +299,13 @@ public class LevelScene extends Scene {
         // Draw to screen
         glViewport(0, 0, windowWidth, windowHeight);
         outShader.bind();
+//        outShader.setUniform("inShadowColor", Colors.hexRGBA(0xd48fe3ff));
+        outShader.setUniform("inShadowColor", Colors.background);
         outShader.setUniform("normalTexture", 0);
         outShader.setUniform("depthTexture", 1);
         outShader.setUniform("shadowMap", 2);
         outShader.setUniform("projectionMatrix", camera.getProjectionMatrix());
         outShader.setUniform("lightSpaceMatrix", shadowMap.lightSpaceMatrix);
-
 
         glActiveTexture(GL_TEXTURE0);
         edgeSourceFbo.getColorTexture().bind();

@@ -9,12 +9,14 @@ uniform mat4 viewMatrices[100];
 uniform mat4 projectionMatrix;
 uniform vec4 color0[100];
 uniform vec4 color1[100];
+uniform vec4 inShadowColor;
 
 uniform mat4 lightSpaceMatrix;
 uniform mat4 worldMatrices[100];
 
 out vec4 color;
 out float glow;
+out vec4 shadowColor;
 out vec3 normal;
 out vec3 orthoPos;
 
@@ -26,6 +28,7 @@ void main() {
     glow = 1 - inColor.g;
 
     normal = inNormal;
+    shadowColor = inShadowColor;
 
     orthoPos = vec3(worldMatrices[gl_InstanceID] * vec4(position, 1.0));
     fragPosLightSpace = lightSpaceMatrix * vec4(orthoPos, 1.0);
@@ -36,6 +39,7 @@ void main() {
 
 in vec4 color;
 in float glow;
+in vec4 shadowColor;
 in vec3 normal;
 in vec3 orthoPos;
 in vec4 fragPosLightSpace;
@@ -84,7 +88,7 @@ float shadow(vec4 fragPosLightSpace) {
             shadow += currentDepth - bias > depth ? 1 : 0.0;
         }
     }
-    shadow = max(0.0, shadow/9 - 0.8);
+    shadow = max(0.0, shadow/9 - 0.7);
     shadow = 1 - (1-shadow)*(1-shadow);
     return shadow;
 }
@@ -110,8 +114,8 @@ void main() {
         fragColor = vec4(0, 0, 0, color.a);
     } else {
         float shadowFactor = glow*shadow(fragPosLightSpace);
-//        vec3 mixed = mix(color.rgb, vec3(100, 100, 100), shadowFactor);
-        fragColor = vec4(color.rgb * (1-shadowFactor), color.a);
-//        fragColor = vec4(mixed, color.a);
+        vec3 mixed = mix(color.rgb, shadowColor.rgb, shadowFactor);
+//        fragColor = vec4(color.rgb * (1-shadowFactor), color.a);
+        fragColor = vec4(mixed, color.a);
     }
 }

@@ -10,16 +10,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
-      <change afterPath="$PROJECT_DIR$/assets/shaders/depth_instanced.glsl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/shaders/depth_instanced2.glsl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/graphics/ShadowMap.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/shaders/sobel_filter_instanced.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/assets/shaders/shadows_sobelfilter.glsl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/shaders/texture.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/assets/shaders/texture.glsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/shaders/shadows_sobelfilter.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/assets/shaders/shadows_sobelfilter.glsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/collision/CollisionHandler3.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/CollisionHandler3.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game/Colors.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Colors.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/game/LevelScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/LevelScene.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/DepthMapFbo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/DepthMapFbo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/graphics/ShaderProgram.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/ShaderProgram.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mesh/MeshGeometry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/mesh/MeshGeometry.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -200,7 +196,7 @@
       <workItem from="1686942468572" duration="3328000" />
       <workItem from="1686958105083" duration="42000" />
       <workItem from="1686958154881" duration="2014000" />
-      <workItem from="1686993805924" duration="35117000" />
+      <workItem from="1686993805924" duration="39640000" />
     </task>
     <servers />
   </component>

@@ -2,6 +2,7 @@ package graphics;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 import util.Deletable;
@@ -121,6 +122,13 @@ public class ShaderProgram implements Deletable {
             FloatBuffer buffer = stack.mallocFloat(16);
             value.get(buffer);
             glUniformMatrix4fv(uniforms.get(name), false, buffer);
+        }
+    }
+    public void setUniform(String name, Vector4f value) {
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            FloatBuffer buffer = stack.mallocFloat(4);
+            value.get(buffer);
+            glUniform4fv(uniforms.get(name), buffer);
         }
     }
     public void setUniform(String name, Vector3f value) {

@@ -359,7 +359,7 @@ public class LevelScene extends Scene {
 
         for (int i = 0; i < level.numberBalls(); i++) {
             Ball ball = new Ball(
-                    new Sphere(new Vector3d(level.getBallPosX(i), level.getBallPosY(i), 0.5), 0.35)
+                    new Sphere(new Vector3d(level.getPosX(level.getBallColumn(i))+0.5, level.getPosY(level.getBallRow(i))+0.5, 0.5), 0.35)
             );
             ball.getColor(0).set(Colors.base[i]);
             ball.setHoleColor(i+1);

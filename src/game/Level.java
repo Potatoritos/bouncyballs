@@ -10,16 +10,16 @@ public class Level {
     private final FloorTile[][] floorState;
     private final boolean[][] wallXState;
     private final boolean[][] wallYState;
-    private final double[] ballPosX;
-    private final double[] ballPosY;
+    private final int[] ballRow;
+    private final int[] ballColumn;
     private Level(int rows, int columns, int numBalls) {
         this.rows = rows;
         this.columns = columns;
         this.floorState = new FloorTile[rows][columns];
         this.wallXState = new boolean[rows][columns+1];
         this.wallYState = new boolean[rows+1][columns];
-        ballPosX = new double[numBalls];
-        ballPosY = new double[numBalls];
+        ballRow = new int[numBalls];
+        ballColumn = new int[numBalls];
     }
     public int getRows() {
         return rows;
@@ -52,19 +52,19 @@ public class Level {
         wallYState[row][column] = value;
     }
     public int numberBalls() {
-        return ballPosX.length;
+        return ballRow.length;
     }
-    public void setBallPosX(int ball, double value) {
-        ballPosX[ball] = value;
+    public void setBallRow(int ball, int value) {
+        ballRow[ball] = value;
     }
-    public double getBallPosX(int ball) {
-        return ballPosX[ball];
+    public int getBallRow(int ball) {
+        return ballRow[ball];
     }
-    public void setBallPosY(int ball, double value) {
-        ballPosY[ball] = value;
+    public void setBallColumn(int ball, int value) {
+        ballColumn[ball] = value;
     }
-    public double getBallPosY(int ball) {
-        return ballPosY[ball];
+    public int getBallColumn(int ball) {
+        return ballColumn[ball];
     }
     public void exportToFile(String path) {
         try (FileWriter fw = new FileWriter("assets/levels/" + path);
@@ -87,7 +87,17 @@ public class Level {
                 throw new RuntimeException("Invalid level number of balls");
             }
             Level level = new Level(rows, columns, numBalls);
-
+            for (int i = 0; i < rows; i++) {
+                String row = br.readLine();
+                if (row.length() != columns) new RuntimeException("Invalid level file - special tiles malformed");
+                for (int j = 0; j < row.length(); j++) {
+                    if ('1' <= row.charAt(j) && row.charAt(j) <= '1' + numBalls) {
+                        int ball = row.charAt(j) - '1';
+                        level.setBallRow(ball, rows-1-i);
+                        level.setBallColumn(ball, j);
+                    }
+                }
+            }
             for (int i = 0; i < rows; i++) {
                 String row = br.readLine();
                 if (row.length() != columns) new RuntimeException("Invalid level file - floor tiles malformed");
@@ -116,8 +126,6 @@ public class Level {
             }
 
             for (int i = 0; i < numBalls; i++) {
-                level.setBallPosX(i, Double.parseDouble(br.readLine()));
-                level.setBallPosY(i, Double.parseDouble(br.readLine()));
             }
             return level;
         } catch (NumberFormatException e) {

@@ -1,10 +1,12 @@
 package graphics;
 
+import game.InputState;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.IntBuffer;
+import java.util.HashSet;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
@@ -19,10 +21,10 @@ public class Window {
 
     private int width;
     private int height;
-    private double mouseX;
-    private double mouseY;
+    public final InputState input;
     private boolean resized;
     public Window() {
+        input = new InputState();
         width = 600;
         height = 480;
         resized = false;
@@ -80,14 +82,23 @@ public class Window {
         });
 
         glfwSetCursorPosCallback(handle, (window, x, y) -> {
-            mouseX = x;
-            mouseY = y;
+            int minDimension = Math.min(height, width);
+            input.mousePosition.x = (x - (width - minDimension)/2.0) / minDimension;
+            input.mousePosition.y = (y - (height - minDimension)/2.0) / minDimension;
+        });
+
+        glfwSetKeyCallback(handle, (window, key, scanCode, action, mods) -> {
+            if (action == GLFW_PRESS) {
+                input.pressedKeys.add(key);
+            }
+//            System.out.printf("key=%s, scanCode=%s, action=%s, mods=%d\n", key, scanCode, action, mods);
         });
     }
     public boolean shouldClose() {
         return glfwWindowShouldClose(handle);
     }
     public void update() {
+        input.pressedKeys.clear();
         glfwPollEvents();
     }
     public long getHandle() {
@@ -109,12 +120,6 @@ public class Window {
     }
     public int getHeight() {
         return height;
-    }
-    public double getMouseX() {
-        return mouseX;
-    }
-    public double getMouseY() {
-        return mouseY;
     }
     public float getAspectRatio() {
         return (float)width / height;

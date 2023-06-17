@@ -12,7 +12,6 @@ public class Game {
     private Window window;
 
     private LevelScene levelScene;
-    private InputState inputMap;
 
     public Game() {
         isRunning = true;
@@ -26,7 +25,6 @@ public class Game {
 
         levelScene = new LevelScene(window.getWidth(), window.getHeight());
         levelScene.loadLevel(Level.fromFile("level0.txt"));
-        inputMap = new InputState();
 
         loop();
     }
@@ -36,12 +34,7 @@ public class Game {
             isRunning = false;
         }
 
-        int minWindowDimension = Math.min(window.getHeight(), window.getWidth());
-        double mouseX = (window.getMouseX() - (window.getWidth() - minWindowDimension)/2.0)/minWindowDimension;
-        double mouseY = (window.getMouseY() - (window.getHeight() - minWindowDimension)/2.0)/minWindowDimension;
-        inputMap.getMousePosition().set(mouseX, mouseY);
-
-        levelScene.update(inputMap);
+        levelScene.update(window.input);
     }
     private void render() {
         if (window.isResized()) {

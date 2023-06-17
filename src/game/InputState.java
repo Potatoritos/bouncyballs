@@ -1,13 +1,14 @@
 package game;
 
-import org.joml.Vector2f;
+import org.joml.Vector2d;
+
+import java.util.HashSet;
 
 public class InputState {
-    Vector2f mousePosition;
+    public final Vector2d mousePosition;
+    public final HashSet<Integer> pressedKeys;
     public InputState() {
-        mousePosition = new Vector2f();
-    }
-    public Vector2f getMousePosition() {
-        return mousePosition;
+        mousePosition = new Vector2d();
+        pressedKeys = new HashSet<>();
     }
 }

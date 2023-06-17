@@ -13,7 +13,7 @@ public class HoleBox extends Box {
         super(geometry);
         this.radius = radius;
         hasReachedGoal = false;
-        coverTimer = new FrameTimer(72);
+        coverTimer = new FrameTimer(48);
         coverTimer.start();
         cover = new HoleBoxCover();
     }

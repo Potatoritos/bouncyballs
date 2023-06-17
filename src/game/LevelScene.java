@@ -1,10 +1,8 @@
 package game;
 
 import collision.CollisionHandler3;
-import collision.DeathTrigger;
 import mesh.Quad;
 import shape.Line3;
-import shape.Plane;
 import shape.Sphere;
 import graphics.EmptyFbo;
 import graphics.FrameBufferObject;
@@ -50,11 +48,9 @@ public class LevelScene extends Scene {
     private final double floorTileHeight = 0.5;
     private final double wallHeight = 0.75;
 
-    private final Vector3f tileColor = new Vector3f(238f/255, 240f/255, 242f/255);
-    private final Vector3f bgColor = new Vector3f(180f/255, 180f/255, 190f/255);
-    private final Vector3f red = new Vector3f(255f/255, 91f/255, 91f/255);
-    private final Vector3f blue = new Vector3f(136f/255, 132f/255, 255f/255);
-    private final Vector3f green = new Vector3f(106f/255, 181f/255, 71f/255);
+    private boolean hasDied;
+    private boolean hasWon;
+
     public LevelScene(int windowWidth, int windowHeight) {
         super();
         floorMesh = rectangularPrismMesh(
@@ -110,7 +106,15 @@ public class LevelScene extends Scene {
         edgeSourceFbo = new EmptyFbo(windowWidth, windowHeight);
         handleWindowResize(windowWidth, windowHeight);
 
+        hasDied = false;
+        hasWon = false;
         collisionHandler = new CollisionHandler3();
+    }
+    public boolean hasDied() {
+        return hasDied;
+    }
+    public boolean hasWon() {
+        return hasWon;
     }
     @Override
     public void handleWindowResize(int width, int height) {
@@ -118,14 +122,17 @@ public class LevelScene extends Scene {
         edgeSourceFbo.resize(width, height);
     }
     public void update(InputState input) {
-        rotation.x = (MathUtil.cutMaxMin(input.getMousePosition().y*1.2 - 0.1, 0, 1)-0.5) * Math.PI/3;
-        rotation.y = (MathUtil.cutMaxMin(input.getMousePosition().x*1.2 - 0.1, 0, 1)-0.5) * Math.PI/3;
+        rotation.x = (MathUtil.cutMaxMin(input.mousePosition.y*1.2 - 0.1, 0, 1)-0.5) * Math.PI/3;
+        rotation.y = (MathUtil.cutMaxMin(input.mousePosition.x*1.2 - 0.1, 0, 1)-0.5) * Math.PI/3;
         if (rotation.length() > Math.PI/6) {
             rotation.normalize(Math.PI/6);
         }
 
+        int ballsDead = 0;
+
         for (Ball ball : balls) {
             if (ball.isDead()) {
+                ballsDead++;
                 ball.geometry.position.set(1.5, -0.5, 0.5);
                 ball.velocity.set(0,0,0);
                 ball.setIsDead(false);
@@ -155,8 +162,19 @@ public class LevelScene extends Scene {
 
             ball.update();
         }
+
+        if (ballsDead == balls.size()) {
+            hasDied = true;
+        }
+        int goalsReached = 0;
         for (HoleBox hole : holeTiles) {
             hole.update();
+            if (hole.hasReachedGoal()) {
+                goalsReached++;
+            }
+        }
+        if (goalsReached == holeTiles.size()) {
+            hasWon = true;
         }
     }
 
@@ -199,7 +217,7 @@ public class LevelScene extends Scene {
     public void render() {
         if (level == null) return;
 
-        glClearColor(bgColor.x, bgColor.y, bgColor.z, 1);
+        glClearColor(Colors.bg.x, Colors.bg.y, Colors.bg.z, 1);
 //        glEnable(GL_STENCIL_TEST);
 //        glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 //        glStencilMask(0xFF);
@@ -270,39 +288,29 @@ public class LevelScene extends Scene {
 
         for (int i = 0; i < level.getRows(); i++) {
             for (int j = 0; j < level.getColumns(); j++) {
-                switch (level.getFloorState(i, j)) {
-                    case FLOOR -> {
-                        Box tile = new Box(new Line3(
-                                new Vector3d(level.getPosX(j), level.getPosY(i), -floorTileHeight),
-                                new Vector3d(1, 1, floorTileHeight)
-                        ));
-                        tile.color1.set(tileColor);
-                        floorTiles.add(tile);
+                if (level.getFloorState(i, j) == FloorTile.FLOOR) {
+                    Box tile = new Box(new Line3(
+                            new Vector3d(level.getPosX(j), level.getPosY(i), -floorTileHeight),
+                            new Vector3d(1, 1, floorTileHeight)
+                    ));
+                    tile.color1.set(Colors.tile);
+                    floorTiles.add(tile);
+
+                } else if (level.getFloorState(i, j) == FloorTile.GOAL1 || level.getFloorState(i, j) == FloorTile.GOAL2) {
+                    int holeColor = 1;
+                    if (level.getFloorState(i, j) == FloorTile.GOAL2) {
+                        holeColor = 2;
                     }
-                    case GOAL1 -> {
-                        HoleBox tile = new HoleBox(new Line3(
-                                new Vector3d(level.getPosX(j), level.getPosY(i), -floorTileHeight),
-                                new Vector3d(1, 1, floorTileHeight)
-                        ), 0.4);
-                        tile.color1.set(tileColor);
-                        tile.color2.set(red);
-                        tile.setHoleColor(1);
-                        holeTiles.add(tile);
-                        tile.cover.color1.set(tileColor);
-                        coverTiles.add(tile.cover);
-                    }
-                    case GOAL2 -> {
-                        HoleBox tile = new HoleBox(new Line3(
-                                new Vector3d(level.getPosX(j), level.getPosY(i), -floorTileHeight),
-                                new Vector3d(1, 1, floorTileHeight)
-                        ), 0.4);
-                        tile.color1.set(tileColor);
-                        tile.color2.set(blue);
-                        tile.setHoleColor(2);
-                        holeTiles.add(tile);
-                        tile.cover.color1.set(tileColor);
-                        coverTiles.add(tile.cover);
-                    }
+                    HoleBox tile = new HoleBox(new Line3(
+                            new Vector3d(level.getPosX(j), level.getPosY(i), -floorTileHeight),
+                            new Vector3d(1, 1, floorTileHeight)
+                    ), 0.4);
+                    tile.color1.set(Colors.tile);
+                    tile.color2.set(Colors.base[holeColor-1]);
+                    tile.setHoleColor(holeColor);
+                    holeTiles.add(tile);
+                    tile.cover.color1.set(Colors.tile);
+                    coverTiles.add(tile.cover);
                 }
             }
             for (int j = 0; j < level.getColumns()+1; j++) {
@@ -311,7 +319,7 @@ public class LevelScene extends Scene {
                             new Vector3d(level.getPosX(j)-0.05, level.getPosY(i)-0.05, -floorTileHeight),
                             new Vector3d(0.1, 1.1, floorTileHeight+wallHeight)
                     ));
-                    tile.color1.set(tileColor);
+                    tile.color1.set(Colors.tile);
                     wallXTiles.add(tile);
                 }
             }
@@ -323,19 +331,17 @@ public class LevelScene extends Scene {
                             new Vector3d(level.getPosX(j)-0.05, level.getPosY(i)-0.05, -floorTileHeight),
                             new Vector3d(1.1, 0.1, floorTileHeight+wallHeight)
                     ));
-                    tile.color1.set(tileColor);
+                    tile.color1.set(Colors.tile);
                     wallYTiles.add(tile);
                 }
             }
         }
 
-        Vector3f[] ballColors = new Vector3f[] { red, blue };
         for (int i = 0; i < level.numberBalls(); i++) {
             Ball ball = new Ball(
                     new Sphere(new Vector3d(level.getBallPosX(i), level.getBallPosY(i), 0.5), 0.35)
             );
-            ball.color1.set(ballColors[i]);
-            ball.color2.set(ballColors[i]);
+            ball.color1.set(Colors.base[i]);
             ball.setHoleColor(i+1);
             balls.add(ball);
         }

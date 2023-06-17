@@ -15,14 +15,17 @@ public class GameScene extends Scene {
     }
     @Override
     public void update(InputState input) {
-
+        levelScene.update(input);
+        if (input.isKeyPressed(input.getResetKey()) || levelScene.hasDied()) {
+            levelScene.reset();
+        }
     }
     @Override
     public void render() {
-
+        levelScene.render();
     }
     @Override
     public void delete() {
-
+        levelScene.delete();
     }
 }

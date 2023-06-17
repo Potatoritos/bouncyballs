@@ -4,22 +4,22 @@
 layout (location=0) in vec3 position;
 layout (location=2) in vec3 inColor;
 
-out vec3 color;
+out vec4 color;
 
 uniform mat4 viewMatrices[100];
 uniform mat4 projectionMatrix;
-uniform vec3 color1[100];
-uniform vec3 color2[100];
+uniform vec4 color0[100];
+uniform vec4 color1[100];
 
 void main() {
     gl_Position = projectionMatrix * viewMatrices[gl_InstanceID] * vec4(position, 1.0);
-    color = vec3(mix(color1[gl_InstanceID], color2[gl_InstanceID], inColor.r));
+    color = vec4(mix(color0[gl_InstanceID], color1[gl_InstanceID], inColor.r));
 }
 
 /// Fragment
 #version 330
 
-in vec3 color;
+in vec4 color;
 out vec4 fragColor;
 
 uniform sampler2D normalTexture;
@@ -66,8 +66,8 @@ void main() {
     float gradientDepth = gradient(depth);
 
     if (gradientDepth > 0.015 || gradientNormal > 1.25) {
-        fragColor = vec4(0, 0, 0, 1);
+        fragColor = vec4(0, 0, 0, color.a);
     } else {
-        fragColor = vec4(color, 1);
+        fragColor = color;
     }
 }

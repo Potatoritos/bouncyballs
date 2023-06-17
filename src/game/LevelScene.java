@@ -17,6 +17,7 @@ import util.Deletable;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
+import static math.MathUtil.cutMaxMin;
 import static mesh.MeshGeometry.*;
 import static org.lwjgl.opengl.GL30.*;
 
@@ -122,26 +123,30 @@ public class LevelScene extends Scene {
         edgeSourceFbo.resize(width, height);
     }
     public void update(InputState input) {
-        rotation.x = (MathUtil.cutMaxMin(input.mousePosition.y*1.2 - 0.1, 0, 1)-0.5) * Math.PI/3;
-        rotation.y = (MathUtil.cutMaxMin(input.mousePosition.x*1.2 - 0.1, 0, 1)-0.5) * Math.PI/3;
+        rotation.x = (cutMaxMin(input.mousePosition.y*1.2 - 0.1, 0, 1)-0.5) * Math.PI/3;
+        rotation.y = (cutMaxMin(input.mousePosition.x*1.2 - 0.1, 0, 1)-0.5) * Math.PI/3;
         if (rotation.length() > Math.PI/6) {
             rotation.normalize(Math.PI/6);
         }
 
-        int ballsDead = 0;
+        int ballsWon = 0;
 
         for (Ball ball : balls) {
             if (ball.isDead()) {
-                ballsDead++;
-                ball.geometry.position.set(1.5, -0.5, 0.5);
-                ball.velocity.set(0,0,0);
-                ball.setIsDead(false);
+                hasDied = true;
+                continue;
             }
+            if (ball.hasReachedGoal()) {
+                ballsWon++;
+                ball.geometry.position.set(0, 0, 10000);
+                continue;
+            }
+            ball.getColor(0).w = (float)cutMaxMin(1.25 + ball.geometry.position.z, 0, 1);
 
             ball.velocity.x += Math.sin(rotation.y * 0.0004);
-            ball.velocity.x = MathUtil.cutMaxMin(ball.velocity.x, -0.04f, 0.04f);
+            ball.velocity.x = cutMaxMin(ball.velocity.x, -0.04f, 0.04f);
             ball.velocity.y += -Math.sin(rotation.x * 0.0004);
-            ball.velocity.y = MathUtil.cutMaxMin(ball.velocity.y, -0.04f, 0.04f);
+            ball.velocity.y = cutMaxMin(ball.velocity.y, -0.04f, 0.04f);
 
             ball.velocity.z -= 0.00048;
 
@@ -163,9 +168,10 @@ public class LevelScene extends Scene {
             ball.update();
         }
 
-        if (ballsDead == balls.size()) {
-            hasDied = true;
+        if (ballsWon == holeTiles.size()) {
+            hasWon = true;
         }
+
         int goalsReached = 0;
         for (HoleBox hole : holeTiles) {
             hole.update();
@@ -173,23 +179,30 @@ public class LevelScene extends Scene {
                 goalsReached++;
             }
         }
-        if (goalsReached == holeTiles.size()) {
-            hasWon = true;
-        }
     }
 
     private void renderGameObjects(ShaderProgram shader) {
         for (int i = 0; i < gameObjects.length; i++) {
             setViewMatrices(shader, gameObjects[i]);
+            setTransparencies(shader, gameObjects[i]);
             gameObjectMeshes[i].renderInstanced(gameObjects[i].size());
         }
     }
     private void renderGameObjectsColor(ShaderProgram shader) {
         for (int i = 0; i < gameObjects.length; i++) {
             setViewMatrices(shader, gameObjects[i]);
-            setColors(shader, gameObjects[i]);
+            setColors(0, shader, gameObjects[i]);
+            setColors(1, shader, gameObjects[i]);
             gameObjectMeshes[i].renderInstanced(gameObjects[i].size());
         }
+    }
+    private void setTransparencies(ShaderProgram shader, ArrayList<? extends GameObject> objects) {
+        FloatBuffer buffer = MemoryUtil.memAllocFloat(objects.size());
+        for (int i = 0; i < objects.size(); i++) {
+            buffer.put(i, objects.get(i).getColor(0).w);
+        }
+        shader.setUniform1fv("transparency", buffer);
+        MemoryUtil.memFree(buffer);
     }
     private void setViewMatrices(ShaderProgram shader, ArrayList<? extends GameObject> objects) {
         FloatBuffer buffer = MemoryUtil.memAllocFloat(16*objects.size());
@@ -199,30 +212,25 @@ public class LevelScene extends Scene {
         shader.setUniformMatrix4fv("viewMatrices", buffer);
         MemoryUtil.memFree(buffer);
     }
-    private void setColors(ShaderProgram shader, ArrayList<? extends GameObject> objects) {
-        FloatBuffer buffer = MemoryUtil.memAllocFloat(3*objects.size());
+    private void setColors(int index, ShaderProgram shader, ArrayList<? extends GameObject> objects) {
+        FloatBuffer buffer = MemoryUtil.memAllocFloat(4*objects.size());
         for (int i = 0; i < objects.size(); i++) {
-            objects.get(i).color1.get(i*3, buffer);
+            objects.get(i).getColor(index).get(i*4, buffer);
         }
-        shader.setUniform3fv("color1", buffer);
-        MemoryUtil.memFree(buffer);
-
-        buffer = MemoryUtil.memAllocFloat(3*objects.size());
-        for (int i = 0; i < objects.size(); i++) {
-            objects.get(i).color2.get(i*3, buffer);
-        }
-        shader.setUniform3fv("color2", buffer);
+        shader.setUniform4fv("color" + index, buffer);
         MemoryUtil.memFree(buffer);
     }
     public void render() {
         if (level == null) return;
 
-        glClearColor(Colors.bg.x, Colors.bg.y, Colors.bg.z, 1);
+        glClearColor(Colors.background.x, Colors.background.y, Colors.background.z, 1);
 //        glEnable(GL_STENCIL_TEST);
 //        glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 //        glStencilMask(0xFF);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         glEnable(GL_CULL_FACE);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 //        glStencilFunc(GL_ALWAYS, 1, 0xFF);
 //        glStencilMask(0xFF);
@@ -286,6 +294,9 @@ public class LevelScene extends Scene {
         wallYTiles.clear();
         balls.clear();
 
+        hasWon = false;
+        hasDied = false;
+
         for (int i = 0; i < level.getRows(); i++) {
             for (int j = 0; j < level.getColumns(); j++) {
                 if (level.getFloorState(i, j) == FloorTile.FLOOR) {
@@ -293,7 +304,7 @@ public class LevelScene extends Scene {
                             new Vector3d(level.getPosX(j), level.getPosY(i), -floorTileHeight),
                             new Vector3d(1, 1, floorTileHeight)
                     ));
-                    tile.color1.set(Colors.tile);
+                    tile.getColor(0).set(Colors.tile);
                     floorTiles.add(tile);
 
                 } else if (level.getFloorState(i, j) == FloorTile.GOAL1 || level.getFloorState(i, j) == FloorTile.GOAL2) {
@@ -305,11 +316,11 @@ public class LevelScene extends Scene {
                             new Vector3d(level.getPosX(j), level.getPosY(i), -floorTileHeight),
                             new Vector3d(1, 1, floorTileHeight)
                     ), 0.4);
-                    tile.color1.set(Colors.tile);
-                    tile.color2.set(Colors.base[holeColor-1]);
+                    tile.getColor(0).set(Colors.tile);
+                    tile.getColor(1).set(Colors.base[holeColor-1]);
                     tile.setHoleColor(holeColor);
                     holeTiles.add(tile);
-                    tile.cover.color1.set(Colors.tile);
+                    tile.cover.getColor(0).set(Colors.tile);
                     coverTiles.add(tile.cover);
                 }
             }
@@ -319,7 +330,7 @@ public class LevelScene extends Scene {
                             new Vector3d(level.getPosX(j)-0.05, level.getPosY(i)-0.05, -floorTileHeight),
                             new Vector3d(0.1, 1.1, floorTileHeight+wallHeight)
                     ));
-                    tile.color1.set(Colors.tile);
+                    tile.getColor(0).set(Colors.tile);
                     wallXTiles.add(tile);
                 }
             }
@@ -331,7 +342,7 @@ public class LevelScene extends Scene {
                             new Vector3d(level.getPosX(j)-0.05, level.getPosY(i)-0.05, -floorTileHeight),
                             new Vector3d(1.1, 0.1, floorTileHeight+wallHeight)
                     ));
-                    tile.color1.set(Colors.tile);
+                    tile.getColor(0).set(Colors.tile);
                     wallYTiles.add(tile);
                 }
             }
@@ -341,10 +352,13 @@ public class LevelScene extends Scene {
             Ball ball = new Ball(
                     new Sphere(new Vector3d(level.getBallPosX(i), level.getBallPosY(i), 0.5), 0.35)
             );
-            ball.color1.set(Colors.base[i]);
+            ball.getColor(0).set(Colors.base[i]);
             ball.setHoleColor(i+1);
             balls.add(ball);
         }
+    }
+    public void reset() {
+        loadLevel(level);
     }
     public void delete() {
         for (Deletable obj : new Deletable[] {floorMesh, holeMesh, holeCoverMesh, wallXMesh, wallYMesh, colorNormalsInstanced, outlineInstanced}) {

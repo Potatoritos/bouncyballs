@@ -15,7 +15,7 @@ import static org.lwjgl.opengl.GL20.*;
 
 public class ShaderProgram implements Deletable {
     private final int id;
-    ArrayList<Shader> shaders;
+    private final ArrayList<Shader> shaders;
     private final HashMap<String, Integer> uniforms;
 
     public ShaderProgram() {
@@ -99,6 +99,12 @@ public class ShaderProgram implements Deletable {
     }
     public void setUniform3fv(String name, FloatBuffer buffer) {
         glUniform3fv(uniforms.get(name), buffer);
+    }
+    public void setUniform4fv(String name, FloatBuffer buffer) {
+        glUniform4fv(uniforms.get(name), buffer);
+    }
+    public void setUniform1fv(String name, FloatBuffer buffer) {
+        glUniform1fv(uniforms.get(name), buffer);
     }
     public void setUniform(String name, ArrayList<Matrix4f> values) {
         FloatBuffer buffer = MemoryUtil.memAllocFloat(16*values.size());

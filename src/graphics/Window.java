@@ -89,7 +89,7 @@ public class Window {
 
         glfwSetKeyCallback(handle, (window, key, scanCode, action, mods) -> {
             if (action == GLFW_PRESS) {
-                input.pressedKeys.add(key);
+                input.addPressedKey(key);
             }
 //            System.out.printf("key=%s, scanCode=%s, action=%s, mods=%d\n", key, scanCode, action, mods);
         });
@@ -98,7 +98,7 @@ public class Window {
         return glfwWindowShouldClose(handle);
     }
     public void update() {
-        input.pressedKeys.clear();
+        input.clearPressedKeys();
         glfwPollEvents();
     }
     public long getHandle() {

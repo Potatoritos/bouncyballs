@@ -13,10 +13,8 @@ public class GoalTrigger extends CollisionTrigger {
         if (ball.getHoleColor() == parent.getHoleColor()) {
             ball.setHasReachedGoal(true);
             parent.setHasReachedGoal(true);
-            System.out.println("goal reached " + ball.getHoleColor());
         } else {
             ball.setIsDead(true);
-            System.out.println("killed ball from goaltrigger");
         }
     }
 }

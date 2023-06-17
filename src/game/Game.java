@@ -11,7 +11,7 @@ public class Game {
     private boolean isRunning;
     private Window window;
 
-    private LevelScene levelScene;
+    private GameScene gameScene;
 
     public Game() {
         isRunning = true;
@@ -23,8 +23,7 @@ public class Game {
         }
         window = new Window();
 
-        levelScene = new LevelScene(window.getWidth(), window.getHeight());
-        levelScene.loadLevel(Level.fromFile("level0.txt"));
+        gameScene = new GameScene(window.getWidth(), window.getHeight());
 
         loop();
     }
@@ -34,19 +33,19 @@ public class Game {
             isRunning = false;
         }
 
-        levelScene.update(window.input);
+        gameScene.update(window.input);
     }
     private void render() {
         if (window.isResized()) {
             glViewport(0, 0, window.getWidth(), window.getHeight());
             window.setResized(false);
 
-            levelScene.handleWindowResize(window.getWidth(), window.getHeight());
+            gameScene.handleWindowResize(window.getWidth(), window.getHeight());
 
         }
         FrameBufferObject.unbind();
 
-        levelScene.render();
+        gameScene.render();
 
         glfwSwapBuffers(window.getHandle()); // swap the color buffers
     }

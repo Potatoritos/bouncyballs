@@ -16,6 +16,7 @@ public class HoleBox extends Box {
         coverTimer = new FrameTimer(48);
         coverTimer.start();
         cover = new HoleBoxCover();
+        cover.position.set(geometry.position);
     }
     @Override
     public void update() {

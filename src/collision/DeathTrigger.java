@@ -7,7 +7,6 @@ public class DeathTrigger extends CollisionTrigger {
         super(collisionObject);
     }
     public void onCollision(Ball ball) {
-        System.out.println("ball killed");
         ball.setIsDead(true);
     }
 }

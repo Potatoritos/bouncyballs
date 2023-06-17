@@ -287,10 +287,10 @@ public class MeshGeometry {
         MeshBuilder builder = new MeshBuilder();
         builder.addQuad(
                 new Quad(
-                        new Vector3f(p.x, p.y, p.z),
                         new Vector3f(p.x+d.x, p.y, p.z),
-                        new Vector3f(p.x+d.x, p.y+d.y, p.z),
-                        new Vector3f(p.x, p.y+d.y, p.z)
+                        new Vector3f(p.x, p.y, p.z),
+                        new Vector3f(p.x, p.y+d.y, p.z),
+                        new Vector3f(p.x+d.x, p.y+d.y, p.z)
                 ),
                 new Quad(new Vector3f(0, 0, -1)),
                 colors
@@ -342,7 +342,7 @@ public class MeshGeometry {
                         new Vector3f(p.x, p.y+d.y, p.z+d.z),
                         new Vector3f(p.x+d.x, p.y+d.y, p.z+d.z)
                 ),
-                new Quad(new Vector3f(0, -1, 0)),
+                new Quad(new Vector3f(0, 1, 0)),
                 colors
         );
         return builder.createMesh();

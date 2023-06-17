@@ -14,7 +14,7 @@ public class DepthMapFbo extends FrameBufferObject {
         depthTexture = new Texture();
 
         depthTexture.bind();
-        depthTexture.setEmptyImage(width, height, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE);
+        depthTexture.setEmptyImage(width, height, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_FLOAT);
         Texture.unbind();
 
         bind();

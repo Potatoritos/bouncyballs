@@ -1,17 +1,14 @@
 package game;
 
 import collision.CollisionHandler3;
+import graphics.*;
 import mesh.Quad;
+import org.joml.Vector2f;
 import shape.Line3;
 import shape.Sphere;
-import graphics.EmptyFbo;
-import graphics.FrameBufferObject;
-import graphics.GameObjectMesh;
-import graphics.ShaderProgram;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 import org.lwjgl.system.MemoryUtil;
-import math.MathUtil;
 import util.Deletable;
 
 import java.nio.FloatBuffer;
@@ -34,8 +31,11 @@ public class LevelScene extends Scene {
 
     private final ShaderProgram colorNormalsInstanced;
     private final ShaderProgram outlineInstanced;
-    private final ShaderProgram sobelFilterInstanced;
+    private final ShaderProgram outShader;
+    private final ShaderProgram depthInstanced;
+    private final ShaderProgram textureShader;
     private final EmptyFbo edgeSourceFbo;
+    private final ShadowMap shadowMap;
     private final Vector3d rotation;
 
     private final ArrayList<Box> floorTiles;
@@ -53,8 +53,15 @@ public class LevelScene extends Scene {
     private boolean hasWon;
     private boolean isPaused;
 
+    private int windowWidth;
+    private int windowHeight;
+//    private final TextureMesh view;
+//    private final RenderEntity viewEntity;
+
     public LevelScene(int windowWidth, int windowHeight) {
         super();
+        this.windowWidth = windowWidth;
+        this.windowHeight = windowHeight;
         floorMesh = rectangularPrismMesh(
                 new Vector3f(0, 0, 0),
                 new Vector3f(1, 1, (float)floorTileHeight),
@@ -62,7 +69,7 @@ public class LevelScene extends Scene {
         );
         holeMesh = holeTileMesh(
                 new Vector3f(0f, 0f, 0f),
-                new Vector3f(1, 0, 0),
+                new Vector3f(1, 1, 0),
                 20,
                 0.4
         );
@@ -85,12 +92,14 @@ public class LevelScene extends Scene {
                 new Vector3f(1.1f, 0.1f, (float)(floorTileHeight+wallHeight)),
                 new Vector3f(0f, 0f, 0f)
         );
-        ballMesh = generateGeodesicPolyhedronMesh(3, new Vector3f(0f, 0f, 0f));
+        ballMesh = generateGeodesicPolyhedronMesh(3, new Vector3f(0f, 1f, 0f));
         gameObjectMeshes = new GameObjectMesh[] {floorMesh, holeMesh, holeCoverMesh, wallXMesh, wallYMesh, ballMesh};
 
         colorNormalsInstanced = ShaderProgram.fromFile("color_normals_instanced.glsl");
         outlineInstanced = ShaderProgram.fromFile("outline_instanced.glsl");
-        sobelFilterInstanced = ShaderProgram.fromFile("sobel_filter_instanced.glsl");
+        outShader = ShaderProgram.fromFile("shadows_sobelfilter.glsl");
+        depthInstanced = ShaderProgram.fromFile("depth_instanced.glsl");
+        textureShader = ShaderProgram.fromFile("texture.glsl");
 
         rotation = new Vector3d();
 
@@ -102,11 +111,14 @@ public class LevelScene extends Scene {
         balls = new ArrayList<>();
         gameObjects = new ArrayList[] {floorTiles, holeTiles, coverTiles, wallXTiles, wallYTiles, balls, };
 
-
         camera.position.z = 6;
 
         edgeSourceFbo = new EmptyFbo(windowWidth, windowHeight);
         handleWindowResize(windowWidth, windowHeight);
+        shadowMap = new ShadowMap(2048, 2048, 3.5f);
+
+//        view = texturedRectangle(new Vector2f(0, 0), new Vector2f(1, 1), shadowMap.depthMap.getDepthTexture());
+//        viewEntity = new RenderEntity(view, new Vector3f(1, 1, 2));
 
         hasDied = false;
         hasWon = false;
@@ -122,6 +134,8 @@ public class LevelScene extends Scene {
     public void handleWindowResize(int width, int height) {
         super.handleWindowResize(width, height);
         edgeSourceFbo.resize(width, height);
+        windowWidth = width;
+        windowHeight = height;
     }
     public void update(InputState input) {
         rotation.x = (cutMaxMin(input.mousePosition.y*1.2 - 0.1, 0, 1)-0.5) * Math.PI/3;
@@ -186,18 +200,25 @@ public class LevelScene extends Scene {
         }
     }
 
-    private void renderGameObjects(ShaderProgram shader) {
+    private void renderGameNormals(ShaderProgram shader) {
         for (int i = 0; i < gameObjects.length; i++) {
             setViewMatrices(shader, gameObjects[i]);
             setTransparencies(shader, gameObjects[i]);
             gameObjectMeshes[i].renderInstanced(gameObjects[i].size());
         }
     }
-    private void renderGameObjectsColor(ShaderProgram shader) {
+    private void renderDepths(ShaderProgram shader) {
+        for (int i = 0; i < gameObjects.length; i++) {
+            setWorldMatrices(shader, gameObjects[i]);
+            gameObjectMeshes[i].renderInstanced(gameObjects[i].size());
+        }
+    }
+    private void renderGameObjects(ShaderProgram shader) {
         for (int i = 0; i < gameObjects.length; i++) {
             setViewMatrices(shader, gameObjects[i]);
             setColors(0, shader, gameObjects[i]);
             setColors(1, shader, gameObjects[i]);
+            setWorldMatrices(shader, gameObjects[i]);
             gameObjectMeshes[i].renderInstanced(gameObjects[i].size());
         }
     }
@@ -209,6 +230,14 @@ public class LevelScene extends Scene {
         shader.setUniform1fv("transparency", buffer);
         MemoryUtil.memFree(buffer);
     }
+    private void setWorldMatrices(ShaderProgram shader, ArrayList<? extends GameObject> objects) {
+        FloatBuffer buffer = MemoryUtil.memAllocFloat(16*objects.size());
+        for (int i = 0; i < objects.size(); i++) {
+            objects.get(i).getWorldMatrix(rotation).get(i*16, buffer);
+        }
+        shader.setUniformMatrix4fv("worldMatrices", buffer);
+        MemoryUtil.memFree(buffer);
+    }
     private void setViewMatrices(ShaderProgram shader, ArrayList<? extends GameObject> objects) {
         FloatBuffer buffer = MemoryUtil.memAllocFloat(16*objects.size());
         for (int i = 0; i < objects.size(); i++) {
@@ -217,6 +246,7 @@ public class LevelScene extends Scene {
         shader.setUniformMatrix4fv("viewMatrices", buffer);
         MemoryUtil.memFree(buffer);
     }
+
     private void setColors(int index, ShaderProgram shader, ArrayList<? extends GameObject> objects) {
         FloatBuffer buffer = MemoryUtil.memAllocFloat(4*objects.size());
         for (int i = 0; i < objects.size(); i++) {
@@ -225,6 +255,7 @@ public class LevelScene extends Scene {
         shader.setUniform4fv("color" + index, buffer);
         MemoryUtil.memFree(buffer);
     }
+
     public void render() {
         if (level == null) return;
 
@@ -244,28 +275,51 @@ public class LevelScene extends Scene {
 //        glStencilFunc(GL_ALWAYS, 1, 0xFF);
 //        glStencilMask(0xFF);
 
+        // Draw normals to edgeSourceFbo
         edgeSourceFbo.bind();
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         colorNormalsInstanced.bind();
         colorNormalsInstanced.setUniform("projectionMatrix", camera.getProjectionMatrix());
 
-        renderGameObjects(colorNormalsInstanced);
+        renderGameNormals(colorNormalsInstanced);
 
+        // Compute shadow map
+        depthInstanced.bind();
+        shadowMap.depthMap.bind();
+        glViewport(0, 0, shadowMap.getWidth(), shadowMap.getHeight());
+        glClear(GL_DEPTH_BUFFER_BIT);
+//        glCullFace(GL_FRONT);
+        depthInstanced.setUniform("lightSpaceMatrix", shadowMap.lightSpaceMatrix);
+        renderDepths(depthInstanced);
         FrameBufferObject.unbind();
-        sobelFilterInstanced.bind();
-        sobelFilterInstanced.setUniform("normalTexture", 0);
-        sobelFilterInstanced.setUniform("depthTexture", 1);
-        sobelFilterInstanced.setUniform("projectionMatrix", camera.getProjectionMatrix());
+        glCullFace(GL_BACK);
+
+        // Draw to screen
+        glViewport(0, 0, windowWidth, windowHeight);
+        outShader.bind();
+        outShader.setUniform("normalTexture", 0);
+        outShader.setUniform("depthTexture", 1);
+        outShader.setUniform("shadowMap", 2);
+        outShader.setUniform("projectionMatrix", camera.getProjectionMatrix());
+        outShader.setUniform("lightSpaceMatrix", shadowMap.lightSpaceMatrix);
+
 
         glActiveTexture(GL_TEXTURE0);
         edgeSourceFbo.getColorTexture().bind();
         glActiveTexture(GL_TEXTURE1);
         edgeSourceFbo.getDepthTexture().bind();
+        glActiveTexture(GL_TEXTURE2);
+        shadowMap.depthMap.getDepthTexture().bind();
 
-        renderGameObjectsColor(sobelFilterInstanced);
+        renderGameObjects(outShader);
 
+//        textureShader.bind();
+//        textureShader.setUniform("viewMatrix", camera.getViewMatrix(viewEntity.getWorldMatrix()));
+//        textureShader.setUniform("projectionMatrix", camera.getProjectionMatrix());
+//        viewEntity.getMesh().render();
+//
 
 //        glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
 //        glStencilMask(0x00);

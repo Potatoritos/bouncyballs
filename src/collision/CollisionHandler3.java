@@ -88,7 +88,7 @@ public class CollisionHandler3 {
 
     public void addFallDeathTrigger() {
         addTrigger(new DeathTrigger(new CollisionPlane(null, new Plane(
-                new Vector3d(-100, -100, -2),
+                new Vector3d(-100, -100, -3),
                 new Vector3d(200, 0, 0),
                 new Vector3d(0, 200, 0)
         ))));

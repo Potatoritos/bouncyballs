@@ -52,7 +52,7 @@ public class Game {
     private void loop() {
         long previousTime = System.nanoTime(), currentTime;
         long updateDelta = 0, renderDelta = 0;
-        long nsPerUpdate = (long)(1e9 / 144), nsPerRender = (long)(1e9 / 60);
+        long nsPerUpdate = (long)(1e9 / 144), nsPerRender = (long)(1e9 / 144);
 
         int updateCount = 0, renderCount = 0;
         long previousFPSCalcTime = System.nanoTime();

@@ -51,6 +51,7 @@ public class LevelScene extends Scene {
 
     private boolean hasDied;
     private boolean hasWon;
+    private boolean isPaused;
 
     public LevelScene(int windowWidth, int windowHeight) {
         super();
@@ -127,6 +128,10 @@ public class LevelScene extends Scene {
         rotation.y = (cutMaxMin(input.mousePosition.x*1.2 - 0.1, 0, 1)-0.5) * Math.PI/3;
         if (rotation.length() > Math.PI/6) {
             rotation.normalize(Math.PI/6);
+        }
+
+        if (isPaused) {
+            return;
         }
 
         int ballsWon = 0;
@@ -228,8 +233,12 @@ public class LevelScene extends Scene {
 //        glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 //        glStencilMask(0xFF);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+        glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+        glFrontFace(GL_CCW);
         glEnable(GL_BLEND);
+        glDisable(GL_STENCIL_TEST);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 //        glStencilFunc(GL_ALWAYS, 1, 0xFF);
@@ -359,6 +368,9 @@ public class LevelScene extends Scene {
     }
     public void reset() {
         loadLevel(level);
+    }
+    public void setPaused(boolean value) {
+        isPaused = value;
     }
     public void delete() {
         for (Deletable obj : new Deletable[] {floorMesh, holeMesh, holeCoverMesh, wallXMesh, wallYMesh, colorNormalsInstanced, outlineInstanced}) {

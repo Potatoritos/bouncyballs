@@ -21,7 +21,6 @@ public class MathUtil {
         }
         return a;
     }
-
     public static double clipWithinEpsilon(double a, double... withinValues) {
         for (double x : withinValues) {
             if (withinEpsilon(a, x)) {
@@ -29,6 +28,10 @@ public class MathUtil {
             }
         }
         return a;
+    }
+
+    public static float cubicInterpolation(float x) {
+        return (x-1)*(x-1)*(x-1) + 1;
     }
 
     public static boolean withinRange(double value, double a, double b) {

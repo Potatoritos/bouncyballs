@@ -130,18 +130,19 @@ public class LevelScene extends Scene {
         previewRotation = new ContinuousFrameTimer(576);
         globalTranslation = new Vector3f();
     }
-    public void setPreviewMode(boolean value) {
-        previewRotation.setIsActive(value);
-        inPreviewMode = value;
-        if (value) {
-            globalScale = 0.7f;
-            globalTranslation.z = 1.5f;
-            rotation.set(0, 0, 0);
-        } else {
-            globalScale = 1;
-            globalTranslation.z = 0;
-            rotation.z = 0;
-        }
+    public void enterPreviewMode() {
+        previewRotation.start();
+        inPreviewMode = true;
+        globalScale = 0.7f;
+        globalTranslation.z = 1.5f;
+        rotation.set(0, 0, 0);
+    }
+    public void exitPreviewMode() {
+        previewRotation.stop();
+        inPreviewMode = false;
+        globalScale = 1;
+        globalTranslation.z = 0;
+        rotation.z = 0;
     }
     public boolean hasDied() {
         return hasDied;

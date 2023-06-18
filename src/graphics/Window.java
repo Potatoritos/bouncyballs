@@ -88,7 +88,6 @@ public class Window {
         });
 
         glfwSetScrollCallback(handle, (window, xOffset, yOffset) -> {
-            System.out.println(yOffset);
             if (yOffset > 0) {
                 input.addPressedKey(InputState.SCROLLWHEEL_UP);
             } else if (yOffset < 0) {

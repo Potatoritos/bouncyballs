@@ -4,6 +4,7 @@ import org.joml.Vector2d;
 
 import java.util.HashSet;
 
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_R;
 
 public class InputState {
@@ -28,5 +29,20 @@ public class InputState {
     public InputState() {
         mousePosition = new Vector2d();
         pressedKeys = new HashSet<>();
+    }
+    public boolean isNextLevelPressed() {
+        return isKeyPressed(SCROLLWHEEL_DOWN);
+    }
+    public boolean isPreviousLevelPressed() {
+        return isKeyPressed(SCROLLWHEEL_UP);
+    }
+    public boolean isSelectLevelPressed() {
+        return isKeyPressed(MOUSE_BUTTON_LEFT);
+    }
+    public boolean isExitKeyPressed() {
+        return isKeyPressed(GLFW_KEY_ESCAPE);
+    }
+    public boolean isResetKeyPressed() {
+        return isKeyPressed(GLFW_KEY_R);
     }
 }

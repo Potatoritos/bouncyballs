@@ -34,4 +34,7 @@ public class FrameTimer {
     public boolean isOnLastFrame() {
         return frame == totalFrames-1;
     }
+    public void end() {
+        frame = totalFrames;
+    }
 }

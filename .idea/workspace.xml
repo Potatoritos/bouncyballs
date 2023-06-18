@@ -10,20 +10,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
-      <change afterPath="$PROJECT_DIR$/assets/images/escape.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/images/mouse1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/images/mousewheel.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/graphics/NanoVGContext.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/graphics/NanoVGImage.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/test.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/test2.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/game/Colors.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Colors.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game/FrameTimer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/FrameTimer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/game/GameScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/GameScene.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/game/InputState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/InputState.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/game/LevelScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/LevelScene.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/Scene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Scene.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/graphics/Window.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/Window.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -206,7 +198,8 @@
       <workItem from="1686958105083" duration="42000" />
       <workItem from="1686958154881" duration="2014000" />
       <workItem from="1686993805924" duration="48835000" />
-      <workItem from="1687058003706" duration="11709000" />
+      <workItem from="1687058003706" duration="13249000" />
+      <workItem from="1687111286113" duration="7479000" />
     </task>
     <servers />
   </component>

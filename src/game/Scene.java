@@ -20,5 +20,6 @@ public abstract class Scene implements Deletable {
     }
     public abstract void update(InputState inputMap);
     public abstract void render();
+    public abstract void nvgRender(long nvg);
     public abstract void delete();
 }

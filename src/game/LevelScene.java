@@ -51,6 +51,10 @@ public class LevelScene extends Scene {
     private boolean hasDied;
     private boolean hasWon;
     private boolean isPaused;
+    private boolean inPreviewMode;
+    private final ContinuousFrameTimer previewRotation;
+    private float globalScale = 1;
+    private final Vector3f globalTranslation;
 
     private int windowWidth;
     private int windowHeight;
@@ -122,6 +126,20 @@ public class LevelScene extends Scene {
         hasDied = false;
         hasWon = false;
         collisionHandler = new CollisionHandler3();
+
+        previewRotation = new ContinuousFrameTimer(576);
+        globalTranslation = new Vector3f();
+    }
+    public void setPreviewMode(boolean value) {
+        previewRotation.setIsActive(value);
+        inPreviewMode = value;
+        if (value) {
+            globalScale = 0.7f;
+            globalTranslation.z = 1.5f;
+        } else {
+            globalScale = 1;
+            globalTranslation.z = 0;
+        }
     }
     public boolean hasDied() {
         return hasDied;
@@ -137,6 +155,12 @@ public class LevelScene extends Scene {
         windowHeight = height;
     }
     public void update(InputState input) {
+        if (inPreviewMode) {
+            rotation.x = -Math.PI/4;
+            rotation.z = previewRotation.percentage() * 2 * Math.PI;
+            previewRotation.update();
+            return;
+        }
         rotation.x = (cutMaxMin(input.mousePosition.y*1.2 - 0.1, 0, 1)-0.5) * Math.PI/3;
         rotation.y = (cutMaxMin(input.mousePosition.x*1.2 - 0.1, 0, 1)-0.5) * Math.PI/3;
         if (rotation.length() > Math.PI/6) {
@@ -232,7 +256,7 @@ public class LevelScene extends Scene {
     private void setWorldMatrices(ShaderProgram shader, ArrayList<? extends GameObject> objects) {
         FloatBuffer buffer = MemoryUtil.memAllocFloat(16*objects.size());
         for (int i = 0; i < objects.size(); i++) {
-            objects.get(i).getWorldMatrix(rotation).get(i*16, buffer);
+            objects.get(i).getWorldMatrix(rotation, globalTranslation, globalScale).get(i*16, buffer);
         }
         shader.setUniformMatrix4fv("worldMatrices", buffer);
         MemoryUtil.memFree(buffer);
@@ -240,7 +264,7 @@ public class LevelScene extends Scene {
     private void setViewMatrices(ShaderProgram shader, ArrayList<? extends GameObject> objects) {
         FloatBuffer buffer = MemoryUtil.memAllocFloat(16*objects.size());
         for (int i = 0; i < objects.size(); i++) {
-            camera.getViewMatrix(objects.get(i).getWorldMatrix(rotation)).get(i*16, buffer);
+            camera.getViewMatrix(objects.get(i).getWorldMatrix(rotation, globalTranslation, globalScale)).get(i*16, buffer);
         }
         shader.setUniformMatrix4fv("viewMatrices", buffer);
         MemoryUtil.memFree(buffer);
@@ -347,6 +371,10 @@ public class LevelScene extends Scene {
 //        outlineInstanced.unbind();
 //
 //        glDisable(GL_STENCIL_TEST);
+    }
+    @Override
+    public void nvgRender(long nvg) {
+
     }
     public void loadLevel(Level level) {
         this.level = level;

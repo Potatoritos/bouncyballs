@@ -5,6 +5,8 @@ import graphics.Window;
 import org.lwjgl.glfw.GLFWErrorCallback;
 
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.nanovg.NanoVG.*;
+import static org.lwjgl.nanovg.NanoVGGL3.*;
 import static org.lwjgl.opengl.GL30.*;
 
 public class Game {
@@ -12,6 +14,9 @@ public class Game {
     private Window window;
 
     private GameScene gameScene;
+
+    private long nvg;
+    private int font;
 
     public Game() {
         isRunning = true;
@@ -22,6 +27,8 @@ public class Game {
             throw new IllegalStateException("Unable to initialize GLFW");
         }
         window = new Window();
+        nvg = nvgCreate(NVG_ANTIALIAS | NVG_STENCIL_STROKES);
+        font = nvgCreateFont(nvg, "montserrat", "assets/fonts/Montserrat-Bold.otf");
 
         gameScene = new GameScene(window.getWidth(), window.getHeight());
 
@@ -46,6 +53,10 @@ public class Game {
         FrameBufferObject.unbind();
 
         gameScene.render();
+
+        nvgBeginFrame(nvg, window.getWidth(), window.getHeight(), 1);
+        gameScene.nvgRender(nvg);
+        nvgEndFrame(nvg);
 
         glfwSwapBuffers(window.getHandle()); // swap the color buffers
     }

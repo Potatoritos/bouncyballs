@@ -1,6 +1,7 @@
 package game;
 
 import math.Geometry;
+import org.joml.Vector3f;
 import shape.Line3;
 import shape.Sphere;
 import org.joml.Matrix4f;
@@ -81,10 +82,14 @@ public class Ball extends GameObject {
     public Vector3d getPosition() {
         return geometry.position;
     }
-    public Matrix4f getWorldMatrix(Vector3d globalRotation) {
+    @Override
+    public Matrix4f getWorldMatrix(Vector3d globalRotation, Vector3f globalTranslation, float globalScale) {
         return worldMatrix.identity()
+                .scale(globalScale)
                 .rotateX((float)globalRotation.x)
                 .rotateY((float)globalRotation.y)
+                .rotateZ((float)globalRotation.z)
+                .translate(globalTranslation)
                 .translate((float)getPosition().x, (float)getPosition().y, (float)getPosition().z)
                 .scale((float)getRadius());
     }

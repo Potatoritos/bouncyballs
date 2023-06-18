@@ -2,22 +2,26 @@ package game;
 
 import org.lwjgl.nanovg.NVGColor;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static math.MathUtil.cubicInterpolation;
 import static math.MathUtil.cutMaxMin;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_E;
 import static org.lwjgl.nanovg.NanoVG.*;
-import static org.lwjgl.nanovg.NanoVGGL3.*;
 
 public class GameScene extends Scene {
     private final LevelScene levelScene;
     private Level level;
     private int windowWidth;
     private int windowHeight;
-    private long nvg;
     private NVGColor nvgColor;
     private final FrameTimer swipeTimer;
     private boolean isLevelResetting;
     private boolean isLevelAdvancing;
+    private boolean inLevelSelect;
+    private final ArrayList<Level> levels;
     public GameScene(int windowWidth, int windowHeight) {
         this.windowWidth = windowWidth;
         this.windowHeight = windowHeight;
@@ -25,10 +29,30 @@ public class GameScene extends Scene {
         level = Level.fromFile("level0.txt");
         levelScene.loadLevel(level);
 
-        nvg = nvgCreate(NVG_ANTIALIAS | NVG_STENCIL_STROKES);
         nvgColor = NVGColor.create();
 
         swipeTimer = new FrameTimer(120);
+
+        levels = new ArrayList<>();
+        loadLevels();
+
+        setInLevelSelect(true);
+    }
+    public void setInLevelSelect(boolean value) {
+        inLevelSelect = value;
+        levelScene.setPreviewMode(value);
+    }
+    public void loadLevels() {
+        levels.clear();
+        File levelsDirectory = new File("assets/levels");
+        File[] levelFiles = levelsDirectory.listFiles();
+        if (levelFiles == null) {
+            throw new RuntimeException("No level files found!");
+        }
+        Arrays.sort(levelFiles);
+        for (File levelFile : levelFiles) {
+            levels.add(Level.fromFile(levelFile.getName()));
+        }
     }
     @Override
     public void handleWindowResize(int width, int height) {
@@ -69,7 +93,17 @@ public class GameScene extends Scene {
     @Override
     public void render() {
         levelScene.render();
+    }
 
+    @Override
+    public void nvgRender(long nvg) {
+        if (inLevelSelect) {
+            nvgFontFace(nvg, "montserrat");
+            nvgFontSize(nvg, 144*windowWidth / 1920);
+            nvgTextAlign(nvg, NVG_ALIGN_CENTER);
+            nvgFillColor(nvg, nvgRGB((byte)0, (byte)0, (byte)0, nvgColor));
+            nvgText(nvg, windowWidth/2f, windowHeight*0.93f, "level 01");
+        }
         if (swipeTimer.isActive()) {
             nvgBeginFrame(nvg, windowWidth, windowHeight, 1);
             nvgBeginPath(nvg);
@@ -93,9 +127,7 @@ public class GameScene extends Scene {
                 nvgFillColor(nvg, nvgRGB((byte)0xE7, (byte)0x84, (byte)0xFF, nvgColor));
             }
             nvgFill(nvg);
-            nvgEndFrame(nvg);
         }
-
     }
     @Override
     public void delete() {

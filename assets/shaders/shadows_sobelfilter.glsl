@@ -5,14 +5,14 @@ layout (location=0) in vec3 position;
 layout (location=1) in vec3 inNormal;
 layout (location=2) in vec3 inColor;
 
-uniform mat4 viewMatrices[100];
+uniform mat4 viewMatrices[200];
 uniform mat4 projectionMatrix;
-uniform vec4 color0[100];
-uniform vec4 color1[100];
+uniform vec4 color0[200];
+uniform vec4 color1[200];
 uniform vec4 inShadowColor;
 
 uniform mat4 lightSpaceMatrix;
-uniform mat4 worldMatrices[100];
+uniform mat4 worldMatrices[200];
 
 out vec4 color;
 out float glow;
@@ -110,7 +110,7 @@ void main() {
     float gradientNormal = max(max(gradient(r), gradient(g)), gradient(b));
     float gradientDepth = gradient(depth);
 
-    if (gradientDepth > 0.015 || gradientNormal > 1.25) {
+    if (gradientDepth >= 0.02 || gradientNormal >= 1.25) {
         fragColor = vec4(0, 0, 0, color.a);
     } else {
         float shadowFactor = glow*shadow(fragPosLightSpace);

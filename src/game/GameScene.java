@@ -129,6 +129,9 @@ public class GameScene extends Scene {
     private void changeSelectedLevelIndex(int index) {
         selectedLevelIndex = index;
         levelScene.loadLevel(levels.get(selectedLevelIndex));
+        if (inLevelSelect) {
+            levelScene.updatePreviewCameraDistance();
+        }
     }
     public void loadLevels() {
         levels.clear();
@@ -220,7 +223,7 @@ public class GameScene extends Scene {
             nvg.drawText(nvg.left(), nvg.bottom(), String.format("level %02d", selectedLevelIndex+1));
         }
         if (inLevelSelect) {
-//            nvg.drawImage(nvg.escapeImage, nvg.left(), nvg.top(), 1);
+            nvg.drawImage(nvg.escapeImage, nvg.left(), nvg.top(), 0.75f);
             nvg.drawImage(nvg.mouse1Image, nvg.left()+nvg.getWidth()*0.27f, nvg.bottom()-nvg.adjustedSize(nvg.mouse1Image.getHeight())*0.75f, 0.75f);
             nvg.drawImage(nvg.mousewheelImage, nvg.right()-nvg.adjustedSize(nvg.mousewheelImage.getWidth()-10), nvg.bottom()-nvg.adjustedSize(60), 0.75f);
 

@@ -6,8 +6,8 @@ layout (location=1) in vec3 normal;
 out vec4 color;
 
 uniform mat4 projectionMatrix;
-uniform mat4 viewMatrices[100];
-uniform float transparency[100];
+uniform mat4 viewMatrices[200];
+uniform float transparency[200];
 
 void main() {
     gl_Position = projectionMatrix * viewMatrices[gl_InstanceID] * vec4(position, 1.0);

@@ -127,18 +127,21 @@ public class LevelScene extends Scene {
 
         previewRotation = new ContinuousFrameTimer(576);
     }
+    public void updatePreviewCameraDistance() {
+        camera.position.set(0, -cameraDistanceFactor()*11/12, cameraDistanceFactor()*2/3);
+    }
     public void enterPreviewMode() {
         previewRotation.start();
         inPreviewMode = true;
-        camera.position.set(0, -5.5f, 4f);
         camera.rotation.x = -(float)Math.PI/4f;
+        updatePreviewCameraDistance();
         shadowMap.setSourcePosition(new Vector3f(-2, 2, 4));
         rotation.set(0, 0, 0);
     }
     public void exitPreviewMode() {
         previewRotation.stop();
         inPreviewMode = false;
-        camera.position.set(0, 0, 6);
+        camera.position.set(0, 0, cameraDistanceFactor());
         camera.rotation.x = 0;
         shadowMap.setSourcePosition(new Vector3f(0, 0, 4));
         rotation.z = 0;
@@ -345,6 +348,9 @@ public class LevelScene extends Scene {
     public void nvgRender(NanoVGContext nvg) {
 
     }
+    private float cameraDistanceFactor() {
+        return (float)(Math.max(level.getRows(), level.getColumns())/Math.tan(camera.getFov()/2)) * 0.7f;
+    }
     public void loadLevel(Level level) {
         this.level = level;
 
@@ -357,6 +363,8 @@ public class LevelScene extends Scene {
 
         hasWon = false;
         hasDied = false;
+
+        camera.position.z = cameraDistanceFactor();
 
         for (int i = 0; i < level.getRows(); i++) {
             for (int j = 0; j < level.getColumns(); j++) {

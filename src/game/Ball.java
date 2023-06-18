@@ -83,13 +83,11 @@ public class Ball extends GameObject {
         return geometry.position;
     }
     @Override
-    public Matrix4f getWorldMatrix(Vector3d globalRotation, Vector3f globalTranslation, float globalScale) {
+    public Matrix4f getWorldMatrix(Vector3d globalRotation) {
         return worldMatrix.identity()
-                .scale(globalScale)
                 .rotateX((float)globalRotation.x)
                 .rotateY((float)globalRotation.y)
                 .rotateZ((float)globalRotation.z)
-                .translate(globalTranslation)
                 .translate((float)getPosition().x, (float)getPosition().y, (float)getPosition().z)
                 .scale((float)getRadius());
     }

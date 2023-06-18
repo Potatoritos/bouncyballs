@@ -45,7 +45,7 @@ public class GameScene extends Scene {
         horizontalSwipeTimer = new FrameTimer(120);
         verticalSwipeTimer = new FrameTimer(240);
         levelClearTimer = new FrameTimer(180);
-        levelClearDelayTimer = new FrameTimer(72);
+        levelClearDelayTimer = new FrameTimer(48);
         enterLevelSelectTimer = new FrameTimer(49);
         enterLevelTimer = new FrameTimer(49);
         levelResetTimer = new FrameTimer(120);
@@ -221,8 +221,8 @@ public class GameScene extends Scene {
         }
         if (inLevelSelect) {
 //            nvg.drawImage(nvg.escapeImage, nvg.left(), nvg.top(), 1);
-            nvg.drawImage(nvg.mouse1Image, nvg.left()+nvg.getWidth()*0.27f, nvg.bottom()-nvg.adjustedSize(nvg.mouse1Image.getHeight()), 1);
-            nvg.drawImage(nvg.mousewheelImage, nvg.right()-nvg.adjustedSize(nvg.mousewheelImage.getWidth()), nvg.bottom()-nvg.adjustedSize(80), 1);
+            nvg.drawImage(nvg.mouse1Image, nvg.left()+nvg.getWidth()*0.27f, nvg.bottom()-nvg.adjustedSize(nvg.mouse1Image.getHeight())*0.75f, 0.75f);
+            nvg.drawImage(nvg.mousewheelImage, nvg.right()-nvg.adjustedSize(nvg.mousewheelImage.getWidth()-10), nvg.bottom()-nvg.adjustedSize(60), 0.75f);
 
             float scrollPosition = (float)selectedLevelIndex / Math.max(1, levels.size()-1);
             if (levels.size() == 1) {
@@ -254,7 +254,7 @@ public class GameScene extends Scene {
         if (levelClearTimer.isActive()) {
             nvg.setFillColor(Colors.pink);
             float x = levelClearTimer.fpercentage()*1.4f;
-            float y = nvg.adjustedSize(-600 * x * (x - 2));
+            float y = nvg.adjustedSize(-400 * x * (x - 2));
             nvg.fillRect(0, y, windowWidth, nvg.adjustedSize(300));
 
             nvg.setFontFace("montserrat");

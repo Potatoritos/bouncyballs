@@ -53,8 +53,6 @@ public class LevelScene extends Scene {
     private boolean isPaused;
     private boolean inPreviewMode;
     private final ContinuousFrameTimer previewRotation;
-    private float globalScale = 1;
-    private final Vector3f globalTranslation;
 
     private int windowWidth;
     private int windowHeight;
@@ -128,20 +126,21 @@ public class LevelScene extends Scene {
         collisionHandler = new CollisionHandler3();
 
         previewRotation = new ContinuousFrameTimer(576);
-        globalTranslation = new Vector3f();
     }
     public void enterPreviewMode() {
         previewRotation.start();
         inPreviewMode = true;
-        globalScale = 0.7f;
-        globalTranslation.z = 1.5f;
+        camera.position.set(0, -5.5f, 4f);
+        camera.rotation.x = -(float)Math.PI/4f;
+        shadowMap.setSourcePosition(new Vector3f(-2, 2, 4));
         rotation.set(0, 0, 0);
     }
     public void exitPreviewMode() {
         previewRotation.stop();
         inPreviewMode = false;
-        globalScale = 1;
-        globalTranslation.z = 0;
+        camera.position.set(0, 0, 6);
+        camera.rotation.x = 0;
+        shadowMap.setSourcePosition(new Vector3f(0, 0, 4));
         rotation.z = 0;
     }
     public boolean hasDied() {
@@ -159,7 +158,6 @@ public class LevelScene extends Scene {
     }
     public void update(InputState input) {
         if (inPreviewMode) {
-            rotation.x = -Math.PI/4;
             rotation.z = previewRotation.percentage() * 2 * Math.PI;
             previewRotation.update();
             return;
@@ -259,7 +257,7 @@ public class LevelScene extends Scene {
     private void setWorldMatrices(ShaderProgram shader, ArrayList<? extends GameObject> objects) {
         FloatBuffer buffer = MemoryUtil.memAllocFloat(16*objects.size());
         for (int i = 0; i < objects.size(); i++) {
-            objects.get(i).getWorldMatrix(rotation, globalTranslation, globalScale).get(i*16, buffer);
+            objects.get(i).getWorldMatrix(rotation).get(i*16, buffer);
         }
         shader.setUniformMatrix4fv("worldMatrices", buffer);
         MemoryUtil.memFree(buffer);
@@ -267,7 +265,7 @@ public class LevelScene extends Scene {
     private void setViewMatrices(ShaderProgram shader, ArrayList<? extends GameObject> objects) {
         FloatBuffer buffer = MemoryUtil.memAllocFloat(16*objects.size());
         for (int i = 0; i < objects.size(); i++) {
-            camera.getViewMatrix(objects.get(i).getWorldMatrix(rotation, globalTranslation, globalScale)).get(i*16, buffer);
+            camera.getViewMatrix(objects.get(i).getWorldMatrix(rotation)).get(i*16, buffer);
         }
         shader.setUniformMatrix4fv("viewMatrices", buffer);
         MemoryUtil.memFree(buffer);
@@ -342,38 +340,6 @@ public class LevelScene extends Scene {
         shadowMap.depthMap.getDepthTexture().bind();
 
         renderGameObjects(outShader);
-
-//        textureShader.bind();
-//        textureShader.setUniform("viewMatrix", camera.getViewMatrix(viewEntity.getWorldMatrix()));
-//        textureShader.setUniform("projectionMatrix", camera.getProjectionMatrix());
-//        viewEntity.getMesh().render();
-//
-
-//        glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-//        glStencilMask(0x00);
-
-//        outline.bind();
-//        outline.setUniform("projectionMatrix", camera.getProjectionMatrix());
-//        outline.setUniform("viewMatrix", camera.getViewMatrix(ball.getWorldMatrix(rotation)));
-//        outline.setUniform("expand", 0.05f);
-//        ballMesh.render();
-
-//        outlineInstanced.bind();
-//        outlineInstanced.setUniform("projectionMatrix", camera.getProjectionMatrix());
-//        outlineInstanced.setUniform("expand", 0.03f);
-//
-//        setViewMatrices(outlineInstanced, floorTiles);
-//        floorMesh.renderInstanced(floorTiles.size());
-//
-//        setViewMatrices(outlineInstanced, wallXTiles);
-//        wallXMesh.renderInstanced(wallXTiles.size());
-//
-//        setViewMatrices(outlineInstanced, wallYTiles);
-//        wallYMesh.renderInstanced(wallYTiles.size());
-//
-//        outlineInstanced.unbind();
-//
-//        glDisable(GL_STENCIL_TEST);
     }
     @Override
     public void nvgRender(NanoVGContext nvg) {

@@ -18,12 +18,20 @@ public class ShadowMap implements Deletable {
         depthMap = new DepthMapFbo(width, height);
         float nearPlane = 1.0f, farPlane = 7.5f;
         lightProjection = new Matrix4f().ortho(-radius, radius, -radius, radius, nearPlane, farPlane);
-        lightView = new Matrix4f().lookAt(
-                new Vector3f(0, 0, 4),
+        lightView = new Matrix4f();
+        lightSpaceMatrix = new Matrix4f();
+        setSourcePosition(new Vector3f(0, 0, 4));
+    }
+    public void setSourcePosition(Vector3f position) {
+        lightView.setLookAt(
+                position,
                 new Vector3f(0, 0, 0),
                 new Vector3f(0, 1, 0)
         );
-        lightSpaceMatrix = new Matrix4f(lightProjection).mul(lightView);
+        updateLightSpaceMatrix();
+    }
+    public void updateLightSpaceMatrix() {
+        lightSpaceMatrix.set(lightProjection).mul(lightView);
     }
     public int getWidth() {
         return width;

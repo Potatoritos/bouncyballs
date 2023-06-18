@@ -5,7 +5,7 @@ import graphics.PerspectiveCamera;
 import util.Deletable;
 
 public abstract class Scene implements Deletable {
-    protected PerspectiveCamera camera;
+    protected final PerspectiveCamera camera;
     public Scene() {
         camera = new PerspectiveCamera();
         camera.setFov((float)Math.PI/3);

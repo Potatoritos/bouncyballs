@@ -87,6 +87,21 @@ public class Window {
             input.mousePosition.y = (y - (height - minDimension)/2.0) / minDimension;
         });
 
+        glfwSetScrollCallback(handle, (window, xOffset, yOffset) -> {
+            System.out.println(yOffset);
+            if (yOffset > 0) {
+                input.addPressedKey(InputState.SCROLLWHEEL_UP);
+            } else if (yOffset < 0) {
+                input.addPressedKey(InputState.SCROLLWHEEL_DOWN);
+            }
+        });
+
+        glfwSetMouseButtonCallback(handle, (window, button, action, mods) -> {
+            if (action == GLFW_PRESS && button == GLFW_MOUSE_BUTTON_LEFT) {
+                input.addPressedKey(InputState.MOUSE_BUTTON_LEFT);
+            }
+        });
+
         glfwSetKeyCallback(handle, (window, key, scanCode, action, mods) -> {
             if (action == GLFW_PRESS) {
                 input.addPressedKey(key);
@@ -98,7 +113,6 @@ public class Window {
         return glfwWindowShouldClose(handle);
     }
     public void update() {
-        input.clearPressedKeys();
         glfwPollEvents();
     }
     public long getHandle() {

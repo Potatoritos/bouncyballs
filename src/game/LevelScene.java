@@ -136,9 +136,11 @@ public class LevelScene extends Scene {
         if (value) {
             globalScale = 0.7f;
             globalTranslation.z = 1.5f;
+            rotation.set(0, 0, 0);
         } else {
             globalScale = 1;
             globalTranslation.z = 0;
+            rotation.z = 0;
         }
     }
     public boolean hasDied() {
@@ -373,7 +375,7 @@ public class LevelScene extends Scene {
 //        glDisable(GL_STENCIL_TEST);
     }
     @Override
-    public void nvgRender(long nvg) {
+    public void nvgRender(NanoVGContext nvg) {
 
     }
     public void loadLevel(Level level) {
@@ -444,7 +446,7 @@ public class LevelScene extends Scene {
 
         for (int i = 0; i < level.numberBalls(); i++) {
             Ball ball = new Ball(
-                    new Sphere(new Vector3d(level.getPosX(level.getBallColumn(i))+0.5, level.getPosY(level.getBallRow(i))+0.5, 0.5), 0.35)
+                    new Sphere(new Vector3d(level.getPosX(level.getBallColumn(i))+0.5, level.getPosY(level.getBallRow(i))+0.5, 0.35), 0.35)
             );
             ball.getColor(0).set(Colors.base[i]);
             ball.setHoleColor(i+1);

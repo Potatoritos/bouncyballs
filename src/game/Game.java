@@ -15,8 +15,7 @@ public class Game {
 
     private GameScene gameScene;
 
-    private long nvg;
-    private int font;
+    private NanoVGContext nvg;
 
     public Game() {
         isRunning = true;
@@ -27,8 +26,7 @@ public class Game {
             throw new IllegalStateException("Unable to initialize GLFW");
         }
         window = new Window();
-        nvg = nvgCreate(NVG_ANTIALIAS | NVG_STENCIL_STROKES);
-        font = nvgCreateFont(nvg, "montserrat", "assets/fonts/Montserrat-Bold.otf");
+        nvg = new NanoVGContext();
 
         gameScene = new GameScene(window.getWidth(), window.getHeight());
 
@@ -38,9 +36,11 @@ public class Game {
         window.update();
         if (window.shouldClose()) {
             isRunning = false;
+            return;
         }
 
         gameScene.update(window.input);
+        window.input.clearPressedKeys();
     }
     private void render() {
         if (window.isResized()) {
@@ -54,9 +54,10 @@ public class Game {
 
         gameScene.render();
 
-        nvgBeginFrame(nvg, window.getWidth(), window.getHeight(), 1);
+        nvg.beginFrame(window.getWidth(), window.getHeight());
+//        nvgScale(nvg, (float)1920/window.getWidth(), (float)1920/window.getWidth());
         gameScene.nvgRender(nvg);
-        nvgEndFrame(nvg);
+        nvg.endFrame();
 
         glfwSwapBuffers(window.getHandle()); // swap the color buffers
     }
@@ -118,6 +119,7 @@ public class Game {
         }
     }
     public void close() {
+        gameScene.delete();
         window.delete();
         glfwTerminate();
         glfwSetErrorCallback(null).free();

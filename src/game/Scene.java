@@ -1,6 +1,6 @@
 package game;
 
-import game.InputState;
+import graphics.NanoVGContext;
 import graphics.PerspectiveCamera;
 import util.Deletable;
 
@@ -20,6 +20,6 @@ public abstract class Scene implements Deletable {
     }
     public abstract void update(InputState inputMap);
     public abstract void render();
-    public abstract void nvgRender(long nvg);
+    public abstract void nvgRender(NanoVGContext nvg);
     public abstract void delete();
 }

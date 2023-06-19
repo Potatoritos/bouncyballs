@@ -378,6 +378,7 @@ public class LevelScene extends Scene {
         coverTiles.clear();
         wallXTiles.clear();
         wallYTiles.clear();
+        tallTiles.clear();
         balls.clear();
 
         hasWon = false;

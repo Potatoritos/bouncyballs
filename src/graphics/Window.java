@@ -85,6 +85,7 @@ public class Window {
             int minDimension = Math.min(height, width);
             input.mousePosition.x = (x - (width - minDimension)/2.0) / minDimension;
             input.mousePosition.y = (y - (height - minDimension)/2.0) / minDimension;
+            input.actualMousePosition.set(x, y);
         });
 
         glfwSetScrollCallback(handle, (window, xOffset, yOffset) -> {
@@ -112,6 +113,7 @@ public class Window {
         return glfwWindowShouldClose(handle);
     }
     public void update() {
+        input.clearPressedKeys();
         glfwPollEvents();
     }
     public long getHandle() {

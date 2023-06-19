@@ -40,6 +40,10 @@ public class GameScene extends Scene {
     private final UIButton fpsCapButton;
     private final UIButton gameSpeedButton;
     private final UIButton[] buttons;
+    private float buttonX;
+    private float buttonY;
+    private float buttonGap;
+    private float buttonLength;
     public GameScene(int windowWidth, int windowHeight) {
         this.windowWidth = windowWidth;
         this.windowHeight = windowHeight;
@@ -71,6 +75,18 @@ public class GameScene extends Scene {
         gameSpeedButton.setText("speed");
         gameSpeedButton.setSecondaryText("1.00x");
         buttons = new UIButton[] {levelSelectButton, aboutButton, fpsCapButton, gameSpeedButton};
+
+        buttonX = 970;
+        buttonY = 300;
+        buttonGap = 30;
+        buttonLength = 300;
+//        Vector2d buttonSize = new Vector2d(buttonLength, buttonLength);
+//        float x1 = buttonX;
+//        float x2 = buttonX+buttonGap+buttonLength;
+//        levelSelectButton.geometry.set(new Vector2d(x1, buttonY), buttonSize);
+//        aboutButton.geometry.set(new Vector2d(x2, buttonY), buttonSize);
+//        fpsCapButton.geometry.set(new Vector2d(x1, buttonY+buttonGap+buttonLength), buttonSize);
+//        gameSpeedButton.geometry.set(new Vector2d(x2, buttonY+buttonGap+buttonLength), buttonSize);
 
         loadLevels();
 
@@ -291,23 +307,20 @@ public class GameScene extends Scene {
             nvg.setFontSize(nvg.scaledHeightSize(110));
             nvg.drawText(nvg.adjustedSceneX(920), nvg.scaledHeightSize(180), "bouncy balls");
 
-            float buttonX = 970;
-            float buttonY = 300;
-            float gap = 30;
-            float length = 300;
+            // TODO: clean up
             float hoverPadding = 5;
-            Vector2d buttonSize1 = new Vector2d(nvg.adjustedSceneX(buttonX+length) - nvg.adjustedSceneX(buttonX), nvg.scaledHeightSize(length));
-            Vector2d buttonSize2 = new Vector2d(nvg.adjustedSceneX(buttonX+gap+2*length) - nvg.adjustedSceneX(buttonX+gap+length), nvg.scaledHeightSize(length));
+            Vector2d buttonSize1 = new Vector2d(nvg.adjustedSceneX(buttonX+buttonLength) - nvg.adjustedSceneX(buttonX), nvg.scaledHeightSize(buttonLength));
+            Vector2d buttonSize2 = new Vector2d(nvg.adjustedSceneX(buttonX+buttonGap+2*buttonLength) - nvg.adjustedSceneX(buttonX+buttonGap+buttonLength), nvg.scaledHeightSize(buttonLength));
 
             float x1 = nvg.adjustedSceneX(buttonX);
-            float x2 = nvg.adjustedSceneX(buttonX+gap+length);
+            float x2 = nvg.adjustedSceneX(buttonX+buttonGap+buttonLength);
             levelSelectButton.geometry.set(new Vector2d(x1, nvg.scaledHeightSize(buttonY)), buttonSize1);
             aboutButton.geometry.set(new Vector2d(x2, nvg.scaledHeightSize(buttonY)), buttonSize1);
-            fpsCapButton.geometry.set(new Vector2d(x1, nvg.scaledHeightSize(buttonY+gap+length)), buttonSize2);
-            gameSpeedButton.geometry.set(new Vector2d(x2, nvg.scaledHeightSize(buttonY+gap+length)), buttonSize2);
+            fpsCapButton.geometry.set(new Vector2d(x1, nvg.scaledHeightSize(buttonY+buttonGap+buttonLength)), buttonSize2);
+            gameSpeedButton.geometry.set(new Vector2d(x2, nvg.scaledHeightSize(buttonY+buttonGap+buttonLength)), buttonSize2);
             for (UIButton button : buttons) {
                 if (button.isHoveredOver()) {
-                    nvg.setFillColor(Colors.black);
+                    nvg.setFillColor(Colors.backgroundDarker);
                     nvg.fillRect((float)button.geometry.position.x-hoverPadding, (float)button.geometry.position.y-hoverPadding, (float)button.geometry.displacement.x+2*hoverPadding, (float)button.geometry.displacement.y+2*hoverPadding);
                     nvg.setFillColor(Colors.tile);
                     nvg.setFontFace("montserrat_bold");

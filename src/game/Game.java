@@ -40,7 +40,6 @@ public class Game {
         }
 
         gameScene.update(window.input);
-        window.input.clearPressedKeys();
     }
     private void render() {
         if (window.isResized()) {

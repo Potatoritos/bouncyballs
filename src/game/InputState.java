@@ -12,6 +12,7 @@ public class InputState {
     public static final int SCROLLWHEEL_DOWN = 727272728;
     public static final int MOUSE_BUTTON_LEFT = 727272729;
     public final Vector2d mousePosition;
+    public final Vector2d actualMousePosition;
     private final HashSet<Integer> pressedKeys;
     private int resetKey = GLFW_KEY_R;
     public int getResetKey() {
@@ -28,6 +29,7 @@ public class InputState {
     }
     public InputState() {
         mousePosition = new Vector2d();
+        actualMousePosition = new Vector2d();
         pressedKeys = new HashSet<>();
     }
     public boolean isNextLevelPressed() {

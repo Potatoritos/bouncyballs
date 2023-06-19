@@ -32,10 +32,7 @@ public class UIButton {
         return isClicked;
     }
     public void update(InputState input) {
-        isHoveredOver = geometry.isPointInRectangle(input.mousePosition);
-        if (isHoveredOver) {
-            System.out.println("edfwefwef");
-        }
+        isHoveredOver = geometry.isPointInRectangle(input.actualMousePosition);
         isClicked = isHoveredOver && input.isSelectLevelPressed();
     }
 }

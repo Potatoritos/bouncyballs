@@ -49,6 +49,10 @@ public class Game {
 
         gameScene.update(window.input);
 
+        if (gameScene.hasRequestedExit()) {
+            isRunning = false;
+            return;
+        }
         setRenderFps(gameScene.getRequestedFpsCap());
         setUpdateFps((int)Math.round(144 * gameScene.getRequestedGameSpeed()));
     }

@@ -27,11 +27,13 @@ public class GameScene extends Scene {
     private final FrameTimer advanceTimer;
     private final FrameTimer enterMainMenuTimer;
     private final FrameTimer enterAboutTimer;
+    private final FrameTimer gameExitTimer;
     private final FrameTimer levelTitleTimer;
     private final FrameTimer[] timers;
     private boolean inLevelSelect;
     private boolean inLevel;
     private boolean inMainMenu;
+    private boolean inAboutMenu;
     private boolean inTransition;
     private boolean atEndOfLevels;
     private final ArrayList<Level> levels;
@@ -51,6 +53,7 @@ public class GameScene extends Scene {
     private double requestedGameSpeed;
     private double[] gameSpeeds;
     private int gameSpeedIndex;
+    private boolean hasRequestedExit;
     public GameScene(int windowWidth, int windowHeight) {
         this.windowWidth = windowWidth;
         this.windowHeight = windowHeight;
@@ -66,9 +69,10 @@ public class GameScene extends Scene {
         advanceTimer = new FrameTimer(240);
         enterMainMenuTimer = new FrameTimer(49);
         enterAboutTimer = new FrameTimer(49);
+        gameExitTimer = new FrameTimer(72);
         levelTitleTimer = new FrameTimer(432);
 
-        timers = new FrameTimer[] {horizontalSwipeTimer, verticalSwipeTimer, levelClearTimer, levelClearDelayTimer, enterLevelSelectTimer, enterLevelTimer, levelResetTimer, advanceTimer, enterMainMenuTimer, enterAboutTimer, levelTitleTimer};
+        timers = new FrameTimer[] {horizontalSwipeTimer, verticalSwipeTimer, levelClearTimer, levelClearDelayTimer, enterLevelSelectTimer, enterLevelTimer, levelResetTimer, advanceTimer, enterMainMenuTimer, enterAboutTimer, gameExitTimer, levelTitleTimer};
 
         levels = new ArrayList<>();
 
@@ -96,6 +100,7 @@ public class GameScene extends Scene {
         requestedGameSpeed = 1;
         gameSpeeds = new double[] {0.5, 0.75, 1, 1.5, 2};
         gameSpeedIndex = 2;
+        horizontalSwipeTimer.start(49);
 
 //        startEnterLevelSelect();
         endEnterMainMenu();
@@ -107,6 +112,30 @@ public class GameScene extends Scene {
     public double getRequestedGameSpeed() {
         return requestedGameSpeed;
     }
+    public boolean hasRequestedExit() {
+        return hasRequestedExit;
+    }
+    private void startRequestExit() {
+        gameExitTimer.start();
+        horizontalSwipeTimer.start();
+        inTransition = true;
+    }
+    private void endRequestExit() {
+        hasRequestedExit = true;
+        inTransition = false;
+    }
+    private void startEnterAboutMenu() {
+        enterAboutTimer.start();
+        horizontalSwipeTimer.start();
+        inTransition = true;
+    }
+    private void endEnterAboutMenu() {
+        inLevelSelect = false;
+        inMainMenu = false;
+        inLevel = false;
+        inAboutMenu = true;
+        inTransition = false;
+    }
     private void startEnterMainMenu() {
         enterMainMenuTimer.start();
         horizontalSwipeTimer.start();
@@ -117,6 +146,7 @@ public class GameScene extends Scene {
         inLevel = false;
         inLevelSelect = false;
         inMainMenu = true;
+        inAboutMenu = false;
         levelScene.enterMainMenuMode();
         inTransition = false;
     }
@@ -129,6 +159,7 @@ public class GameScene extends Scene {
         inLevel = false;
         inMainMenu = false;
         inLevelSelect = true;
+        inAboutMenu = false;
         setLevelToSelected();
         levelScene.enterPreviewMode();
         levelTitleTimer.end();
@@ -222,6 +253,7 @@ public class GameScene extends Scene {
             timer.update();
         }
 
+        // TODO: create some sort of function callback class so i can avoid doing this
         if (enterLevelSelectTimer.isOnLastFrame()) {
             endEnterLevelSelect();
         }
@@ -247,6 +279,12 @@ public class GameScene extends Scene {
         if (enterMainMenuTimer.isOnLastFrame()) {
             endEnterMainMenu();
         }
+        if (enterAboutTimer.isOnLastFrame()) {
+            endEnterAboutMenu();
+        }
+        if (gameExitTimer.isOnLastFrame()) {
+            endRequestExit();
+        }
 
         for (UIButton button : buttons) {
             button.update(input);
@@ -264,7 +302,7 @@ public class GameScene extends Scene {
                     startEnterMainMenu();
                 }
             } else if (inLevel) {
-                if (levelScene.hasWon() || input.isKeyPressed(GLFW_KEY_W)) {
+                if (levelScene.hasWon()) {
                     startLevelClearDelay();
                 } else if (input.isExitKeyPressed()) {
                     startEnterLevelSelect();
@@ -282,6 +320,14 @@ public class GameScene extends Scene {
                     gameSpeedIndex = (gameSpeedIndex+1) % gameSpeeds.length;
                     requestedGameSpeed = gameSpeeds[gameSpeedIndex];
                     gameSpeedButton.setSecondaryText(String.format("%.2fx", requestedGameSpeed));
+                } else if (aboutButton.isClicked()) {
+                    startEnterAboutMenu();
+                } else if (input.isExitKeyPressed()) {
+                    startRequestExit();
+                }
+            } else if (inAboutMenu) {
+                if (input.isExitKeyPressed()) {
+                    startEnterMainMenu();
                 }
             }
         }
@@ -355,7 +401,33 @@ public class GameScene extends Scene {
             nvg.renderButton(aboutButton, nx2);
             nvg.renderButton(fpsCapButton, nx1);
             nvg.renderButton(gameSpeedButton, nx2);
+        } else if (inAboutMenu) {
+            nvg.setFillColor(Colors.tile);
+            nvg.fillRect(0, 0, windowWidth, windowHeight);
+            nvg.setFillColor(Colors.backgroundDarker);
+            nvg.setFontFace("montserrat_bold");
+            nvg.setTextAlign(NVG_ALIGN_LEFT);
+            nvg.setFillColor(Colors.backgroundDarker);
+            nvg.setFontSize(nvg.scaledHeightSize(80));
+            nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(150), "About");
+
+            nvg.setFontFace("montserrat");
+            nvg.setFontSize(nvg.scaledHeightSize(40));
+            nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(250), "By Elliott Cheng. My first OpenGL project!");
+            nvg.setFontFace("montserrat_bold");
+            nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(350), "Instructions:");
+            nvg.setFontFace("montserrat");
+            nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(400), "Move your mouse to tilt the board.");
+            nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(450), "Your objective is to maneuver all balls into their respective holes.");
+            nvg.setFontFace("montserrat_bold");
+            nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(550), "Non-explicitly-stated controls:");
+            nvg.drawText(nvg.adjustedSceneX(150), nvg.scaledHeightSize(600), "Esc");
+            nvg.drawText(nvg.adjustedSceneX(150), nvg.scaledHeightSize(650), "R");
+            nvg.setFontFace("montserrat");
+            nvg.drawText(nvg.adjustedSceneX(250), nvg.scaledHeightSize(600), "- back to previous menu / exit game");
+            nvg.drawText(nvg.adjustedSceneX(250), nvg.scaledHeightSize(650), "- restart level");
         }
+
         if (horizontalSwipeTimer.isActive()) {
             nvg.setFillColor(Colors.black);
             if (horizontalSwipeTimer.getFrame() <= 48) {

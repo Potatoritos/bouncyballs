@@ -153,6 +153,7 @@ public class LevelScene extends Scene {
     }
     public void enterPreviewMode() {
         previewRotation.start();
+        inMainMenuMode = false;
         inPreviewMode = true;
         camera.rotation.x = -(float)Math.PI/4f;
         updatePreviewCameraDistance();
@@ -171,10 +172,14 @@ public class LevelScene extends Scene {
         rotation.z = 0;
     }
     public void enterMainMenuMode() {
+        previewRotation.stop();
+        rotation.z = 0;
+        inPreviewMode = false;
+        inMainMenuMode = true;
+        camera.rotation.x = 0;
         camera.position.set(0.5, 0, 5);
         shadowMap.setSourcePosition(new Vector3f(2, 2, 4));
         shadowMap.updateLightSpaceMatrix();
-        inMainMenuMode = true;
     }
     public boolean hasDied() {
         return hasDied;

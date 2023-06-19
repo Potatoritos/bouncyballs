@@ -13,9 +13,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/game/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Game.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/game/GameScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/GameScene.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/InputState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/InputState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/UIButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/UIButton.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/Window.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/Window.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game/LevelScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/LevelScene.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -203,7 +201,7 @@
       <workItem from="1687111286113" duration="13356000" />
       <workItem from="1687130244942" duration="5145000" />
       <workItem from="1687141607862" duration="3514000" />
-      <workItem from="1687145132256" duration="16435000" />
+      <workItem from="1687145132256" duration="17777000" />
     </task>
     <servers />
   </component>

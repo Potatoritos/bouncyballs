@@ -16,9 +16,17 @@ public class Game {
     private GameScene gameScene;
 
     private NanoVGContext nvg;
+    private long nsPerUpdate;
+    private long nsPerRender;
 
     public Game() {
         isRunning = true;
+    }
+    public void setUpdateFps(int fps) {
+        nsPerUpdate = (long)(1e9 / fps);
+    }
+    public void setRenderFps(int fps) {
+        nsPerRender = (long)(1e9 / fps);
     }
     public void run() {
         GLFWErrorCallback.createPrint(System.err).set();
@@ -40,6 +48,9 @@ public class Game {
         }
 
         gameScene.update(window.input);
+
+        setRenderFps(gameScene.getRequestedFpsCap());
+        setUpdateFps((int)Math.round(144 * gameScene.getRequestedGameSpeed()));
     }
     private void render() {
         if (window.isResized()) {
@@ -63,7 +74,8 @@ public class Game {
     private void loop() {
         long previousTime = System.nanoTime(), currentTime;
         long updateDelta = 0, renderDelta = 0;
-        long nsPerUpdate = (long)(1e9 / 144), nsPerRender = (long)(1e9 / 144);
+        setUpdateFps(144);
+        setRenderFps(144);
 
         int updateCount = 0, renderCount = 0;
         long previousFPSCalcTime = System.nanoTime();
@@ -78,7 +90,7 @@ public class Game {
             renderDelta += currentTime - previousTime;
 
             while (updateDelta >= nsPerUpdate) {
-                long time = System.nanoTime();
+//                long time = System.nanoTime();
                 update();
 //                updateTime += System.nanoTime() - time;
 //                updateTimeCounter++;
@@ -108,13 +120,6 @@ public class Game {
                 updateCount = 0;
                 renderCount = 0;
             }
-//            LockSupport.parkNanos((long)1e6);
-
-//            try {
-//                Thread.sleep(1);
-//            } catch (InterruptedException e) {
-//                System.out.println("zxczxzxc");
-//            }
         }
     }
     public void close() {

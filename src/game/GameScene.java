@@ -44,6 +44,12 @@ public class GameScene extends Scene {
     private float buttonY;
     private float buttonGap;
     private float buttonLength;
+    private int requestedFpsCap;
+    private int[] fpsCaps;
+    private int fpsCapIndex;
+    private double requestedGameSpeed;
+    private double[] gameSpeeds;
+    private int gameSpeedIndex;
     public GameScene(int windowWidth, int windowHeight) {
         this.windowWidth = windowWidth;
         this.windowHeight = windowHeight;
@@ -80,19 +86,23 @@ public class GameScene extends Scene {
         buttonY = 300;
         buttonGap = 30;
         buttonLength = 300;
-//        Vector2d buttonSize = new Vector2d(buttonLength, buttonLength);
-//        float x1 = buttonX;
-//        float x2 = buttonX+buttonGap+buttonLength;
-//        levelSelectButton.geometry.set(new Vector2d(x1, buttonY), buttonSize);
-//        aboutButton.geometry.set(new Vector2d(x2, buttonY), buttonSize);
-//        fpsCapButton.geometry.set(new Vector2d(x1, buttonY+buttonGap+buttonLength), buttonSize);
-//        gameSpeedButton.geometry.set(new Vector2d(x2, buttonY+buttonGap+buttonLength), buttonSize);
 
         loadLevels();
+
+        requestedFpsCap = 144;
+        fpsCaps = new int[] {144, 30, 60};
+        requestedGameSpeed = 1;
+        gameSpeeds = new double[] {1, 0.5, 0.75};
 
 //        startEnterLevelSelect();
         endEnterMainMenu();
 //        levelScene.loadLevel(levels.get(selectedLevelIndex));
+    }
+    public int getRequestedFpsCap() {
+        return requestedFpsCap;
+    }
+    public double getRequestedGameSpeed() {
+        return requestedGameSpeed;
     }
     private void startEnterMainMenu() {
         enterMainMenuTimer.start();
@@ -101,6 +111,7 @@ public class GameScene extends Scene {
     }
     private void endEnterMainMenu() {
         levelScene.loadLevel(Level.fromFile("level_mainmenu.txt"));
+        inLevel = false;
         inLevelSelect = false;
         inMainMenu = true;
         levelScene.enterMainMenuMode();
@@ -115,7 +126,7 @@ public class GameScene extends Scene {
         inLevel = false;
         inMainMenu = false;
         inLevelSelect = true;
-        levelScene.reset();
+        setLevelToSelected();
         levelScene.enterPreviewMode();
         levelTitleTimer.end();
         inTransition = false;
@@ -175,6 +186,9 @@ public class GameScene extends Scene {
     }
     private void changeSelectedLevelIndex(int index) {
         selectedLevelIndex = index;
+        setLevelToSelected();
+    }
+    private void setLevelToSelected() {
         levelScene.loadLevel(levels.get(selectedLevelIndex));
         if (inLevelSelect) {
             levelScene.updatePreviewCameraDistance();
@@ -254,6 +268,18 @@ public class GameScene extends Scene {
                 } else if (levelScene.hasDied() || input.isResetKeyPressed()) {
                     startLevelReset();
                 }
+            } else if (inMainMenu) {
+                if (levelSelectButton.isClicked()) {
+                    startEnterLevelSelect();
+                } else if (fpsCapButton.isClicked()) {
+                    fpsCapIndex = (fpsCapIndex+1) % fpsCaps.length;
+                    requestedFpsCap = fpsCaps[fpsCapIndex];
+                    fpsCapButton.setSecondaryText(Integer.toString(requestedFpsCap));
+                } else if (gameSpeedButton.isClicked()) {
+                    gameSpeedIndex = (gameSpeedIndex+1) % fpsCaps.length;
+                    requestedGameSpeed = gameSpeeds[gameSpeedIndex];
+                    gameSpeedButton.setSecondaryText(String.format("%.2fx", requestedGameSpeed));
+                }
             }
         }
 
@@ -328,8 +354,8 @@ public class GameScene extends Scene {
                     nvg.drawText((float)button.geometry.x1() + nvg.adjustedSceneX(20), (float)button.geometry.y1() + nvg.scaledHeightSize(60), button.getText());
 
                     nvg.setFontFace("montserrat");
-                    nvg.setFontSize(nvg.scaledHeightSize(100));
-                    nvg.drawText((float)button.geometry.x1() + nvg.adjustedSceneX(20), (float)button.geometry.y2() - nvg.scaledHeightSize(30), button.getSecondaryText());
+                    nvg.setFontSize(nvg.scaledHeightSize(90));
+                    nvg.drawText((float)button.geometry.x1() + nvg.adjustedSceneX(20), (float)button.geometry.y2() - nvg.scaledHeightSize(20), button.getSecondaryText());
                 } else {
                     nvg.setStrokeColor(Colors.black);
                     nvg.setStrokeWidth(nvg.scaledHeightSize(4));
@@ -340,8 +366,8 @@ public class GameScene extends Scene {
                     nvg.drawText((float)button.geometry.x1() + nvg.adjustedSceneX(20), (float)button.geometry.y1() + nvg.scaledHeightSize(60), button.getText());
 
                     nvg.setFontFace("montserrat");
-                    nvg.setFontSize(nvg.scaledHeightSize(100));
-                    nvg.drawText((float)button.geometry.x1() + nvg.adjustedSceneX(20), (float)button.geometry.y2() - nvg.scaledHeightSize(30), button.getSecondaryText());
+                    nvg.setFontSize(nvg.scaledHeightSize(90));
+                    nvg.drawText((float)button.geometry.x1() + nvg.adjustedSceneX(20), (float)button.geometry.y2() - nvg.scaledHeightSize(20), button.getSecondaryText());
                 }
             }
         }

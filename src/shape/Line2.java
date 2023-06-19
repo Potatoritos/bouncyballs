@@ -36,6 +36,9 @@ public class Line2 {
     public double y2() {
         return position.y + displacement.y;
     }
+    public boolean isPointInRectangle(Vector2d point) {
+        return x1() <= point.x && point.x <= x2() && y1() <= point.y && point.y <= y2();
+    }
     public String toString() {
         return String.format("[Line2 pos=%s d=%s]", position, displacement);
     }

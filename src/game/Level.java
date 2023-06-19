@@ -13,6 +13,7 @@ public class Level implements Comparable<Level> {
     private final int[] ballRow;
     private final int[] ballColumn;
     private final String name;
+    private boolean isMainMenu;
     private Level(String name, int rows, int columns, int numBalls) {
         this.name = name;
         this.rows = rows;
@@ -22,6 +23,12 @@ public class Level implements Comparable<Level> {
         this.wallYState = new boolean[rows+1][columns];
         ballRow = new int[numBalls];
         ballColumn = new int[numBalls];
+    }
+    public boolean isMainMenu() {
+        return isMainMenu;
+    }
+    public void setMainMenu(boolean value) {
+        isMainMenu = value;
     }
     public String getName() {
         return name;
@@ -93,6 +100,9 @@ public class Level implements Comparable<Level> {
                 throw new RuntimeException("Invalid level number of balls");
             }
             Level level = new Level(name, rows, columns, numBalls);
+            if (name.equals("mainmenu")) {
+                level.setMainMenu(true);
+            }
             for (int i = 0; i < rows; i++) {
                 String row = br.readLine();
                 if (row.length() != columns) new RuntimeException("Invalid level file - special tiles malformed");

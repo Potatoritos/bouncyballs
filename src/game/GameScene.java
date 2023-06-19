@@ -1,16 +1,15 @@
 package game;
 
 import graphics.NanoVGContext;
+import org.joml.Vector2d;
 import org.joml.Vector4f;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 import static math.MathUtil.cubicInterpolation;
 import static math.MathUtil.cutMaxMin;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
 import static org.lwjgl.nanovg.NanoVG.*;
 
@@ -26,18 +25,21 @@ public class GameScene extends Scene {
     private final FrameTimer enterLevelTimer;
     private final FrameTimer levelResetTimer;
     private final FrameTimer advanceTimer;
+    private final FrameTimer enterMainMenuTimer;
     private final FrameTimer levelTitleTimer;
     private final FrameTimer[] timers;
-    private boolean isLevelResetting;
-    private boolean isLevelAdvancing;
-    private boolean isLevelSelected;
     private boolean inLevelSelect;
     private boolean inLevel;
-    private boolean hasEscaped;
+    private boolean inMainMenu;
     private boolean inTransition;
     private boolean atEndOfLevels;
     private final ArrayList<Level> levels;
     private int selectedLevelIndex;
+    private final UIButton levelSelectButton;
+    private final UIButton aboutButton;
+    private final UIButton fpsCapButton;
+    private final UIButton gameSpeedButton;
+    private final UIButton[] buttons;
     public GameScene(int windowWidth, int windowHeight) {
         this.windowWidth = windowWidth;
         this.windowHeight = windowHeight;
@@ -51,15 +53,42 @@ public class GameScene extends Scene {
         enterLevelTimer = new FrameTimer(49);
         levelResetTimer = new FrameTimer(120);
         advanceTimer = new FrameTimer(240);
+        enterMainMenuTimer = new FrameTimer(49);
         levelTitleTimer = new FrameTimer(432);
-        timers = new FrameTimer[] {horizontalSwipeTimer, verticalSwipeTimer, levelClearTimer, levelClearDelayTimer, enterLevelSelectTimer, enterLevelTimer, levelResetTimer, advanceTimer, levelTitleTimer};
+
+        timers = new FrameTimer[] {horizontalSwipeTimer, verticalSwipeTimer, levelClearTimer, levelClearDelayTimer, enterLevelSelectTimer, enterLevelTimer, levelResetTimer, advanceTimer, enterMainMenuTimer, levelTitleTimer};
 
         levels = new ArrayList<>();
+
+        levelSelectButton = new UIButton();
+        levelSelectButton.setText("play");
+        aboutButton = new UIButton();
+        aboutButton.setText("about");
+        fpsCapButton = new UIButton();
+        fpsCapButton.setText("fps cap");
+        fpsCapButton.setSecondaryText("144");
+        gameSpeedButton = new UIButton();
+        gameSpeedButton.setText("speed");
+        gameSpeedButton.setSecondaryText("1.00x");
+        buttons = new UIButton[] {levelSelectButton, aboutButton, fpsCapButton, gameSpeedButton};
+
         loadLevels();
 
-        startEnterLevelSelect();
-        isLevelSelected = false;
-        levelScene.loadLevel(levels.get(selectedLevelIndex));
+//        startEnterLevelSelect();
+        endEnterMainMenu();
+//        levelScene.loadLevel(levels.get(selectedLevelIndex));
+    }
+    private void startEnterMainMenu() {
+        enterMainMenuTimer.start();
+        horizontalSwipeTimer.start();
+        inTransition = true;
+    }
+    private void endEnterMainMenu() {
+        levelScene.loadLevel(Level.fromFile("level_mainmenu.txt"));
+        inLevelSelect = false;
+        inMainMenu = true;
+        levelScene.enterMainMenuMode();
+        inTransition = false;
     }
     private void startEnterLevelSelect() {
         enterLevelSelectTimer.start();
@@ -68,6 +97,7 @@ public class GameScene extends Scene {
     }
     private void endEnterLevelSelect() {
         inLevel = false;
+        inMainMenu = false;
         inLevelSelect = true;
         levelScene.reset();
         levelScene.enterPreviewMode();
@@ -94,7 +124,7 @@ public class GameScene extends Scene {
     }
     private void endEnterLevel() {
         inLevelSelect = false;
-        levelScene.exitPreviewMode();
+        levelScene.enterLevelMode();
 
         levelTitleTimer.start();
         inTransition = false;
@@ -136,13 +166,13 @@ public class GameScene extends Scene {
     }
     public void loadLevels() {
         levels.clear();
-        File levelsDirectory = new File("assets/levels");
+        File levelsDirectory = new File("assets/levels/main");
         File[] levelFiles = levelsDirectory.listFiles();
         if (levelFiles == null || levelFiles.length == 0) {
             throw new RuntimeException("No level files found!");
         }
         for (File levelFile : levelFiles) {
-            levels.add(Level.fromFile(levelFile.getName()));
+            levels.add(Level.fromFile("main/" + levelFile.getName()));
         }
         Collections.sort(levels);
     }
@@ -181,6 +211,13 @@ public class GameScene extends Scene {
         } else if (advanceTimer.isOnLastFrame()) {
             endAdvanceLevel();
         }
+        if (enterMainMenuTimer.isOnLastFrame()) {
+            endEnterMainMenu();
+        }
+
+        for (UIButton button : buttons) {
+            button.update(input);
+        }
 
         if (!inTransition && !horizontalSwipeTimer.isActive() && !verticalSwipeTimer.isActive()) {
             if (inLevelSelect) {
@@ -190,6 +227,8 @@ public class GameScene extends Scene {
                     changeSelectedLevelIndex(Math.min(selectedLevelIndex+1, levels.size()-1));
                 } else if (input.isSelectLevelPressed()) {
                     startEnterLevel();
+                } else if (input.isExitKeyPressed()) {
+                    startEnterMainMenu();
                 }
             } else if (inLevel) {
                 if (levelScene.hasWon() || input.isKeyPressed(GLFW_KEY_W)) {
@@ -217,33 +256,81 @@ public class GameScene extends Scene {
             if (levelTitleTimer.isActive() && levelTitleTimer.getFrame() >= 288) {
                 color.w = 1 - (levelTitleTimer.getFrame()-288f) / 144;
             }
-            nvg.setFontFace("montserrat");
-            nvg.setFontSize(120);
+            nvg.setFontFace("montserrat_bold");
+            nvg.setFontSize(nvg.scaledWidthSize(120));
             nvg.setTextAlign(NVG_ALIGN_LEFT);
             nvg.setFillColor(color);
             nvg.drawText(nvg.left(), nvg.bottom(), String.format("level %02d", selectedLevelIndex+1));
         }
         if (inLevelSelect) {
             nvg.drawImage(nvg.escapeImage, nvg.left(), nvg.top(), 0.75f);
-            nvg.drawImage(nvg.mouse1Image, nvg.left()+nvg.getWidth()*0.27f, nvg.bottom()-nvg.adjustedSize(nvg.mouse1Image.getHeight())*0.75f, 0.75f);
-            nvg.drawImage(nvg.mousewheelImage, nvg.right()-nvg.adjustedSize(nvg.mousewheelImage.getWidth()-10), nvg.bottom()-nvg.adjustedSize(60), 0.75f);
+            nvg.drawImage(nvg.mouse1Image, nvg.left()+nvg.getWidth()*0.27f, nvg.bottom()-nvg.scaledWidthSize(nvg.mouse1Image.getHeight())*0.75f, 0.75f);
+            nvg.drawImage(nvg.mousewheelImage, nvg.right()-nvg.scaledWidthSize(nvg.mousewheelImage.getWidth()-10), nvg.bottom()-nvg.scaledWidthSize(60), 0.75f);
 
             float scrollPosition = (float)selectedLevelIndex / Math.max(1, levels.size()-1);
             if (levels.size() == 1) {
                 scrollPosition = 1;
             }
-            nvg.setStrokeWidth(nvg.adjustedSize(6));
+            nvg.setStrokeWidth(nvg.scaledWidthSize(6));
             nvg.setStrokeColor(Colors.backgroundDarker);
-            float scrollX = nvg.right() - nvg.adjustedSize(42);
-            float scrollY = nvg.bottom() - nvg.adjustedSize(100);
+            float scrollX = nvg.right() - nvg.scaledWidthSize(42);
+            float scrollY = nvg.bottom() - nvg.scaledWidthSize(100);
             nvg.drawLine(scrollX, nvg.top(), scrollX, scrollY);
             scrollY -= nvg.top();
 
             nvg.setFillColor(Colors.backgroundDarker);
-            nvg.fillCircle(scrollX, nvg.top() + scrollPosition*scrollY, nvg.adjustedSize(20));
+            nvg.fillCircle(scrollX, nvg.top() + scrollPosition*scrollY, nvg.scaledWidthSize(20));
 
 //                nvgImagePattern(nvg, left + windowWidth*0.1f, bottom, windowWidth*83f/1920, windowWidth*68f/1920, 0, resources.getEscapeImage(), 1f, imagePaint);
 
+        } else if (inMainMenu) {
+            nvg.setFontFace("montserrat_bold");
+            nvg.setTextAlign(NVG_ALIGN_LEFT);
+            nvg.setFillColor(Colors.backgroundDarker);
+
+            nvg.setFontSize(nvg.scaledHeightSize(110));
+            nvg.drawText(nvg.adjustedSceneX(920), nvg.scaledHeightSize(180), "bouncy balls");
+
+            float buttonX = 970;
+            float buttonY = 300;
+            float gap = 30;
+            float length = 300;
+            float hoverPadding = 5;
+            Vector2d buttonSize1 = new Vector2d(nvg.adjustedSceneX(buttonX+length) - nvg.adjustedSceneX(buttonX), nvg.scaledHeightSize(length));
+            Vector2d buttonSize2 = new Vector2d(nvg.adjustedSceneX(buttonX+gap+2*length) - nvg.adjustedSceneX(buttonX+gap+length), nvg.scaledHeightSize(length));
+
+            float x1 = nvg.adjustedSceneX(buttonX);
+            float x2 = nvg.adjustedSceneX(buttonX+gap+length);
+            levelSelectButton.geometry.set(new Vector2d(x1, nvg.scaledHeightSize(buttonY)), buttonSize1);
+            aboutButton.geometry.set(new Vector2d(x2, nvg.scaledHeightSize(buttonY)), buttonSize1);
+            fpsCapButton.geometry.set(new Vector2d(x1, nvg.scaledHeightSize(buttonY+gap+length)), buttonSize2);
+            gameSpeedButton.geometry.set(new Vector2d(x2, nvg.scaledHeightSize(buttonY+gap+length)), buttonSize2);
+            for (UIButton button : buttons) {
+                if (button.isHoveredOver()) {
+                    nvg.setFillColor(Colors.black);
+                    nvg.fillRect((float)button.geometry.position.x-hoverPadding, (float)button.geometry.position.y-hoverPadding, (float)button.geometry.displacement.x+2*hoverPadding, (float)button.geometry.displacement.y+2*hoverPadding);
+                    nvg.setFillColor(Colors.tile);
+                    nvg.setFontFace("montserrat_bold");
+                    nvg.setFontSize(nvg.scaledHeightSize(50));
+                    nvg.drawText((float)button.geometry.x1() + nvg.adjustedSceneX(20), (float)button.geometry.y1() + nvg.scaledHeightSize(60), button.getText());
+
+                    nvg.setFontFace("montserrat");
+                    nvg.setFontSize(nvg.scaledHeightSize(100));
+                    nvg.drawText((float)button.geometry.x1() + nvg.adjustedSceneX(20), (float)button.geometry.y2() - nvg.scaledHeightSize(30), button.getSecondaryText());
+                } else {
+                    nvg.setStrokeColor(Colors.black);
+                    nvg.setStrokeWidth(nvg.scaledHeightSize(4));
+                    nvg.drawRect((float)button.geometry.position.x, (float)button.geometry.position.y, (float)button.geometry.displacement.x, (float)button.geometry.displacement.y);
+                    nvg.setFillColor(Colors.backgroundDarker);
+                    nvg.setFontFace("montserrat_bold");
+                    nvg.setFontSize(nvg.scaledHeightSize(50));
+                    nvg.drawText((float)button.geometry.x1() + nvg.adjustedSceneX(20), (float)button.geometry.y1() + nvg.scaledHeightSize(60), button.getText());
+
+                    nvg.setFontFace("montserrat");
+                    nvg.setFontSize(nvg.scaledHeightSize(100));
+                    nvg.drawText((float)button.geometry.x1() + nvg.adjustedSceneX(20), (float)button.geometry.y2() - nvg.scaledHeightSize(30), button.getSecondaryText());
+                }
+            }
         }
         if (horizontalSwipeTimer.isActive()) {
             nvg.setFillColor(Colors.black);
@@ -256,16 +343,16 @@ public class GameScene extends Scene {
             }
         }
         if (levelClearTimer.isActive()) {
-            nvg.setFillColor(Colors.pink);
+            nvg.setFillColor(Colors.green);
             float x = levelClearTimer.fpercentage()*1.4f;
-            float y = nvg.adjustedSize(-400 * x * (x - 2));
-            nvg.fillRect(0, y, windowWidth, nvg.adjustedSize(300));
+            float y = nvg.scaledWidthSize(-400 * x * (x - 2));
+            nvg.fillRect(0, y, windowWidth, nvg.scaledWidthSize(300));
 
-            nvg.setFontFace("montserrat");
-            nvg.setFontSize(120);
+            nvg.setFontFace("montserrat_bold");
+            nvg.setFontSize(nvg.scaledWidthSize(120));
             nvg.setTextAlign(NVG_ALIGN_CENTER);
-            nvg.setFillColor(Colors.black);
-            nvg.drawText(windowWidth/2, y+nvg.adjustedSize(190), "LEVEL CLEAR");
+            nvg.setFillColor(Colors.backgroundDarker);
+            nvg.drawText(windowWidth/2, y+nvg.scaledWidthSize(190), "LEVEL CLEAR");
         }
         if (verticalSwipeTimer.isActive()) {
             nvg.setFillColor(Colors.black);

@@ -1,7 +1,7 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="Tilt:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/Tilt_jar</output-path>
-    <root id="archive" name="Tilt.jar">
+  <artifact type="jar" name="BouncyBalls:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/BouncyBalls_jar</output-path>
+    <root id="archive" name="BouncyBalls.jar">
       <element id="module-output" name="BouncyBalls" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lwjgl-release-3.3.2-custom/lwjgl-egl.jar" path-in-jar="/" />

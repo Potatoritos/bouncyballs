@@ -10,14 +10,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
-      <change afterPath="$PROJECT_DIR$/assets/levels/level4.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/fonts/Montserrat-Medium.otf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/images/title.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/levels/level_mainmenu.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/game/UIButton.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/Tilt_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/BouncyBalls_jar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/level0.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/level1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/level1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/level2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/level2.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/level3.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/level3.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/levels/level1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/main/level1.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/levels/level2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/main/level2.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/levels/level3.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/main/level3.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/levels/level4.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/main/level4.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/game/GameScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/GameScene.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/game/Level.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Level.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game/LevelScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/LevelScene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/NanoVGContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/NanoVGContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/RenderEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/RenderObject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/Texture.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/Texture.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/Window.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/Window.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/shape/Line2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/shape/Line2.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,7 +82,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "SDKs",
+    "project.structure.last.edited": "Artifacts",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "preferences.editor",
@@ -86,6 +96,7 @@
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/assets/levels" />
+      <recent name="$PROJECT_DIR$/assets/levels/main" />
       <recent name="$PROJECT_DIR$/assets/shader" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -203,6 +214,8 @@
       <workItem from="1687058003706" duration="13249000" />
       <workItem from="1687111286113" duration="13356000" />
       <workItem from="1687130244942" duration="5145000" />
+      <workItem from="1687141607862" duration="3514000" />
+      <workItem from="1687145132256" duration="15316000" />
     </task>
     <servers />
   </component>

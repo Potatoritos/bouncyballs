@@ -3,7 +3,6 @@ package game;
 import collision.CollisionHandler3;
 import graphics.*;
 import mesh.Quad;
-import org.joml.Vector2f;
 import shape.Line3;
 import shape.Sphere;
 import org.joml.Vector3d;
@@ -32,9 +31,9 @@ public class LevelScene extends Scene {
 
     private final ShaderProgram colorNormalsInstanced;
     private final ShaderProgram outlineInstanced;
-    private final ShaderProgram outShader;
+    private final ShaderProgram outInstanced;
     private final ShaderProgram depthInstanced;
-//    private final ShaderProgram textureShader;
+    private final ShaderProgram textureShader;
     private final EmptyFbo edgeSourceFbo;
     private final ShadowMap shadowMap;
     private final Vector3d rotation;
@@ -55,13 +54,18 @@ public class LevelScene extends Scene {
     private boolean hasWon;
     private boolean isPaused;
     private boolean inPreviewMode;
+    private boolean inMainMenuMode;
     private final ContinuousFrameTimer previewRotation;
+    private final ContinuousFrameTimer mainMenuVelocity;
+    private final FrameTimer mainMenuRespawn;
 
 
     private int windowWidth;
     private int windowHeight;
 //    private final TextureMesh view;
 //    private final RenderEntity viewEntity;
+//    private final RenderObject title;
+//    private final Texture titleTexture;
 
     public LevelScene(int windowWidth, int windowHeight) {
         super();
@@ -107,9 +111,9 @@ public class LevelScene extends Scene {
 
         colorNormalsInstanced = ShaderProgram.fromFile("color_normals_instanced.glsl");
         outlineInstanced = ShaderProgram.fromFile("outline_instanced.glsl");
-        outShader = ShaderProgram.fromFile("shadows_sobelfilter.glsl");
+        outInstanced = ShaderProgram.fromFile("shadows_sobelfilter.glsl");
         depthInstanced = ShaderProgram.fromFile("depth_instanced.glsl");
-//        textureShader = ShaderProgram.fromFile("texture.glsl");
+        textureShader = ShaderProgram.fromFile("texture.glsl");
 
         rotation = new Vector3d();
 
@@ -136,6 +140,12 @@ public class LevelScene extends Scene {
         collisionHandler = new CollisionHandler3();
 
         previewRotation = new ContinuousFrameTimer(576);
+        mainMenuVelocity = new ContinuousFrameTimer(576);
+        mainMenuRespawn = new FrameTimer(72);
+
+//        titleTexture = new Texture();
+//        titleTexture.loadImage("assets/images/astolfo_necoarc.png");
+//        title = new RenderObject(texturedRectangle(new Vector2f(0, 0), new Vector2f(1, 1), titleTexture));
     }
     public void updatePreviewCameraDistance() {
         float factor = cameraDistanceFactor();
@@ -150,14 +160,21 @@ public class LevelScene extends Scene {
         shadowMap.updateLightSpaceMatrix();
         rotation.set(0, 0, 0);
     }
-    public void exitPreviewMode() {
+    public void enterLevelMode() {
         previewRotation.stop();
         inPreviewMode = false;
+        inMainMenuMode = false;
         camera.position.set(0, 0, cameraDistanceFactor());
         camera.rotation.x = 0;
         shadowMap.setSourcePosition(new Vector3f(0, 0, 4));
         shadowMap.updateLightSpaceMatrix();
         rotation.z = 0;
+    }
+    public void enterMainMenuMode() {
+        camera.position.set(0.5, 0, 5);
+        shadowMap.setSourcePosition(new Vector3f(2, 2, 4));
+        shadowMap.updateLightSpaceMatrix();
+        inMainMenuMode = true;
     }
     public boolean hasDied() {
         return hasDied;
@@ -172,22 +189,7 @@ public class LevelScene extends Scene {
         windowWidth = width;
         windowHeight = height;
     }
-    public void update(InputState input) {
-        if (inPreviewMode) {
-            rotation.z = previewRotation.percentage() * 2 * Math.PI;
-            previewRotation.update();
-            return;
-        }
-        rotation.x = (cutMaxMin(input.mousePosition.y*1.2 - 0.1, 0, 1)-0.5) * Math.PI/3;
-        rotation.y = (cutMaxMin(input.mousePosition.x*1.2 - 0.1, 0, 1)-0.5) * Math.PI/3;
-        if (rotation.length() > Math.PI/6) {
-            rotation.normalize(Math.PI/6);
-        }
-
-        if (isPaused) {
-            return;
-        }
-
+    public void updateBalls() {
         int ballsWon = 0;
 
         for (Ball ball : balls) {
@@ -235,6 +237,42 @@ public class LevelScene extends Scene {
         if (ballsWon == balls.size()) {
             hasWon = true;
         }
+    }
+    public void update(InputState input) {
+        if (inMainMenuMode) {
+//            mainMenuRespawn.update();
+            mainMenuVelocity.update();
+            mainMenuVelocity.start();
+            for (Ball ball : balls) {
+                if (ball.isDead()) {
+//                    mainMenuRespawn.start();
+                    ball.setIsDead(false);
+                    ball.velocity.set(Math.random()*0.01, Math.random()*0.01, 0);
+                    ball.geometry.position.set(-0.5 - Math.random(), 3.35, 0.35);
+                }
+
+                ball.velocity.x -= 0.00004 * Math.sin(2*Math.PI*mainMenuVelocity.percentage());
+                ball.velocity.y -= 0.00005;
+            }
+            updateBalls();
+            return;
+        }
+        if (inPreviewMode) {
+            rotation.z = previewRotation.percentage() * 2 * Math.PI;
+            previewRotation.update();
+            return;
+        }
+        rotation.x = (cutMaxMin(input.mousePosition.y*1.2 - 0.1, 0, 1)-0.5) * Math.PI/3;
+        rotation.y = (cutMaxMin(input.mousePosition.x*1.2 - 0.1, 0, 1)-0.5) * Math.PI/3;
+        if (rotation.length() > Math.PI/6) {
+            rotation.normalize(Math.PI/6);
+        }
+
+        if (isPaused) {
+            return;
+        }
+
+        updateBalls();
 
         for (HoleBox hole : holeTiles) {
             hole.update();
@@ -340,14 +378,14 @@ public class LevelScene extends Scene {
 
         // Draw to screen
         glViewport(0, 0, windowWidth, windowHeight);
-        outShader.bind();
+        outInstanced.bind();
 //        outShader.setUniform("inShadowColor", Colors.hexRGBA(0xd48fe3ff));
-        outShader.setUniform("inShadowColor", Colors.background);
-        outShader.setUniform("normalTexture", 0);
-        outShader.setUniform("depthTexture", 1);
-        outShader.setUniform("shadowMap", 2);
-        outShader.setUniform("projectionMatrix", camera.getProjectionMatrix());
-        outShader.setUniform("lightSpaceMatrix", shadowMap.lightSpaceMatrix);
+        outInstanced.setUniform("inShadowColor", Colors.background);
+        outInstanced.setUniform("normalTexture", 0);
+        outInstanced.setUniform("depthTexture", 1);
+        outInstanced.setUniform("shadowMap", 2);
+        outInstanced.setUniform("projectionMatrix", camera.getProjectionMatrix());
+        outInstanced.setUniform("lightSpaceMatrix", shadowMap.lightSpaceMatrix);
 
         glActiveTexture(GL_TEXTURE0);
         edgeSourceFbo.getColorTexture().bind();
@@ -356,12 +394,15 @@ public class LevelScene extends Scene {
         glActiveTexture(GL_TEXTURE2);
         shadowMap.depthMap.getDepthTexture().bind();
 
-        renderGameObjects(outShader);
+        renderGameObjects(outInstanced);
 
-//        textureShader.bind();
-//        textureShader.setUniform("viewMatrix", camera.getViewMatrix(viewEntity.getWorldMatrix()));
-//        textureShader.setUniform("projectionMatrix", camera.getProjectionMatrix());
-//        viewEntity.getMesh().render();
+//        if (level.isMainMenu()) {
+//            textureShader.bind();
+//            textureShader.setUniform("viewMatrix", camera.getViewMatrix(title.getWorldMatrix(rotation)));
+//            textureShader.setUniform("projectionMatrix", camera.getProjectionMatrix());
+//            textureShader.setUniform("textureSampler", 0);
+//            title.mesh.render();
+//        }
     }
     @Override
     public void nvgRender(NanoVGContext nvg) {
@@ -389,6 +430,10 @@ public class LevelScene extends Scene {
         shadowMap.setRadius(Math.max(level.getRows(), level.getColumns())*0.7f);
 //        shadowMap.setFarPlane(factor * 1.25f);
         shadowMap.updateLightSpaceMatrix();
+//
+//        if (level.isMainMenu()) {
+//            title.position.set(-1, -1, 1);
+//        }
 
         for (int i = 0; i < level.getRows(); i++) {
             for (int j = 0; j < level.getColumns(); j++) {
@@ -466,7 +511,7 @@ public class LevelScene extends Scene {
         isPaused = value;
     }
     public void delete() {
-        for (Deletable obj : new Deletable[] {floorMesh, holeMesh, holeCoverMesh, wallXMesh, wallYMesh, colorNormalsInstanced, outlineInstanced}) {
+        for (Deletable obj : new Deletable[] {floorMesh, holeMesh, holeCoverMesh, wallXMesh, wallYMesh, tallTileMesh, ballMesh, colorNormalsInstanced, outlineInstanced, depthInstanced, outInstanced, textureShader}) {
             obj.delete();
         }
     }

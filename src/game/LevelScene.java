@@ -1,6 +1,6 @@
 package game;
 
-import collision.CollisionHandler3;
+import collision.CollisionHandler;
 import graphics.*;
 import mesh.Quad;
 import shape.Line3;
@@ -46,7 +46,7 @@ public class LevelScene extends Scene {
     private final ArrayList<Box> tallTiles;
     private final ArrayList<Ball> balls;
     private final ArrayList<? extends GameObject>[] gameObjects;
-    private final CollisionHandler3 collisionHandler;
+    private final CollisionHandler collisionHandler;
     private final double floorTileHeight = 0.5;
     private final double wallHeight = 0.75;
 
@@ -137,7 +137,7 @@ public class LevelScene extends Scene {
 
         hasDied = false;
         hasWon = false;
-        collisionHandler = new CollisionHandler3();
+        collisionHandler = new CollisionHandler();
 
         previewRotation = new ContinuousFrameTimer(576);
         mainMenuVelocity = new ContinuousFrameTimer(576);

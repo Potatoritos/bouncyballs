@@ -8,7 +8,7 @@ import org.joml.Vector3d;
 
 import static math.Geometry.*;
 
-public class CollisionPlane extends CollisionObject3 {
+public class CollisionPlane extends CollisionObject {
     protected final Plane plane;
     private final Vector3d midpoint;
     public CollisionPlane(GameObject parent, Plane plane) {

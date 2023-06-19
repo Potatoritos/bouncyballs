@@ -10,9 +10,6 @@ import static math.MathUtil.*;
 
 
 public class Geometry {
-    private static final Vector3d xHat = new Vector3d(1, 0, 0);
-    private static final Vector3d yHat = new Vector3d(0, 1, 0);
-    private static final Vector3d zHat = new Vector3d(0, 0, 1);
 
     // Stores the projection of a onto b in result
     // note: result should not be the same variable as a
@@ -136,7 +133,7 @@ public class Geometry {
             } else if (cylinder.axis.y == 0) {
                 rotationMatrix.rotationY(Math.PI/2);
             } else {
-                rotationMatrix.rotationZ(cylinder.axis.angle(xHat));
+                rotationMatrix.rotationZ(cylinder.axis.angle(new Vector3d(1, 0, 0)));
                 rotationMatrix.rotateY(Math.PI/2);
             }
             rotatedLine.position.mul(rotationMatrix);
@@ -222,64 +219,6 @@ public class Geometry {
         return scaleLine(line, intersectionLineCircle(line, circle), result);
     }
 
-    // Finds the intersection (x,y) of the
-    // rays given by the parametric equations
-    //  ⎡ x = at + b
-    //  ⎣ y = ct + d
-    // and
-    //  ⎡ x = e
-    //  ⎣ y = gs + h
-    // where 0 ≤ s,t ≤ 1
-    public static boolean intersectionLineWallX(double a, double b, double c, double d, double e, double g, double h, Vector2d result) {
-        if (a == 0 || g == 0) {
-            return false;
-        }
-        double t = (e-b)/a;
-        double s = (c*t + d - h)/g;
-        if (t < 0 || t > 1 || s < 0 || s > 1) {
-            t = clipWithinEpsilon(clipWithinEpsilon(t, 0), 1);
-            s = clipWithinEpsilon(clipWithinEpsilon(t, 0), 1);
-//            boolean t1Within = withinEpsilon(t, 0);
-//            boolean t2Within = withinEpsilon(s, 0);
-//            t = clipWithinEpsilon(t, 0);
-//            s = clipWithinEpsilon(s, 0);
-//            if (t1Within) t = 0;
-//            if (t2Within) s = 0;
-//            if (!t1Within && !t2Within) {
-//                return false;
-//            }
-            if (t < 0 || t > 1 || s < 0 || s > 1)
-                return false;
-        }
-        result.set(a*t+b, c*t+d);
-        return true;
-    }
-
-    public static boolean intersectionLineWallX(Line2 line, Line2 wall, Vector2d result) {
-        return intersectionLineWallX(line.displacement.x, line.position.x, line.displacement.y, line.position.y, wall.position.x, wall.displacement.y, wall.position.y, result);
-    }
-
-    // Finds the intersection (x,y) of the
-    // rays given by the parametric equations
-    //  ⎡ x = at + b
-    //  ⎣ y = ct + d
-    // and
-    //  ⎡ x = es + f
-    //  ⎣ y = g
-    // where 0 ≤ s,t ≤ 1
-    public static boolean intersectionLineWallY(double a, double b, double c, double d, double e, double f, double g, Vector2d result) {
-        boolean r = intersectionLineWallX(c, d, a, b, g, e, f, result);
-        result.set(result.y, result.x);
-        return r;
-    }
-
-    public static boolean intersectionLineWallY(Line2 line, Line2 wall, Vector2d result) {
-        return intersectionLineWallY(line.displacement.x, line.position.x, line.displacement.y, line.position.y, wall.displacement.x, wall.position.x, wall.position.y, result);
-    }
-
-//    public static double distanceLinePoint(Line line, Vector2d point) {
-//        return Math.abs((line.x2()-line.x1())*(line.y1()-point.y) - (line.x1()-point.x)*(line.y2()-line.y1())) / Math.hypot(line.x2()-line.x1(), line.y2()-line.y1());
-//    }
     public static double distanceLineSegmentPoint(Line2 line, Vector2d point) {
         double l = line.displacement.lengthSquared();
         if (l == 0) return distance(line.position, point);

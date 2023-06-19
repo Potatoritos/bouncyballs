@@ -13,15 +13,15 @@ import java.util.ArrayList;
 
 import static math.Geometry.distance;
 
-public class CollisionHandler3 {
+public class CollisionHandler {
     private Ball ball;
     private final Line3 ballMotion;
-    private final ArrayList<CollisionObject3> collisionObjects;
+    private final ArrayList<CollisionObject> collisionObjects;
     private final ArrayList<CollisionTrigger> triggers;
     private final Vector3d minIntersection;
-    private CollisionObject3 minCollisionObject;
+    private CollisionObject minCollisionObject;
     private final Sphere ballSphere;
-    public CollisionHandler3() {
+    public CollisionHandler() {
         ballMotion = new Line3();
         collisionObjects = new ArrayList<>();
         triggers = new ArrayList<>();
@@ -38,7 +38,7 @@ public class CollisionHandler3 {
         ballMotion.position.set(ball.geometry.position);
         ballMotion.displacement.set(ball.velocity);
     }
-    private void addCollisionObject(CollisionObject3 object) {
+    private void addCollisionObject(CollisionObject object) {
         if (object.isNearby(ballSphere)) {
             collisionObjects.add(object);
         }
@@ -63,7 +63,7 @@ public class CollisionHandler3 {
 
             // Get the collision object that collides with the ball at the closest point to the ball
             double minDistance = Double.POSITIVE_INFINITY;
-            for (CollisionObject3 object : collisionObjects) {
+            for (CollisionObject object : collisionObjects) {
                 if (object.intersect(ballMotion, intersection)) {
                     double distance = distance(intersection, ballMotion.position);
                     if (distance <= minDistance) {

@@ -8,7 +8,7 @@ import org.joml.Vector3d;
 
 import static math.Geometry.*;
 
-public class CollisionCylinder extends CollisionObject3 {
+public class CollisionCylinder extends CollisionObject {
     protected final Cylinder cylinder;
     private final Vector3d midpoint;
     public CollisionCylinder(GameObject parent, Cylinder cylinder) {

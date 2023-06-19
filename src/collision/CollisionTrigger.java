@@ -3,9 +3,9 @@ package collision;
 import game.Ball;
 
 public abstract class CollisionTrigger implements HasCollisionObject {
-    public final CollisionObject3 collisionObject;
+    public final CollisionObject collisionObject;
     private boolean isActive;
-    public CollisionTrigger(CollisionObject3 collisionObject) {
+    public CollisionTrigger(CollisionObject collisionObject) {
         this.collisionObject = collisionObject;
         isActive = true;
     }
@@ -16,7 +16,7 @@ public abstract class CollisionTrigger implements HasCollisionObject {
         isActive = false;
     }
     public abstract void onCollision(Ball ball);
-    public CollisionObject3 getCollisionObject() {
+    public CollisionObject getCollisionObject() {
         return collisionObject;
     }
 }

@@ -3,7 +3,7 @@ package collision;
 import game.Ball;
 
 public class DeathTrigger extends CollisionTrigger {
-    public DeathTrigger(CollisionObject3 collisionObject) {
+    public DeathTrigger(CollisionObject collisionObject) {
         super(collisionObject);
     }
     public void onCollision(Ball ball) {

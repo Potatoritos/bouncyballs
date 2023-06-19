@@ -7,7 +7,7 @@ import org.joml.Vector3d;
 
 import static math.Geometry.*;
 
-public class CollisionSphere extends CollisionObject3 {
+public class CollisionSphere extends CollisionObject {
     private final Sphere sphere;
     public CollisionSphere(GameObject parent, Sphere sphere) {
         super(parent);

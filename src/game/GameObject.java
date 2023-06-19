@@ -1,13 +1,9 @@
 package game;
 
-import collision.CollisionObject3;
-import collision.CollisionObjectContainer;
-import collision.CollisionTrigger;
 import org.joml.Vector4f;
 import shape.Line3;
 import org.joml.Matrix4f;
 import org.joml.Vector3d;
-import org.joml.Vector3f;
 
 public abstract class GameObject {
     protected final Matrix4f worldMatrix;

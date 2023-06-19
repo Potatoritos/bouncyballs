@@ -6,7 +6,7 @@ import org.joml.Vector3d;
 
 public class GoalTrigger extends CollisionTrigger {
     private final HoleBox parent;
-    public GoalTrigger(CollisionObject3 collisionObject, HoleBox parent) {
+    public GoalTrigger(CollisionObject collisionObject, HoleBox parent) {
         super(collisionObject);
         this.parent = parent;
     }

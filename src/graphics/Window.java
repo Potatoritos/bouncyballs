@@ -28,16 +28,16 @@ public class Window {
         width = 1600;
         height = 900;
         resized = false;
-        glfwDefaultWindowHints(); // optional, the current window hints are already the default
-        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // the window will stay hidden after creation
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
+        glfwDefaultWindowHints();
+        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
         glfwWindowHint(GLFW_SAMPLES, 4);
 
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-        handle = glfwCreateWindow(width, height, "Tilt", NULL, NULL);
+        handle = glfwCreateWindow(width, height, "bouncy balls", NULL, NULL);
         if (handle == NULL) {
             throw new RuntimeException("Failed to create the GLFW window");
         }
@@ -59,7 +59,7 @@ public class Window {
                     (vidmode.width() - pWidth.get(0)) / 2,
                     (vidmode.height() - pHeight.get(0)) / 2
             );
-        } // the stack frame is popped automatically
+        }
 
         // Make the OpenGL context current
         glfwMakeContextCurrent(handle);
@@ -75,6 +75,7 @@ public class Window {
         // Make the window visible
         glfwShowWindow(handle);
 
+        // Add event callbacks
         glfwSetFramebufferSizeCallback(handle, (window, width, height) -> {
             this.width = width;
             this.height = height;
@@ -120,7 +121,6 @@ public class Window {
         return handle;
     }
     public void delete() {
-        // Free the window callbacks and destroy the window
         glfwFreeCallbacks(handle);
         glfwDestroyWindow(handle);
     }

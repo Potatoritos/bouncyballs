@@ -9,6 +9,9 @@ import java.util.ArrayList;
 
 import static org.lwjgl.opengl.GL30.*;
 
+/**
+ * Describes how vertex attributes are stored
+ */
 public class VertexArrayObject implements Deletable {
     private final int id;
     private int eboSize;
@@ -28,6 +31,12 @@ public class VertexArrayObject implements Deletable {
         glBindVertexArray(0);
     }
 
+    /**
+     * Create a vertex buffer object of floats
+     * @param index the index of the VBO
+     * @param size the size of the data type in array
+     * @param array the values to put
+     */
     public void createFloatVBO(int index, int size, float[] array) {
         int vbo = glGenBuffers();
         vbos.add(vbo);
@@ -43,6 +52,9 @@ public class VertexArrayObject implements Deletable {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
+    /**
+     * Create an element buffer object from an array
+     */
     public void createEBO(int[] array) {
         int vbo = glGenBuffers();
         eboSize = array.length;

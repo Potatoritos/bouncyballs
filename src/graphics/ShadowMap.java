@@ -4,8 +4,10 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import util.Deletable;
 
+/**
+ * Represents a shadow map (uses an orthographic projection)
+ */
 public class ShadowMap implements Deletable {
-//    public final DepthMapFbo depthMap;
     public final DepthMapFbo depthMap;
     public final Matrix4f lightProjection;
     public final Matrix4f lightView;
@@ -39,6 +41,11 @@ public class ShadowMap implements Deletable {
     public void setFarPlane(float value) {
         farPlane = value;
     }
+
+    /**
+     * Set the position of the light source
+     * @param position the position to set
+     */
     public void setSourcePosition(Vector3f position) {
         this.lastSourcePosition.set(position);
         lightView.setLookAt(

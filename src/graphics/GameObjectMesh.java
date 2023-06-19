@@ -1,5 +1,8 @@
 package graphics;
 
+/**
+ * Represents the mesh of a game object
+ */
 public class GameObjectMesh extends Mesh {
 
     public GameObjectMesh(float[] vertices, float[] normals, float[] colors, int[] indices) {

@@ -9,6 +9,9 @@ import static org.lwjgl.opengl.GL30.GL_FRAMEBUFFER;
 import static org.lwjgl.opengl.GL30.glFramebufferTexture2D;
 import static org.lwjgl.opengl.GL30C.*;
 
+/**
+ * Allows for drawing to textures
+ */
 public class FrameBufferObject implements Deletable {
     private final int id;
     public FrameBufferObject() {

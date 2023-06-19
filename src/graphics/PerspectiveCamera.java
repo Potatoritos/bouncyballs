@@ -3,6 +3,9 @@ package graphics;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
+/**
+ * Represents a camera that looks at the world with a perspective projection
+ */
 public class PerspectiveCamera {
     public final Vector3f position;
     public final Vector3f rotation;

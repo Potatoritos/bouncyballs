@@ -14,6 +14,9 @@ import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.system.MemoryUtil.*;
 import static org.lwjgl.system.MemoryUtil.memFree;
 
+/**
+ * Represents a mesh that has a texture mapped onto it
+ */
 public class TextureMesh extends Mesh {
     private final Texture texture;
     public TextureMesh(float[] vertices, float[] textureCoords, int[] indices, Texture texture) {

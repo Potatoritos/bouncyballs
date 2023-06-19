@@ -10,6 +10,9 @@ import static math.MathUtil.cubicInterpolation;
 import static org.lwjgl.nanovg.NanoVG.*;
 import static org.lwjgl.nanovg.NanoVGGL3.*;
 
+/**
+ * Provides functions for drawing using NanoVG
+ */
 public class NanoVGContext {
     private long handle;
 
@@ -44,6 +47,8 @@ public class NanoVGContext {
     public float getHeight() {
         return height;
     }
+
+    // functions to help with getting the positions of ui elements
     public float bottom() {
         return height*0.93f;
     }
@@ -57,6 +62,13 @@ public class NanoVGContext {
         return height*0.07f;
     }
 
+    /**
+     * Draws an image
+     * @param image the image
+     * @param x the x-coordinate of the image
+     * @param y the y-coordinate of the image
+     * @param scale the scale to draw the image at
+     */
     public void drawImage(NanoVGImage image, float x, float y, float scale) {
         try (NVGPaint imagePaint = NVGPaint.calloc()) {
             nvgBeginPath(handle);
@@ -67,18 +79,40 @@ public class NanoVGContext {
             nvgClosePath(handle);
         }
     }
+
+    /**
+     * Fills a rectangle
+     * @param x the x-coordinate of the rectangle
+     * @param y the y-coordinate of the rectangle
+     * @param width the width of hte rectangle
+     * @param height the height of the rectangle
+     */
     public void fillRect(float x, float y, float width, float height) {
         nvgBeginPath(handle);
         nvgRect(handle, x, y, width, height);
         nvgFill(handle);
         nvgClosePath(handle);
     }
+    /**
+     * Draws the outline of a rectangle
+     * @param x the x-coordinate of the rectangle
+     * @param y the y-coordinate of the rectangle
+     * @param width the width of hte rectangle
+     * @param height the height of the rectangle
+     */
     public void drawRect(float x, float y, float width, float height) {
         nvgBeginPath(handle);
         nvgRect(handle, x, y, width, height);
         nvgStroke(handle);
         nvgClosePath(handle);
     }
+    /**
+     * Draws a line
+     * @param x1 the x-coordinate of the line's starting position
+     * @param y1 the y-coordinate of the line's starting position
+     * @param x2 the x-coordinate of the line's ending position
+     * @param y2 the y-coordinate of the line's ending position
+     */
     public void drawLine(float x1, float y1, float x2, float y2) {
         nvgBeginPath(handle);
         nvgMoveTo(handle, x1, y1);
@@ -86,6 +120,13 @@ public class NanoVGContext {
         nvgStroke(handle);
         nvgClosePath(handle);
     }
+
+    /**
+     * Fills a circle
+     * @param x the x-coordinate of the circle
+     * @param y the y-coordinate of the circle
+     * @param r the radius of the circle
+     */
     public void fillCircle(float x, float y, float r) {
         nvgBeginPath(handle);
         nvgCircle(handle, x, y, r);
@@ -95,21 +136,49 @@ public class NanoVGContext {
     public void setStrokeWidth(float width) {
         nvgStrokeWidth(handle, width);
     }
+
+    /**
+     * Scales a value to the width
+     * @param size the value
+     * @return the scaled value
+     */
     public float scaledWidthSize(float size) {
         return size * width / 1920;
     }
+
+    /**
+     * Scales a value to the height
+     * @param size the height
+     * @return the scaled value
+     */
     public float scaledHeightSize(float size) {
         return size * height / 1080;
     }
+
+    /**
+     * Adjusts a value so that it matches with the changing dimensions
+     * of a level when the window is resized
+     * @param x the value
+     * @return the adjusted value
+     */
     public float adjustedSceneX(float x) {
         return (x - 1920*0.5f) * height/1080f + width*0.5f;
     }
 
+    /**
+     * Indicates that a rendering frame is starting
+     * @param width the width of the window
+     * @param height the height of the window
+     */
     public void beginFrame(int width, int height) {
         this.width = width;
         this.height = height;
         nvgBeginFrame(handle, width, height, 1);
     }
+
+    /**
+     * Indicates that a rendering frame is ending
+     */
     public void endFrame() {
         nvgEndFrame(handle);
     }
@@ -128,9 +197,22 @@ public class NanoVGContext {
     public void setStrokeColor(Vector4f color) {
         nvgStrokeColor(handle, nvgRGBAf(color.x, color.y, color.z, color.w, nvgColor2));
     }
+
+    /**
+     * Draws text
+     * @param x the x-coordinate of the text
+     * @param y the y-coordinate of hte text
+     * @param text the text to draw
+     */
     public void drawText(float x, float y, String text) {
         nvgText(handle, x, y, text);
     }
+
+    /**
+     * Renders a UIButton
+     * @param button the button
+     * @param textX the x-position of the button if it were on a 1920x1080 screen
+     */
     public void renderButton(UIButton button, float textX) {
         float hoverPadding = 5;
         if (button.isHoveredOver()) {

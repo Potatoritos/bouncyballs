@@ -5,6 +5,10 @@ import org.joml.Vector3d;
 import org.joml.Vector3f;
 import util.Deletable;
 
+/**
+ * A class to help with rendering objects without having to
+ * create a GameObject
+ */
 public class RenderObject implements Deletable {
     public final Mesh mesh;
     public final Vector3f position;
@@ -17,10 +21,22 @@ public class RenderObject implements Deletable {
     public RenderObject(Mesh mesh) {
         this(mesh, new Vector3f());
     }
+
+    /**
+     * Gets the transformation matrix that represents the object's position in the world
+     * @return the matrix
+     */
     public Matrix4f getWorldMatrix() {
         return worldMatrix.identity()
                 .translate(position);
     }
+
+
+    /**
+     * Gets the transformation matrix that represents the object's position in the world
+     * @param globalRotation the rotation of the level this object belongs to
+     * @return the matrix
+     */
     public Matrix4f getWorldMatrix(Vector3d globalRotation) {
         return worldMatrix.identity()
                 .rotateX((float)globalRotation.x)

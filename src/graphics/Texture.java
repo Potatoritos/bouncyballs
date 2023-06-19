@@ -32,9 +32,24 @@ public class Texture implements Deletable {
     public static void unbind() {
         glBindTexture(GL_TEXTURE_2D, 0);
     }
+
+    /**
+     * Sets the texture to an empty image of specified properties
+     * @param width the width of the image
+     * @param height the height of the image
+     * @param internalFormat the internal format of the image
+     * @param format the format of the image
+     * @param type the type of the image
+     */
     public void setEmptyImage(int width, int height, int internalFormat, int format, int type) {
         glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, type, 0);
     }
+
+    /**
+     * Loads an image into this texture
+     * (Stopped working and I don't know why)
+     * @param path the path of the file to load from
+     */
     public void loadImage(String path) {
         ByteBuffer image;
         int width, height;

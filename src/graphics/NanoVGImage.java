@@ -3,6 +3,9 @@ package graphics;
 import static org.lwjgl.nanovg.NanoVG.NVG_IMAGE_GENERATE_MIPMAPS;
 import static org.lwjgl.nanovg.NanoVG.nvgCreateImage;
 
+/**
+ * Represents an image used by NanoVG
+ */
 public class NanoVGImage {
     private int handle;
     private int width;

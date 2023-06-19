@@ -28,6 +28,13 @@ public class ShaderProgram implements Deletable {
         shaders = new ArrayList<>();
         uniforms = new HashMap<>();
     }
+
+    /**
+     * Loads a shader program from a file
+     * Supports multiple shaders in a single file
+     * @param path the path of the file
+     * @return the shader program
+     */
     public static ShaderProgram fromFile(String path) {
         ShaderProgram program = new ShaderProgram();
         String source = Util.getFileSource("shaders/" + path);
@@ -96,6 +103,7 @@ public class ShaderProgram implements Deletable {
             System.err.println("Warning validating shader: " + glGetProgramInfoLog(id, 1024));
         }
     }
+    // The following functions are for setting uniforms (shader global variables)
     public void setUniformMatrix4fv(String name, FloatBuffer buffer) {
         glUniformMatrix4fv(uniforms.get(name), false, buffer);
     }
@@ -158,6 +166,7 @@ public class ShaderProgram implements Deletable {
         }
         uniforms.put(name, location);
     }
+
     public void bind() {
         glUseProgram(id);
     }

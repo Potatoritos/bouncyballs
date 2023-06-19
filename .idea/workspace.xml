@@ -11,48 +11,23 @@
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/images/title.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/collision/CollisionCylinder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/CollisionCylinder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/collision/CollisionCylinderInverted.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/CollisionCylinderInverted.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/collision/CollisionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/CollisionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/collision/CollisionObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/CollisionObject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/collision/CollisionObjectContainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/CollisionObjectContainer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/collision/CollisionPlane.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/CollisionPlane.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/collision/CollisionPlaneTriangle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/CollisionPlaneTriangle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/collision/CollisionSphere.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/CollisionSphere.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/collision/CollisionTrigger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/CollisionTrigger.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/collision/DeathTrigger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/DeathTrigger.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/collision/GoalTrigger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/GoalTrigger.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/collision/HasCollisionObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/HasCollisionObject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/Ball.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Ball.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/Box.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Box.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/ContinuousFrameTimer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/ContinuousFrameTimer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/FrameTimer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/FrameTimer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/GameObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/GameObject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/GameScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/GameScene.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/HoleBox.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/HoleBox.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/HoleBoxCover.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/HoleBoxCover.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/InputState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/InputState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/Level.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Level.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/LevelScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/LevelScene.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/Scene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Scene.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/UIButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/UIButton.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/math/Geometry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/math/Geometry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/math/MathUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/math/MathUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/math/Quadratic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/math/Quadratic.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mesh/MeshBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/mesh/MeshBuilder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mesh/MeshGeometry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/mesh/MeshGeometry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mesh/Quad.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/mesh/Quad.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mesh/Triangle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/mesh/Triangle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shape/Circle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/shape/Circle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shape/Cylinder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/shape/Cylinder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shape/Line2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/shape/Line2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shape/Line3.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/shape/Line3.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shape/Plane.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/shape/Plane.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shape/Sphere.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/shape/Sphere.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/util/Deletable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/Deletable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/util/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/Util.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/BasicMesh.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/DepthMapFbo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/DepthMapFbo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/EmptyFbo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/EmptyFbo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/FrameBufferObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/FrameBufferObject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/GameObjectMesh.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/GameObjectMesh.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/Mesh.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/Mesh.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/NanoVGContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/NanoVGContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/NanoVGImage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/NanoVGImage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/PerspectiveCamera.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/PerspectiveCamera.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/RenderObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/RenderObject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/Shader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/Shader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/ShaderProgram.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/ShaderProgram.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/ShadowMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/ShadowMap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/Texture.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/Texture.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/TextureMesh.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/TextureMesh.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/VertexArrayObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/VertexArrayObject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/Window.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/Window.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -241,7 +216,7 @@
       <workItem from="1687130244942" duration="5145000" />
       <workItem from="1687141607862" duration="3514000" />
       <workItem from="1687145132256" duration="20233000" />
-      <workItem from="1687166816664" duration="11808000" />
+      <workItem from="1687166816664" duration="13495000" />
     </task>
     <servers />
   </component>

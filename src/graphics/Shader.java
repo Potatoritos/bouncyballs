@@ -22,6 +22,11 @@ public class Shader implements Deletable {
         }
     }
 
+    /**
+     * Loads a shader from a file
+     * @param path the path of the file
+     * @return the shader
+     */
     public static Shader fromFile(String path) {
         int type;
         if (path.endsWith(".frag")) {

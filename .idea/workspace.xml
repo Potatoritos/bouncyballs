@@ -10,24 +10,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
+      <change afterPath="$PROJECT_DIR$/assets/levels/completed_levels.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/BasicMesh.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/DepthMapFbo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/DepthMapFbo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/EmptyFbo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/EmptyFbo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/FrameBufferObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/FrameBufferObject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/GameObjectMesh.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/GameObjectMesh.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/Mesh.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/Mesh.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/NanoVGContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/NanoVGContext.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/NanoVGImage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/NanoVGImage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/PerspectiveCamera.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/PerspectiveCamera.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/RenderObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/RenderObject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/Shader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/Shader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/ShaderProgram.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/ShaderProgram.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/ShadowMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/ShadowMap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/Texture.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/Texture.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/TextureMesh.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/TextureMesh.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/VertexArrayObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/VertexArrayObject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/Window.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/Window.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game/GameScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/GameScene.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -216,7 +201,7 @@
       <workItem from="1687130244942" duration="5145000" />
       <workItem from="1687141607862" duration="3514000" />
       <workItem from="1687145132256" duration="20233000" />
-      <workItem from="1687166816664" duration="13495000" />
+      <workItem from="1687166816664" duration="14529000" />
     </task>
     <servers />
   </component>

@@ -4,9 +4,10 @@ import graphics.NanoVGContext;
 import org.joml.Vector2d;
 import org.joml.Vector4f;
 
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 
 import static math.MathUtil.cubicInterpolation;
 import static math.MathUtil.cutMaxMin;
@@ -57,6 +58,7 @@ public class GameScene extends Scene {
     private double[] gameSpeeds;
     private int gameSpeedIndex;
     private boolean hasRequestedExit;
+    private final HashSet<String> completedLevels;
     public GameScene(int windowWidth, int windowHeight) {
         this.windowWidth = windowWidth;
         this.windowHeight = windowHeight;
@@ -96,7 +98,10 @@ public class GameScene extends Scene {
         buttonGap = 30;
         buttonLength = 300;
 
+        completedLevels = new HashSet<>();
+
         loadLevels();
+        loadCompletedLevels();
 
         requestedFpsCap = 144;
         fpsCaps = new int[] {144, 30, 60};
@@ -115,6 +120,46 @@ public class GameScene extends Scene {
     }
     public boolean hasRequestedExit() {
         return hasRequestedExit;
+    }
+
+    /**
+     * @return the currently selected level in the level select menu
+     */
+    public Level currentLevel() {
+        return levels.get(selectedLevelIndex);
+    }
+
+    /**
+     * Add a level to the completed levels file
+     * @param name the name of the level
+     */
+    private void addCompletedLevel(String name) {
+        if (completedLevels.contains(name)) {
+            return;
+        }
+        try(FileWriter fw = new FileWriter("assets/levels/completed_levels.txt", true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter out = new PrintWriter(bw)) {
+            out.println(name);
+        } catch (IOException e) {
+            throw new RuntimeException("Error while adding to completion list");
+        }
+    }
+
+    /**
+     * Load the list of completed levels from the completed levels file
+     */
+    private void loadCompletedLevels() {
+        try {
+            try (FileReader fr = new FileReader("assets/levels/completed_levels.txt"); BufferedReader br = new BufferedReader(fr)) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    completedLevels.add(line);
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error while reading from completion list");
+        }
     }
     // The functions below are for switching between states (e.g, in main menu, in level select menu)
     private void startRequestExit() {
@@ -205,6 +250,7 @@ public class GameScene extends Scene {
         verticalSwipeTimer.start();
     }
     private void midAdvanceLevel() {
+        addCompletedLevel(currentLevel().getName());
         if (selectedLevelIndex >= levels.size()-1) {
             atEndOfLevels = true;
             endEnterLevelSelect();
@@ -225,7 +271,7 @@ public class GameScene extends Scene {
         setLevelToSelected();
     }
     private void setLevelToSelected() {
-        levelScene.loadLevel(levels.get(selectedLevelIndex));
+        levelScene.loadLevel(currentLevel());
         if (inLevelSelect) {
             levelScene.updatePreviewCameraDistance();
         }
@@ -359,12 +405,16 @@ public class GameScene extends Scene {
             nvg.setFontSize(nvg.scaledWidthSize(120));
             nvg.setTextAlign(NVG_ALIGN_LEFT);
             nvg.setFillColor(color);
-            nvg.drawText(nvg.left(), nvg.bottom(), String.format("level %02d", selectedLevelIndex+1));
+            String name = currentLevel().getName();
+            if (completedLevels.contains(name)) {
+                name += "*";
+            }
+            nvg.drawText(nvg.left(), nvg.bottom(), name);
         }
         if (inLevelSelect) {
             // Draw key indicators
 //            nvg.drawImage(nvg.escapeImage, nvg.left(), nvg.top(), 0.75f);
-            nvg.drawImage(nvg.mouse1Image, nvg.left()+nvg.getWidth()*0.27f, nvg.bottom()-nvg.scaledWidthSize(nvg.mouse1Image.getHeight())*0.75f, 0.75f);
+            nvg.drawImage(nvg.mouse1Image, nvg.left()+nvg.getWidth()*0.29f, nvg.bottom()-nvg.scaledWidthSize(nvg.mouse1Image.getHeight())*0.75f, 0.75f);
             nvg.drawImage(nvg.mousewheelImage, nvg.right()-nvg.scaledWidthSize(nvg.mousewheelImage.getWidth()-10), nvg.bottom()-nvg.scaledWidthSize(60), 0.75f);
 
             // Draw the scrollbar

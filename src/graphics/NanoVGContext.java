@@ -1,5 +1,7 @@
 package graphics;
 
+import game.Colors;
+import game.UIButton;
 import org.joml.Vector4f;
 import org.lwjgl.nanovg.NVGColor;
 import org.lwjgl.nanovg.NVGPaint;
@@ -128,5 +130,32 @@ public class NanoVGContext {
     }
     public void drawText(float x, float y, String text) {
         nvgText(handle, x, y, text);
+    }
+    public void renderButton(UIButton button, float textX) {
+        float hoverPadding = 5;
+        if (button.isHoveredOver()) {
+            setFillColor(Colors.backgroundDarker);
+            fillRect((float)button.geometry.position.x-hoverPadding, (float)button.geometry.position.y-hoverPadding, (float)button.geometry.displacement.x+2*hoverPadding, (float)button.geometry.displacement.y+2*hoverPadding);
+            setFillColor(Colors.tile);
+            setFontFace("montserrat_bold");
+            setFontSize(scaledHeightSize(50));
+            drawText(adjustedSceneX(textX + 20), (float)button.geometry.y1() + scaledHeightSize(60), button.getText());
+
+            setFontFace("montserrat");
+            setFontSize(scaledHeightSize(90));
+            drawText(adjustedSceneX(textX + 20), (float)button.geometry.y2() - scaledHeightSize(20), button.getSecondaryText());
+        } else {
+            setStrokeColor(Colors.black);
+            setStrokeWidth(scaledHeightSize(4));
+            drawRect((float)button.geometry.position.x, (float)button.geometry.position.y, (float)button.geometry.displacement.x, (float)button.geometry.displacement.y);
+            setFillColor(Colors.backgroundDarker);
+            setFontFace("montserrat_bold");
+            setFontSize(scaledHeightSize(50));
+            drawText(adjustedSceneX(textX + 20), (float)button.geometry.y1() + scaledHeightSize(60), button.getText());
+
+            setFontFace("montserrat");
+            setFontSize(scaledHeightSize(90));
+            drawText(adjustedSceneX(textX + 20), (float)button.geometry.y2() - scaledHeightSize(20), button.getSecondaryText());
+        }
     }
 }

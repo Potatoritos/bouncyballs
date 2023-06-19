@@ -26,6 +26,7 @@ public class GameScene extends Scene {
     private final FrameTimer levelResetTimer;
     private final FrameTimer advanceTimer;
     private final FrameTimer enterMainMenuTimer;
+    private final FrameTimer enterAboutTimer;
     private final FrameTimer levelTitleTimer;
     private final FrameTimer[] timers;
     private boolean inLevelSelect;
@@ -64,9 +65,10 @@ public class GameScene extends Scene {
         levelResetTimer = new FrameTimer(120);
         advanceTimer = new FrameTimer(240);
         enterMainMenuTimer = new FrameTimer(49);
+        enterAboutTimer = new FrameTimer(49);
         levelTitleTimer = new FrameTimer(432);
 
-        timers = new FrameTimer[] {horizontalSwipeTimer, verticalSwipeTimer, levelClearTimer, levelClearDelayTimer, enterLevelSelectTimer, enterLevelTimer, levelResetTimer, advanceTimer, enterMainMenuTimer, levelTitleTimer};
+        timers = new FrameTimer[] {horizontalSwipeTimer, verticalSwipeTimer, levelClearTimer, levelClearDelayTimer, enterLevelSelectTimer, enterLevelTimer, levelResetTimer, advanceTimer, enterMainMenuTimer, enterAboutTimer, levelTitleTimer};
 
         levels = new ArrayList<>();
 
@@ -92,7 +94,8 @@ public class GameScene extends Scene {
         requestedFpsCap = 144;
         fpsCaps = new int[] {144, 30, 60};
         requestedGameSpeed = 1;
-        gameSpeeds = new double[] {1, 0.5, 0.75};
+        gameSpeeds = new double[] {0.5, 0.75, 1, 1.5, 2};
+        gameSpeedIndex = 2;
 
 //        startEnterLevelSelect();
         endEnterMainMenu();
@@ -276,7 +279,7 @@ public class GameScene extends Scene {
                     requestedFpsCap = fpsCaps[fpsCapIndex];
                     fpsCapButton.setSecondaryText(Integer.toString(requestedFpsCap));
                 } else if (gameSpeedButton.isClicked()) {
-                    gameSpeedIndex = (gameSpeedIndex+1) % fpsCaps.length;
+                    gameSpeedIndex = (gameSpeedIndex+1) % gameSpeeds.length;
                     requestedGameSpeed = gameSpeeds[gameSpeedIndex];
                     gameSpeedButton.setSecondaryText(String.format("%.2fx", requestedGameSpeed));
                 }
@@ -305,7 +308,7 @@ public class GameScene extends Scene {
             nvg.drawText(nvg.left(), nvg.bottom(), String.format("level %02d", selectedLevelIndex+1));
         }
         if (inLevelSelect) {
-            nvg.drawImage(nvg.escapeImage, nvg.left(), nvg.top(), 0.75f);
+//            nvg.drawImage(nvg.escapeImage, nvg.left(), nvg.top(), 0.75f);
             nvg.drawImage(nvg.mouse1Image, nvg.left()+nvg.getWidth()*0.27f, nvg.bottom()-nvg.scaledWidthSize(nvg.mouse1Image.getHeight())*0.75f, 0.75f);
             nvg.drawImage(nvg.mousewheelImage, nvg.right()-nvg.scaledWidthSize(nvg.mousewheelImage.getWidth()-10), nvg.bottom()-nvg.scaledWidthSize(60), 0.75f);
 
@@ -326,50 +329,32 @@ public class GameScene extends Scene {
 //                nvgImagePattern(nvg, left + windowWidth*0.1f, bottom, windowWidth*83f/1920, windowWidth*68f/1920, 0, resources.getEscapeImage(), 1f, imagePaint);
 
         } else if (inMainMenu) {
+            // Render title
             nvg.setFontFace("montserrat_bold");
             nvg.setTextAlign(NVG_ALIGN_LEFT);
             nvg.setFillColor(Colors.backgroundDarker);
-
             nvg.setFontSize(nvg.scaledHeightSize(110));
             nvg.drawText(nvg.adjustedSceneX(920), nvg.scaledHeightSize(180), "bouncy balls");
 
-            // TODO: clean up
-            float hoverPadding = 5;
+            // Render buttons
             Vector2d buttonSize1 = new Vector2d(nvg.adjustedSceneX(buttonX+buttonLength) - nvg.adjustedSceneX(buttonX), nvg.scaledHeightSize(buttonLength));
             Vector2d buttonSize2 = new Vector2d(nvg.adjustedSceneX(buttonX+buttonGap+2*buttonLength) - nvg.adjustedSceneX(buttonX+buttonGap+buttonLength), nvg.scaledHeightSize(buttonLength));
-
-            float x1 = nvg.adjustedSceneX(buttonX);
-            float x2 = nvg.adjustedSceneX(buttonX+buttonGap+buttonLength);
-            levelSelectButton.geometry.set(new Vector2d(x1, nvg.scaledHeightSize(buttonY)), buttonSize1);
-            aboutButton.geometry.set(new Vector2d(x2, nvg.scaledHeightSize(buttonY)), buttonSize1);
-            fpsCapButton.geometry.set(new Vector2d(x1, nvg.scaledHeightSize(buttonY+buttonGap+buttonLength)), buttonSize2);
-            gameSpeedButton.geometry.set(new Vector2d(x2, nvg.scaledHeightSize(buttonY+buttonGap+buttonLength)), buttonSize2);
-            for (UIButton button : buttons) {
-                if (button.isHoveredOver()) {
-                    nvg.setFillColor(Colors.backgroundDarker);
-                    nvg.fillRect((float)button.geometry.position.x-hoverPadding, (float)button.geometry.position.y-hoverPadding, (float)button.geometry.displacement.x+2*hoverPadding, (float)button.geometry.displacement.y+2*hoverPadding);
-                    nvg.setFillColor(Colors.tile);
-                    nvg.setFontFace("montserrat_bold");
-                    nvg.setFontSize(nvg.scaledHeightSize(50));
-                    nvg.drawText((float)button.geometry.x1() + nvg.adjustedSceneX(20), (float)button.geometry.y1() + nvg.scaledHeightSize(60), button.getText());
-
-                    nvg.setFontFace("montserrat");
-                    nvg.setFontSize(nvg.scaledHeightSize(90));
-                    nvg.drawText((float)button.geometry.x1() + nvg.adjustedSceneX(20), (float)button.geometry.y2() - nvg.scaledHeightSize(20), button.getSecondaryText());
-                } else {
-                    nvg.setStrokeColor(Colors.black);
-                    nvg.setStrokeWidth(nvg.scaledHeightSize(4));
-                    nvg.drawRect((float)button.geometry.position.x, (float)button.geometry.position.y, (float)button.geometry.displacement.x, (float)button.geometry.displacement.y);
-                    nvg.setFillColor(Colors.backgroundDarker);
-                    nvg.setFontFace("montserrat_bold");
-                    nvg.setFontSize(nvg.scaledHeightSize(50));
-                    nvg.drawText((float)button.geometry.x1() + nvg.adjustedSceneX(20), (float)button.geometry.y1() + nvg.scaledHeightSize(60), button.getText());
-
-                    nvg.setFontFace("montserrat");
-                    nvg.setFontSize(nvg.scaledHeightSize(90));
-                    nvg.drawText((float)button.geometry.x1() + nvg.adjustedSceneX(20), (float)button.geometry.y2() - nvg.scaledHeightSize(20), button.getSecondaryText());
-                }
-            }
+            float nx1 = buttonX;
+            float x1 = nvg.adjustedSceneX(nx1);
+            float nx2 = buttonX + buttonGap + buttonLength;
+            float x2 = nvg.adjustedSceneX(nx2);
+            float ny1 = buttonY;
+            float y1 = nvg.scaledHeightSize(ny1);
+            float ny2 = buttonY + buttonGap + buttonLength;
+            float y2 = nvg.scaledHeightSize(ny2);
+            levelSelectButton.geometry.set(new Vector2d(x1, y1), buttonSize1);
+            aboutButton.geometry.set(new Vector2d(x2, y1), buttonSize1);
+            fpsCapButton.geometry.set(new Vector2d(x1, y2), buttonSize2);
+            gameSpeedButton.geometry.set(new Vector2d(x2, y2), buttonSize2);
+            nvg.renderButton(levelSelectButton, nx1);
+            nvg.renderButton(aboutButton, nx2);
+            nvg.renderButton(fpsCapButton, nx1);
+            nvg.renderButton(gameSpeedButton, nx2);
         }
         if (horizontalSwipeTimer.isActive()) {
             nvg.setFillColor(Colors.black);

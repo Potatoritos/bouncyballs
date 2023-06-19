@@ -7,6 +7,9 @@ import org.joml.Vector3d;
 
 import static math.Geometry.intersectionLineCylinder;
 
+/**
+ * Defines the collision properties of the inside of a cylinder
+ */
 public class CollisionCylinderInverted extends CollisionCylinder {
     public CollisionCylinderInverted(GameObject parent, Cylinder cylinder) {
         super(parent, cylinder);

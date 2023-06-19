@@ -5,6 +5,9 @@ import math.Geometry;
 import shape.Line3;
 import org.joml.Vector3d;
 
+/**
+ * Represents any game object that is a rectangular prism (e.g, walls, floor)
+ */
 public class Box extends GameObject {
     public final Line3 geometry;
     public Box() {

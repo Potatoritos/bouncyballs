@@ -7,6 +7,9 @@ import org.joml.Vector3d;
 
 import static math.Geometry.*;
 
+/**
+ * Defines the collision properties of a triangle
+ */
 public class CollisionPlaneTriangle extends CollisionPlane {
     public CollisionPlaneTriangle(GameObject parent, Plane plane) {
         super(parent, plane);

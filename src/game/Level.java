@@ -4,6 +4,9 @@ import org.joml.Vector3d;
 
 import java.io.*;
 
+/**
+ * Stores level data
+ */
 public class Level implements Comparable<Level> {
     private final int rows;
     private final int columns;
@@ -78,14 +81,25 @@ public class Level implements Comparable<Level> {
     public int getBallColumn(int ball) {
         return ballColumn[ball];
     }
+
+    /**
+     * Creates a file that stores the level's data
+     * (NOT IMPLEMENTED)
+     * @param path the path of the file
+     */
     public void exportToFile(String path) {
         try (FileWriter fw = new FileWriter("assets/levels/" + path);
             BufferedWriter bw = new BufferedWriter(fw)) {
-
         } catch (IOException e) {
             throw new RuntimeException("IOException");
         }
     }
+
+    /**
+     * Loads a level from a file
+     * @param path the path of the file
+     * @return the loaded level
+     */
     public static Level fromFile(String path) {
         try (FileReader fr = new FileReader("assets/levels/" + path);
              BufferedReader br = new BufferedReader(fr)) {
@@ -103,6 +117,9 @@ public class Level implements Comparable<Level> {
             if (name.equals("mainmenu")) {
                 level.setMainMenu(true);
             }
+
+            // Process the spawn positions of each ball,
+            // represented by a (rows) * (columns) grid
             for (int i = 0; i < rows; i++) {
                 String row = br.readLine();
                 if (row.length() != columns) new RuntimeException("Invalid level file - special tiles malformed");
@@ -114,6 +131,9 @@ public class Level implements Comparable<Level> {
                     }
                 }
             }
+
+            // Process the floor tiles,
+            // represented by a (rows) * (columns) grid
             for (int i = 0; i < rows; i++) {
                 String row = br.readLine();
                 if (row.length() != columns) new RuntimeException("Invalid level file - floor tiles malformed");
@@ -128,6 +148,8 @@ public class Level implements Comparable<Level> {
                     }
                 }
             }
+            // Process the vertically-oriented walls,
+            // represented by a (rows) * (columns+1) grid
             for (int i = 0; i < rows; i++) {
                 String row = br.readLine();
                 if (row.length() != columns+1) throw new RuntimeException("Invalid level file - vertical walls malformed");
@@ -135,6 +157,8 @@ public class Level implements Comparable<Level> {
                     if (row.charAt(j) == '|') level.setWallXState(rows-1-i, j, true);
                 }
             }
+            // Process the horizontally-oriented walls,
+            // represented by a (rows+1) * (columns) grid
             for (int i = 0; i < rows+1; i++) {
                 String row = br.readLine();
                 if (row.length() != columns) throw new RuntimeException("Invalid level file - horizontal walls malformed");
@@ -143,8 +167,6 @@ public class Level implements Comparable<Level> {
                 }
             }
 
-            for (int i = 0; i < numBalls; i++) {
-            }
             return level;
         } catch (NumberFormatException e) {
             throw new RuntimeException("Invalid level file");
@@ -154,6 +176,12 @@ public class Level implements Comparable<Level> {
             throw new RuntimeException("IOException");
         }
     }
+
+    /**
+     * Compares this level's name to another level's name
+     * @param other the object to be compared.
+     * @return -1, 0, or 1 if this.name < other.name, this.name == other.name, or this.name > other.name, respectively
+     */
     public int compareTo(Level other) {
         return name.compareTo(other.name);
     }

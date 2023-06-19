@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import static java.lang.Math.sqrt;
 import static math.MathUtil.insertVector;
 
+/**
+ * A collection of functions that create meshes
+ */
 public class MeshGeometry {
     private final static Vector3f u;
     private final static Vector3f v;
@@ -18,16 +21,30 @@ public class MeshGeometry {
         u = new Vector3f();
         v = new Vector3f();
     }
+
+    /**
+     * Finds the face normal of a triangle defined by 3 points
+     * @return the normal
+     */
     public static Vector3f triangleNormal(Vector3f a, Vector3f b, Vector3f c) {
         b.sub(a, u);
         c.sub(a, v);
         return u.cross(v).normalize();
     }
+
+    /**
+     * Adds three Vector3fs to a list
+     */
     private static void addTriangle(ArrayList<Vector3f> list, Vector3f a, Vector3f b, Vector3f c) {
         list.add(a);
         list.add(b);
         list.add(c);
     }
+
+    /**
+     * Generates the faces of the icosahedron with vertices that lie on the unit sphere
+     * @return A list containing the vertices of every face (every three consecutive elements makes up one triangle)
+     */
     public static ArrayList<Vector3f> generateIcosahedronFaces() {
         ArrayList<Vector3f> faces = new ArrayList<>(60);
 
@@ -63,6 +80,10 @@ public class MeshGeometry {
         return faces;
     }
 
+    /**
+     * Finds the spherical midpoint of two points on the unit sphere
+     * @return the midpoint
+     */
     public static Vector3f sphericalMidpoint(Vector3f a, Vector3f b) {
         Vector3f midpoint = new Vector3f(a);
         midpoint.add(b);
@@ -70,12 +91,14 @@ public class MeshGeometry {
         return midpoint;
     }
 
+    /**
+     * Generates the faces of a geodesic polyhedron (polyhedron that approximates a sphere) by starting with an icosahedron, then incrementally dividing the faces of the polyhedron into 4 more faces
+     * @param iterations the amount of times to subdivide faces
+     * @return A list containing the vertices of every face (every three consecutive elements makes up one triangle)
+     */
     public static ArrayList<Vector3f> generateGeodesicPolyhedronFaces(int iterations) {
         ArrayList<Vector3f> faces = generateIcosahedronFaces();
         ArrayList<Vector3f> newFaces = new ArrayList<>();
-
-//        int numberEdges = 30;
-//        int numberVertices = 12;
 
         for (int it = 0; it < iterations; it++) {
             newFaces.ensureCapacity(4 * faces.size());
@@ -95,13 +118,16 @@ public class MeshGeometry {
             newFaces = temp;
 
             newFaces.clear();
-
-//            numberVertices += numberEdges;
-//            numberEdges = numberVertices + faces.size()/3 - 2;
         }
         return faces;
     }
 
+    /**
+     * Creates a geodesic polyhedron mesh
+     * @param iterations the amount of iterations done when creating the geodesic polyhedron
+     * @param color the mesh's color
+     * @return the mesh
+     */
     public static GameObjectMesh generateGeodesicPolyhedronMesh(int iterations, Vector3f color) {
         ArrayList<Vector3f> faces = generateGeodesicPolyhedronFaces(iterations);
         float[] vertices = new float[3*faces.size()];
@@ -134,6 +160,14 @@ public class MeshGeometry {
         return new GameObjectMesh(vertices, normals, colors, indices);
     }
 
+    /**
+     * Creates the mesh of a hole tile
+     * @param surfaceColor the color of the surface (non-hole) area
+     * @param holeColor the color of the bottom of the hole
+     * @param cylinderFaces a factor denoting how many faces the cylinder making up the hole should have
+     * @param radius the radius of the hole
+     * @return the mesh
+     */
     public static GameObjectMesh holeTileMesh(Vector3f surfaceColor, Vector3f holeColor, int cylinderFaces, double radius) {
         MeshBuilder builder = new MeshBuilder();
         Quad pzNormals = new Quad(new Vector3f(0, 0, 1));
@@ -280,6 +314,13 @@ public class MeshGeometry {
         return builder.createMesh();
     }
 
+    /**
+     * Creates the mesh of a rectangular prism
+     * @param position the position of the mesh
+     * @param dimensions the dimensions of the rectangular prism
+     * @param color the color of the prism
+     * @return the mesh
+     */
     public static GameObjectMesh rectangularPrismMesh(Vector3f position, Vector3f dimensions, Vector3f color) {
         Vector3f p = position, d = dimensions;
         Quad colors = new Quad(color);
@@ -346,31 +387,27 @@ public class MeshGeometry {
                 colors
         );
         return builder.createMesh();
-//
-//        float l = (float)sqrt(1f/3);
-////        float[] normals = new float[] {
-////                -l, -l, -l,   l, -l, -l,   -l, l, -l,   l, l, -l,
-////                l, -l, l,    -l, -l, l,    l, l, l,    -l, l, l,
-////                -l, -l, l,   -l, -l, -l,   -l, l, l,   -l, l, -l,
-////                l, -l, -l,    l, -l, l,    l, l, -l,    l, l, l,
-////                -l, -l, l,   l, -l, l,   -l, -l, -l,   l, -l, -l,
-////                -l, l, -l,    l, l, -l,    -l, l, l,    l, l, l
-////        };
-
-//        float[] normals = new float[] {
-//                0, 0, -1,   0, 0, -1,   0, 0, -1,   0, 0, -1,
-//                0, 0, 1,    0, 0, 1,    0, 0, 1,    0, 0, 1,
-//                -1, 0, 0,   -1, 0, 0,   -1, 0, 0,   -1, 0, 0,
-//                1, 0, 0,    1, 0, 0,    1, 0, 0,    1, 0, 0,
-//                0, -1, 0,   0, -1, 0,   0, -1, 0,   0, -1, 0,
-//                0, 1, 0,    0, 1, 0,    0, 1, 0,    0, 1, 0
-//        };
     }
+
+    /**
+     * Creates a quadrilateral mesh
+     * @param quad the quadrilateral
+     * @param color the color of the quadrilateral
+     * @return the mesh
+     */
     public static GameObjectMesh quadMesh(Quad quad, Vector3f color) {
         MeshBuilder builder = new MeshBuilder();
         builder.addQuad(quad, new Quad(triangleNormal(quad.a, quad.b, quad.c)), new Quad(color));
         return builder.createMesh();
     }
+
+    /**
+     * Creates a Z-axis-facing rectangular mesh that has a texture
+     * @param position the position of the rectangle
+     * @param dimensions the dimensions of the rectangle
+     * @param texture the texture to map onto the rectangle
+     * @return the mesh
+     */
     public static TextureMesh texturedRectangle(Vector2f position, Vector2f dimensions, Texture texture) {
         float[] vertices = new float[] {
                 position.x, position.y, 0,
@@ -386,19 +423,5 @@ public class MeshGeometry {
                 1, 1
         };
         return new TextureMesh(vertices, textureCoords, indices, texture);
-    }
-
-    // Wrong and I don't know why
-    public static void computeFaceNormals(float[] normals, float[] vertices, int[] indices) {
-        Vector3f a = new Vector3f(), b = new Vector3f(), c = new Vector3f();
-        for (int i = 0; i < indices.length; i += 3) {
-            a.set(vertices[3*indices[i]], vertices[3*indices[i]+1], vertices[3*indices[i+2]+2]);
-            b.set(vertices[3*indices[i+1]], vertices[3*indices[i+1]+1], vertices[3*indices[i+1]+2]);
-            c.set(vertices[3*indices[i+2]], vertices[3*indices[i+2]+1], vertices[3*indices[i+2]+2]);
-            Vector3f normal = triangleNormal(a, b, c);
-            normals[3*indices[i]] = normals[3*indices[i+1]] = normals[3*indices[i+2]] = normal.x;
-            normals[3*indices[i]+1] = normals[3*indices[i+1]+1] = normals[3*indices[i+2]+1] = normal.y;
-            normals[3*indices[i]+2] = normals[3*indices[i+1]+2] = normals[3*indices[i+2]+2] = normal.z;
-        }
     }
 }

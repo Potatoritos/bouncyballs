@@ -22,12 +22,26 @@ public class Game {
     public Game() {
         isRunning = true;
     }
+
+    /**
+     * Sets the amount of update calls done per second
+     * @param fps the amount of updates/s
+     */
     public void setUpdateFps(int fps) {
         nsPerUpdate = (long)(1e9 / fps);
     }
+
+    /**
+     * Sets the amount of render calls done per second
+     * @param fps the amount of renders/s
+     */
     public void setRenderFps(int fps) {
         nsPerRender = (long)(1e9 / fps);
     }
+
+    /**
+     * Runs the game
+     */
     public void run() {
         GLFWErrorCallback.createPrint(System.err).set();
         if (!glfwInit()) {
@@ -40,6 +54,10 @@ public class Game {
 
         loop();
     }
+
+    /**
+     * Advances the game forward one frame
+     */
     private void update() {
         window.update();
         if (window.shouldClose()) {
@@ -56,25 +74,30 @@ public class Game {
         setRenderFps(gameScene.getRequestedFpsCap());
         setUpdateFps((int)Math.round(144 * gameScene.getRequestedGameSpeed()));
     }
+    /**
+     * Draws everything to the screen
+     */
     private void render() {
         if (window.isResized()) {
             glViewport(0, 0, window.getWidth(), window.getHeight());
             window.setResized(false);
 
             gameScene.handleWindowResize(window.getWidth(), window.getHeight());
-
         }
         FrameBufferObject.unbind();
 
         gameScene.render();
 
         nvg.beginFrame(window.getWidth(), window.getHeight());
-//        nvgScale(nvg, (float)1920/window.getWidth(), (float)1920/window.getWidth());
         gameScene.nvgRender(nvg);
         nvg.endFrame();
 
         glfwSwapBuffers(window.getHandle()); // swap the color buffers
     }
+
+    /**
+     * Calls update() and render() at the specified frequency
+     */
     private void loop() {
         long previousTime = System.nanoTime(), currentTime;
         long updateDelta = 0, renderDelta = 0;
@@ -84,30 +107,19 @@ public class Game {
         int updateCount = 0, renderCount = 0;
         long previousFPSCalcTime = System.nanoTime();
 
-//        long updateTime = 0;
-//        int updateTimeCounter = 0;
-
         while (isRunning) {
             currentTime = System.nanoTime();
 
             updateDelta += currentTime - previousTime;
             renderDelta += currentTime - previousTime;
 
+            // Call update multiple times if catching up is required
             while (updateDelta >= nsPerUpdate) {
-//                long time = System.nanoTime();
+                long time = System.nanoTime();
                 update();
-//                updateTime += System.nanoTime() - time;
-//                updateTimeCounter++;
-
                 updateDelta -= nsPerUpdate;
                 updateCount++;
             }
-
-//            if (updateTimeCounter >= 60) {
-//                System.out.printf("avg update time: %fms\n", 1.0*updateTime/updateTimeCounter / 1e6);
-//                updateTimeCounter = 0;
-//                updateTime = 0;
-//            }
 
             if (renderDelta >= nsPerRender) {
                 render();
@@ -126,6 +138,9 @@ public class Game {
             }
         }
     }
+    /**
+     * Stops the game and frees all allocated memory
+     */
     public void close() {
         gameScene.delete();
         window.delete();

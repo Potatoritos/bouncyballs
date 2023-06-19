@@ -57,15 +57,10 @@ public class LevelScene extends Scene {
     private boolean inMainMenuMode;
     private final ContinuousFrameTimer previewRotation;
     private final ContinuousFrameTimer mainMenuVelocity;
-    private final FrameTimer mainMenuRespawn;
 
 
     private int windowWidth;
     private int windowHeight;
-//    private final TextureMesh view;
-//    private final RenderEntity viewEntity;
-//    private final RenderObject title;
-//    private final Texture titleTexture;
 
     public LevelScene(int windowWidth, int windowHeight) {
         super();
@@ -132,25 +127,28 @@ public class LevelScene extends Scene {
         handleWindowResize(windowWidth, windowHeight);
         shadowMap = new ShadowMap(2048, 2048, 3.5f, 0.1f, 10f);
 
-//        view = texturedRectangle(new Vector2f(0, 0), new Vector2f(1, 1), shadowMap.depthMap.getDepthTexture());
-//        viewEntity = new RenderEntity(view, new Vector3f(1, 1, 8));
-
         hasDied = false;
         hasWon = false;
         collisionHandler = new CollisionHandler();
 
         previewRotation = new ContinuousFrameTimer(576);
         mainMenuVelocity = new ContinuousFrameTimer(576);
-        mainMenuRespawn = new FrameTimer(72);
 
-//        titleTexture = new Texture();
-//        titleTexture.loadImage("assets/images/astolfo_necoarc.png");
-//        title = new RenderObject(texturedRectangle(new Vector2f(0, 0), new Vector2f(1, 1), titleTexture));
     }
+
+    /**
+     * Updates the position of the camera based on the amount of tiles in a level.
+     * Should be called every time you switch levels in the level select menu
+     */
     public void updatePreviewCameraDistance() {
         float factor = cameraDistanceFactor();
         camera.position.set(0, -factor*11/12, factor*2/3);
     }
+
+    /**
+     * Enters the mode used for the level select menu.
+     * Updates the camera and light position
+     */
     public void enterPreviewMode() {
         previewRotation.start();
         inMainMenuMode = false;
@@ -161,6 +159,10 @@ public class LevelScene extends Scene {
         shadowMap.updateLightSpaceMatrix();
         rotation.set(0, 0, 0);
     }
+
+    /**
+     * Undoes everything done by enterPreviewMode() and enterMainMenuMode()
+     */
     public void enterLevelMode() {
         previewRotation.stop();
         inPreviewMode = false;
@@ -171,6 +173,10 @@ public class LevelScene extends Scene {
         shadowMap.updateLightSpaceMatrix();
         rotation.z = 0;
     }
+
+    /**
+     * Sets the camera and light position to that used in the main menu screen
+     */
     public void enterMainMenuMode() {
         previewRotation.stop();
         rotation.z = 0;
@@ -194,6 +200,10 @@ public class LevelScene extends Scene {
         windowWidth = width;
         windowHeight = height;
     }
+
+    /**
+     * Update balls and handle their collisions
+     */
     public void updateBalls() {
         int ballsWon = 0;
 
@@ -204,6 +214,7 @@ public class LevelScene extends Scene {
             }
             if (ball.hasReachedGoal()) {
                 ballsWon++;
+                // Hide the ball if it has reached its goal
                 ball.geometry.position.set(0, 0, 10000);
                 continue;
             }
@@ -211,26 +222,30 @@ public class LevelScene extends Scene {
                 ball.update();
                 continue;
             }
+            // Fade the ball out when it falls
             ball.getColor(0).w = (float)cutMaxMin(1.25 + ball.geometry.position.z, 0, 1);
 
+            // Accelerate the ball based on the level's rotation
             ball.velocity.x += Math.sin(rotation.y * 0.0004);
             ball.velocity.x = cutMaxMin(ball.velocity.x, -0.04f, 0.04f);
             ball.velocity.y += -Math.sin(rotation.x * 0.0004);
             ball.velocity.y = cutMaxMin(ball.velocity.y, -0.04f, 0.04f);
 
+            // Apply gravity
             ball.velocity.z -= 0.00048;
 
+            // Handle collisions
             collisionHandler.reset();
             collisionHandler.setBall(ball);
-            for (Box box : wallXTiles) collisionHandler.addFloorBox(box);
-            for (Box box : wallYTiles) collisionHandler.addFloorBox(box);
-            for (Box box : floorTiles) collisionHandler.addFloorBox(box);
-            for (Box box : tallTiles) collisionHandler.addFloorBox(box);
-            for (HoleBox box : holeTiles) collisionHandler.addHoleBox(box);
+            for (Box box : wallXTiles) collisionHandler.addBoxFloorColliders(box);
+            for (Box box : wallYTiles) collisionHandler.addBoxFloorColliders(box);
+            for (Box box : floorTiles) collisionHandler.addBoxFloorColliders(box);
+            for (Box box : tallTiles) collisionHandler.addBoxFloorColliders(box);
+            for (HoleBox box : holeTiles) collisionHandler.addHoleBoxColliders(box);
 
             for (Ball collisionBall : balls) {
                 if (ball == collisionBall) continue;
-                collisionHandler.addBallCollision(collisionBall);
+                collisionHandler.addBallColliders(collisionBall);
             }
             collisionHandler.addFallDeathTrigger();
 
@@ -245,12 +260,11 @@ public class LevelScene extends Scene {
     }
     public void update(InputState input) {
         if (inMainMenuMode) {
-//            mainMenuRespawn.update();
+            // Continuously spawn balls that move downwards
             mainMenuVelocity.update();
             mainMenuVelocity.start();
             for (Ball ball : balls) {
                 if (ball.isDead()) {
-//                    mainMenuRespawn.start();
                     ball.setIsDead(false);
                     ball.velocity.set(Math.random()*0.01, Math.random()*0.01, 0);
                     ball.geometry.position.set(-0.5 - Math.random(), 3.35, 0.35);
@@ -263,10 +277,13 @@ public class LevelScene extends Scene {
             return;
         }
         if (inPreviewMode) {
+            // Continuously rotate the level
             rotation.z = previewRotation.percentage() * 2 * Math.PI;
             previewRotation.update();
             return;
         }
+
+        // Calculate rotation based on mouse position
         rotation.x = (cutMaxMin(input.mousePosition.y*1.2 - 0.1, 0, 1)-0.5) * Math.PI/3;
         rotation.y = (cutMaxMin(input.mousePosition.x*1.2 - 0.1, 0, 1)-0.5) * Math.PI/3;
         if (rotation.length() > Math.PI/6) {
@@ -284,6 +301,9 @@ public class LevelScene extends Scene {
         }
     }
 
+    /**
+     * Render all game objects. Meant for use with the normal coloring shader
+     */
     private void renderGameNormals(ShaderProgram shader) {
         for (int i = 0; i < gameObjects.length; i++) {
             setViewMatrices(shader, gameObjects[i]);
@@ -291,12 +311,20 @@ public class LevelScene extends Scene {
             gameObjectMeshes[i].renderInstanced(gameObjects[i].size());
         }
     }
+
+    /**
+     * Render all game objects. Meant for use with the shadow (depth) map shader
+     */
     private void renderDepths(ShaderProgram shader) {
         for (int i = 0; i < gameObjects.length; i++) {
             setWorldMatrices(shader, gameObjects[i]);
             gameObjectMeshes[i].renderInstanced(gameObjects[i].size());
         }
     }
+
+    /**
+     * Render all game objects. Meant for use with the shadows + sobel filter shader
+     */
     private void renderGameObjects(ShaderProgram shader) {
         for (int i = 0; i < gameObjects.length; i++) {
             setViewMatrices(shader, gameObjects[i]);
@@ -306,6 +334,8 @@ public class LevelScene extends Scene {
             gameObjectMeshes[i].renderInstanced(gameObjects[i].size());
         }
     }
+
+    // The following functions set up variables for use in shaders
     private void setTransparencies(ShaderProgram shader, ArrayList<? extends GameObject> objects) {
         FloatBuffer buffer = MemoryUtil.memAllocFloat(objects.size());
         for (int i = 0; i < objects.size(); i++) {
@@ -330,7 +360,6 @@ public class LevelScene extends Scene {
         shader.setUniformMatrix4fv("viewMatrices", buffer);
         MemoryUtil.memFree(buffer);
     }
-
     private void setColors(int index, ShaderProgram shader, ArrayList<? extends GameObject> objects) {
         FloatBuffer buffer = MemoryUtil.memAllocFloat(4*objects.size());
         for (int i = 0; i < objects.size(); i++) {
@@ -343,11 +372,7 @@ public class LevelScene extends Scene {
     public void render() {
         if (level == null) return;
 
-//        glClearColor(Colors.background.x, Colors.background.y, Colors.background.z, 1);
         glClearColor(Colors.background.x, Colors.background.y, Colors.background.z, 1);
-//        glEnable(GL_STENCIL_TEST);
-//        glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-//        glStencilMask(0xFF);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
@@ -357,10 +382,8 @@ public class LevelScene extends Scene {
         glDisable(GL_STENCIL_TEST);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-//        glStencilFunc(GL_ALWAYS, 1, 0xFF);
-//        glStencilMask(0xFF);
-
         // Draw normals to edgeSourceFbo
+        // These normals are used to draw edges (using sobel filter edge detection)
         edgeSourceFbo.bind();
         glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -370,7 +393,8 @@ public class LevelScene extends Scene {
 
         renderGameNormals(colorNormalsInstanced);
 
-        // Compute shadow map
+        // Compute a shadow map
+        // This is used to determine whether a fragment is in a shadow
         depthInstanced.bind();
         shadowMap.depthMap.bind();
         glViewport(0, 0, shadowMap.getWidth(), shadowMap.getHeight());
@@ -384,7 +408,6 @@ public class LevelScene extends Scene {
         // Draw to screen
         glViewport(0, 0, windowWidth, windowHeight);
         outInstanced.bind();
-//        outShader.setUniform("inShadowColor", Colors.hexRGBA(0xd48fe3ff));
         outInstanced.setUniform("inShadowColor", Colors.background);
         outInstanced.setUniform("normalTexture", 0);
         outInstanced.setUniform("depthTexture", 1);
@@ -400,25 +423,26 @@ public class LevelScene extends Scene {
         shadowMap.depthMap.getDepthTexture().bind();
 
         renderGameObjects(outInstanced);
-
-//        if (level.isMainMenu()) {
-//            textureShader.bind();
-//            textureShader.setUniform("viewMatrix", camera.getViewMatrix(title.getWorldMatrix(rotation)));
-//            textureShader.setUniform("projectionMatrix", camera.getProjectionMatrix());
-//            textureShader.setUniform("textureSampler", 0);
-//            title.mesh.render();
-//        }
     }
     @Override
     public void nvgRender(NanoVGContext nvg) {
 
     }
+
+    /**
+     * @return a factor used to determine how high to position the camera so that all tiles are visible
+     */
     private float cameraDistanceFactor() {
         return (float)(Math.max(level.getRows(), level.getColumns())/Math.tan(camera.getFov()/2)) * 0.7f;
     }
+
+    /**
+     * Loads all game objects in a level
+     */
     public void loadLevel(Level level) {
         this.level = level;
 
+        // Clear all game objects / level state
         floorTiles.clear();
         holeTiles.clear();
         coverTiles.clear();
@@ -430,17 +454,13 @@ public class LevelScene extends Scene {
         hasWon = false;
         hasDied = false;
 
-        float factor = cameraDistanceFactor();
-        camera.position.z = factor;
+        camera.position.z = cameraDistanceFactor();
         shadowMap.setRadius(Math.max(level.getRows(), level.getColumns())*0.7f);
 //        shadowMap.setFarPlane(factor * 1.25f);
         shadowMap.updateLightSpaceMatrix();
-//
-//        if (level.isMainMenu()) {
-//            title.position.set(-1, -1, 1);
-//        }
 
         for (int i = 0; i < level.getRows(); i++) {
+            // Load all floor tiles
             for (int j = 0; j < level.getColumns(); j++) {
                 if (level.getFloorState(i, j) == FloorTile.FLOOR) {
                     Box tile = new Box(new Line3(
@@ -476,6 +496,7 @@ public class LevelScene extends Scene {
                     tallTiles.add(tile);
                 }
             }
+            // Load all vertically-oriented walls
             for (int j = 0; j < level.getColumns()+1; j++) {
                 if (level.getWallXState(i, j)) {
                     Box tile = new Box(new Line3(
@@ -487,6 +508,7 @@ public class LevelScene extends Scene {
                 }
             }
         }
+        // Load all horizontally-oriented walls
         for (int i = 0; i < level.getRows()+1; i++) {
             for (int j = 0; j < level.getColumns(); j++) {
                 if (level.getWallYState(i, j)) {
@@ -500,6 +522,7 @@ public class LevelScene extends Scene {
             }
         }
 
+        // Load all balls
         for (int i = 0; i < level.numberBalls(); i++) {
             Ball ball = new Ball(
                     new Sphere(new Vector3d(level.getPosX(level.getBallColumn(i))+0.5, level.getPosY(level.getBallRow(i))+0.5, 0.35), 0.35)
@@ -509,6 +532,10 @@ public class LevelScene extends Scene {
             balls.add(ball);
         }
     }
+
+    /**
+     * Reset the current level
+     */
     public void reset() {
         loadLevel(level);
     }

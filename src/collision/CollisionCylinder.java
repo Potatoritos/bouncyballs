@@ -8,6 +8,9 @@ import org.joml.Vector3d;
 
 import static math.Geometry.*;
 
+/**
+ * Defines the collision properties of a cylinder
+ */
 public class CollisionCylinder extends CollisionObject {
     protected final Cylinder cylinder;
     private final Vector3d midpoint;
@@ -18,8 +21,7 @@ public class CollisionCylinder extends CollisionObject {
     }
 
     @Override
-    public void reflectLine(Line3 line, Vector3d intersection, double length) {
-        // Project the intersection onto the cylinder's axis
+    public void reflectLine(Line3 line, Vector3d intersection) {
         parent.reflectLine(line, intersection, cylinder.normal(intersection));
     }
 

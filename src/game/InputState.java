@@ -7,20 +7,36 @@ import java.util.HashSet;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_R;
 
+/**
+ * Stores the current state of user input
+ */
 public class InputState {
     public static final int SCROLLWHEEL_UP = 727272727;
     public static final int SCROLLWHEEL_DOWN = 727272728;
     public static final int MOUSE_BUTTON_LEFT = 727272729;
+
+    /**
+     * The mouse position, normalized to [-1, 1]
+     */
     public final Vector2d mousePosition;
+
+    /**
+     * The actual window coordinates of the mouse
+     */
     public final Vector2d actualMousePosition;
     private final HashSet<Integer> pressedKeys;
-    private int resetKey = GLFW_KEY_R;
-    public int getResetKey() {
-        return resetKey;
-    }
+
+    /**
+     * Marks all keys as not pressed. Should be called at the start of every frame
+     */
     public void clearPressedKeys() {
         pressedKeys.clear();
     }
+
+    /**
+     * Marks a key as pressed for the current frame
+     * @param key the key
+     */
     public void addPressedKey(int key) {
         pressedKeys.add(key);
     }

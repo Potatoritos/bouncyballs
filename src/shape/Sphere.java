@@ -2,6 +2,9 @@ package shape;
 
 import org.joml.Vector3d;
 
+/**
+ * Represents a sphere defined by a position and a radius
+ */
 public class Sphere {
     private double radius;
     public final Vector3d position;
@@ -30,7 +33,11 @@ public class Sphere {
     public void setRadius(double value) {
         radius = value;
     }
-    // Get the normal vector of a point on the sphere
+    /**
+     * Get the normal vector of a point on the sphere
+     * @param point the point on the sphere
+     * @return the vector
+     */
     public Vector3d normal(Vector3d point) {
         return new Vector3d(point).sub(position);
     }

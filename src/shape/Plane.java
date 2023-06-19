@@ -2,6 +2,9 @@ package shape;
 
 import org.joml.Vector3d;
 
+/**
+ * Represents a plane defined by a position and two direction vectors
+ */
 public class Plane {
     public final Vector3d position;
     public final Vector3d displacement1;
@@ -28,6 +31,9 @@ public class Plane {
         set(plane.position, plane.displacement1, plane.displacement2);
     }
 
+    /**
+     * @return the normal of this plane
+     */
     public Vector3d normal() {
         return new Vector3d(displacement1).cross(displacement2);
     }

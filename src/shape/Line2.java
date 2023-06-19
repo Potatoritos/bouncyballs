@@ -2,6 +2,9 @@ package shape;
 
 import org.joml.Vector2d;
 
+/**
+ * Represents a 2-D line defined by a position and a direction
+ */
 public class Line2 {
     public final Vector2d position;
     public final Vector2d displacement;
@@ -36,6 +39,10 @@ public class Line2 {
     public double y2() {
         return position.y + displacement.y;
     }
+
+    /**
+     * @return true if the point is in the rectangle defined by corners (x1(), y1()) and (x2(), y2()); false otherwise
+     */
     public boolean isPointInRectangle(Vector2d point) {
         return x1() <= point.x && point.x <= x2() && y1() <= point.y && point.y <= y2();
     }

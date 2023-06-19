@@ -1,6 +1,8 @@
 package math;
 
-// Polynomial of the form ax²+bx+c
+/**
+ * Represents a polynomial of the form ax²+bx+c
+ */
 public class Quadratic {
     private double a;
     private double b;

@@ -13,6 +13,9 @@ import static math.MathUtil.cutMaxMin;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
 import static org.lwjgl.nanovg.NanoVG.*;
 
+/**
+ * Handles the game's menus
+ */
 public class GameScene extends Scene {
     private final LevelScene levelScene;
     private int windowWidth;
@@ -100,11 +103,9 @@ public class GameScene extends Scene {
         requestedGameSpeed = 1;
         gameSpeeds = new double[] {0.5, 0.75, 1, 1.5, 2};
         gameSpeedIndex = 2;
-        horizontalSwipeTimer.start(49);
+        verticalSwipeTimer.start(160);
 
-//        startEnterLevelSelect();
         endEnterMainMenu();
-//        levelScene.loadLevel(levels.get(selectedLevelIndex));
     }
     public int getRequestedFpsCap() {
         return requestedFpsCap;
@@ -115,6 +116,7 @@ public class GameScene extends Scene {
     public boolean hasRequestedExit() {
         return hasRequestedExit;
     }
+    // The functions below are for switching between states (e.g, in main menu, in level select menu)
     private void startRequestExit() {
         gameExitTimer.start();
         horizontalSwipeTimer.start();
@@ -228,6 +230,10 @@ public class GameScene extends Scene {
             levelScene.updatePreviewCameraDistance();
         }
     }
+
+    /**
+     * Load levels from the level folder
+     */
     public void loadLevels() {
         levels.clear();
         File levelsDirectory = new File("assets/levels/main");
@@ -253,6 +259,7 @@ public class GameScene extends Scene {
             timer.update();
         }
 
+        // Handle state switching
         // TODO: create some sort of function callback class so i can avoid doing this
         if (enterLevelSelectTimer.isOnLastFrame()) {
             endEnterLevelSelect();
@@ -290,6 +297,7 @@ public class GameScene extends Scene {
             button.update(input);
         }
 
+        // Handle menu-related input
         if (!inTransition && !horizontalSwipeTimer.isActive() && !verticalSwipeTimer.isActive()) {
             if (inLevelSelect) {
                 if (input.isPreviousLevelPressed()) {
@@ -333,7 +341,6 @@ public class GameScene extends Scene {
         }
 
         levelScene.update(input);
-
     }
     @Override
     public void render() {
@@ -343,6 +350,7 @@ public class GameScene extends Scene {
     @Override
     public void nvgRender(NanoVGContext nvg) {
         if (inLevelSelect || levelTitleTimer.isActive()) {
+            // Draw the level title
             Vector4f color = new Vector4f(Colors.backgroundDarker);
             if (levelTitleTimer.isActive() && levelTitleTimer.getFrame() >= 288) {
                 color.w = 1 - (levelTitleTimer.getFrame()-288f) / 144;
@@ -354,10 +362,12 @@ public class GameScene extends Scene {
             nvg.drawText(nvg.left(), nvg.bottom(), String.format("level %02d", selectedLevelIndex+1));
         }
         if (inLevelSelect) {
+            // Draw key indicators
 //            nvg.drawImage(nvg.escapeImage, nvg.left(), nvg.top(), 0.75f);
             nvg.drawImage(nvg.mouse1Image, nvg.left()+nvg.getWidth()*0.27f, nvg.bottom()-nvg.scaledWidthSize(nvg.mouse1Image.getHeight())*0.75f, 0.75f);
             nvg.drawImage(nvg.mousewheelImage, nvg.right()-nvg.scaledWidthSize(nvg.mousewheelImage.getWidth()-10), nvg.bottom()-nvg.scaledWidthSize(60), 0.75f);
 
+            // Draw the scrollbar
             float scrollPosition = (float)selectedLevelIndex / Math.max(1, levels.size()-1);
             if (levels.size() == 1) {
                 scrollPosition = 1;
@@ -371,8 +381,6 @@ public class GameScene extends Scene {
 
             nvg.setFillColor(Colors.backgroundDarker);
             nvg.fillCircle(scrollX, nvg.top() + scrollPosition*scrollY, nvg.scaledWidthSize(20));
-
-//                nvgImagePattern(nvg, left + windowWidth*0.1f, bottom, windowWidth*83f/1920, windowWidth*68f/1920, 0, resources.getEscapeImage(), 1f, imagePaint);
 
         } else if (inMainMenu) {
             // Render title
@@ -401,7 +409,9 @@ public class GameScene extends Scene {
             nvg.renderButton(aboutButton, nx2);
             nvg.renderButton(fpsCapButton, nx1);
             nvg.renderButton(gameSpeedButton, nx2);
+
         } else if (inAboutMenu) {
+            // Render about menu text
             nvg.setFillColor(Colors.tile);
             nvg.fillRect(0, 0, windowWidth, windowHeight);
             nvg.setFillColor(Colors.backgroundDarker);
@@ -429,6 +439,7 @@ public class GameScene extends Scene {
         }
 
         if (horizontalSwipeTimer.isActive()) {
+            // Render the horizontal swipe animation
             nvg.setFillColor(Colors.black);
             if (horizontalSwipeTimer.getFrame() <= 48) {
                 nvg.fillRect(0, 0, windowWidth * cubicInterpolation((float) horizontalSwipeTimer.getFrame() / 48), windowHeight);
@@ -439,6 +450,7 @@ public class GameScene extends Scene {
             }
         }
         if (levelClearTimer.isActive()) {
+            // Render the LEVEL CLEAR animation
             nvg.setFillColor(Colors.green);
             float x = levelClearTimer.fpercentage()*1.4f;
             float y = nvg.scaledWidthSize(-400 * x * (x - 2));
@@ -451,6 +463,7 @@ public class GameScene extends Scene {
             nvg.drawText(windowWidth/2, y+nvg.scaledWidthSize(190), "LEVEL CLEAR");
         }
         if (verticalSwipeTimer.isActive()) {
+            // Render the vertical swipe animation
             nvg.setFillColor(Colors.black);
             if (verticalSwipeTimer.getFrame() <= 48) {
                 nvg.fillRect(0, 0, windowWidth, windowHeight * cubicInterpolation((float)verticalSwipeTimer.getFrame() / 48));

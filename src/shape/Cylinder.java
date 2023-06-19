@@ -4,6 +4,9 @@ import org.joml.Vector3d;
 
 import static math.Geometry.project;
 
+/**
+ * Represents a cylinder defined by a radius, axis, and position
+ */
 public class Cylinder {
     public final Vector3d position;
     public final Vector3d axis;
@@ -35,7 +38,11 @@ public class Cylinder {
     public void setRadius(double value) {
         radius = value;
     }
-    // Get the normal vector of a point on the cylinder
+    /**
+     * Get the normal vector of a point on the cylinder
+     * @param point the point on the cylinder
+     * @return the vector
+     */
     public Vector3d normal(Vector3d point) {
         Vector3d u = new Vector3d(point).sub(position);
         Vector3d projection = new Vector3d();

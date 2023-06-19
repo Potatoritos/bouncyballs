@@ -10,6 +10,9 @@ import org.joml.Vector3d;
 import static math.Geometry.project;
 import static math.MathUtil.cubicInterpolation;
 
+/**
+ * Represents the balls you have to maneuver into the holes
+ */
 public class Ball extends GameObject {
     public final Vector3d velocity;
     public final Sphere geometry;
@@ -34,6 +37,7 @@ public class Ball extends GameObject {
     }
     @Override
     public void update() {
+        // Handle explosion animation
         explosionTimer.update();
         if (explosionTimer.isActive()) {
             geometry.position.set(explosionPosition);
@@ -45,6 +49,7 @@ public class Ball extends GameObject {
             return;
         }
 
+        // Perform numerical integration (add velocity to position)
         geometry.position.add(velocity);
         if (velocityDeferred) {
             velocity.set(deferredVelocity);
@@ -96,7 +101,7 @@ public class Ball extends GameObject {
         // Rebound the ball colliding into this one
         Geometry.reflectLineFixedRebound(line, intersection, normal, 0.022);
 
-        // Rebound self as well
+        // Rebound this ball as well
         // Velocity is deferred to the next frame to ensure that collisions are handled before the velocity adds to position
         Vector3d normalComponent = new Vector3d();
         deferredVelocity.set(velocity);

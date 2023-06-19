@@ -23,6 +23,10 @@ public class Quad {
         this.c.set(v);
         this.d.set(v);
     }
+
+    /**
+     * The points a, b, c, d should be in counter-clockwise order
+     */
     public Quad(Vector3f a, Vector3f b, Vector3f c, Vector3f d) {
         this();
         this.a.set(a);
@@ -30,6 +34,10 @@ public class Quad {
         this.c.set(c);
         this.d.set(d);
     }
+
+    /**
+     * Adds this quadrilateral's faces to a list
+     */
     public void addToList(ArrayList<Vector3f> list) {
         list.add(a);
         list.add(b);

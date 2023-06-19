@@ -3,6 +3,9 @@ package game;
 import org.joml.Vector3f;
 import shape.Line2;
 
+/**
+ * Represents a button (seen in the main menu)
+ */
 public class UIButton {
     public final Line2 geometry;
     private boolean isHoveredOver;

@@ -7,6 +7,9 @@ import java.util.ArrayList;
 
 import static math.MathUtil.insertVector;
 
+/**
+ * Utility class for creating meshes
+ */
 public class MeshBuilder {
     private final ArrayList<Vector3f> vertices;
     private final ArrayList<Vector3f> normals;
@@ -18,6 +21,13 @@ public class MeshBuilder {
         colors = new ArrayList<>();
         indices = new ArrayList<>();
     }
+
+    /**
+     * Adds a quadrilateral to the mesh
+     * @param vertices the quadrilateral's vertices
+     * @param normals the normals of the vertices
+     * @param colors the colors of the vertices
+     */
     public void addQuad(Quad vertices, Quad normals, Quad colors) {
         int i = this.vertices.size();
         indices.add(i);
@@ -30,6 +40,13 @@ public class MeshBuilder {
         normals.addToList(this.normals);
         colors.addToList(this.colors);
     }
+
+    /**
+     * Adds a triangle to the mesh
+     * @param vertices the triangle's vertices
+     * @param normals the normals of the vertices
+     * @param colors the colors of the vertices
+     */
     public void addTriangle(Triangle vertices, Triangle normals, Triangle colors) {
         int i = this.vertices.size();
         indices.add(i);
@@ -39,6 +56,11 @@ public class MeshBuilder {
         normals.addToList(this.normals);
         colors.addToList(this.colors);
     }
+
+    /**
+     * Creates a mesh from the added triangles and quadrilaterals
+     * @return the mesh
+     */
     GameObjectMesh createMesh() {
         int size = this.vertices.size();
         float[] vertices = new float[3*size];

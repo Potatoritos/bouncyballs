@@ -8,6 +8,9 @@ import org.joml.Vector3d;
 
 import static math.Geometry.*;
 
+/**
+ * Defines the collision properties of a plane
+ */
 public class CollisionPlane extends CollisionObject {
     protected final Plane plane;
     private final Vector3d midpoint;
@@ -18,7 +21,7 @@ public class CollisionPlane extends CollisionObject {
     }
 
     @Override
-    public void reflectLine(Line3 line, Vector3d intersection, double length) {
+    public void reflectLine(Line3 line, Vector3d intersection) {
         parent.reflectLine(line, intersection, plane.normal());
     }
 

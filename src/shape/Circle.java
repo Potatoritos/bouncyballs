@@ -2,6 +2,9 @@ package shape;
 
 import org.joml.Vector2d;
 
+/**
+ * Represents a circle defined by a radius and a position
+ */
 public class Circle {
     private double radius;
     public final Vector2d position;

@@ -13,6 +13,34 @@ import java.util.ArrayList;
 
 import static math.Geometry.distance;
 
+/**
+ * Handles collisions between balls and boxes/other balls
+ */
+/*
+ * To accomplish this, each shape is first spherically extruded.
+ * For instance, boxes become rounded boxes, consisting of planar
+ * (from the original box's faces), cylindrical (from the original
+ * box's edges), and spherical (from the original box's corners)
+ * faces.
+ *
+ * This allows us to represent the ball as a point instead of a
+ * sphere, and by extension, the reflections of the ball off of
+ * surfaces as reflections of the line
+ *      ball.position + t * ball.velocity.
+ * off of the spherically-extruded shapes.
+ *
+ * Then, we can apply the following sequence of steps:
+ *
+ * For each ball,
+ * 1.   Get all collision objects that are near it
+ * 2.   Find the intersections between the ball's motion line and
+ *      all of the above objects
+ * 3.   Reflect the line off of the intersection found above that
+ *      is closest to the ball's position
+ * 4.   Repeat steps 1-3 until the line no longer intersects any
+ *      objects
+ * 5.   Pray that the ball doesn't somehow clip through anything
+ */
 public class CollisionHandler {
     private Ball ball;
     private final Line3 ballMotion;
@@ -32,12 +60,17 @@ public class CollisionHandler {
         collisionObjects.clear();
         triggers.clear();
     }
+
+    /**
+     * Sets the ball to process collisions for
+     */
     public void setBall(Ball ball) {
         this.ball = ball;
         ballSphere.set(ball.geometry);
         ballMotion.position.set(ball.geometry.position);
         ballMotion.displacement.set(ball.velocity);
     }
+
     private void addCollisionObject(CollisionObject object) {
         if (object.isNearby(ballSphere)) {
             collisionObjects.add(object);
@@ -48,6 +81,10 @@ public class CollisionHandler {
             triggers.add(trigger);
         }
     }
+
+    /**
+     * Handle collisions using the steps outlined in the topmost comment
+     */
     public void processCollisions() {
         int i = 0;
         Vector3d intersection = new Vector3d();
@@ -79,13 +116,16 @@ public class CollisionHandler {
             }
 
             // Reflect the ball off of the aforementioned closest collision object
-            minCollisionObject.reflectLine(ballMotion, minIntersection, minDistance);
+            minCollisionObject.reflectLine(ballMotion, minIntersection);
         }
 
         ball.geometry.position.set(ballMotion.position);
         ball.velocity.set(ballMotion.displacement);
     }
 
+    /**
+     * Add the death trigger that kills balls that fall off the board
+     */
     public void addFallDeathTrigger() {
         addTrigger(new DeathTrigger(new CollisionPlane(null, new Plane(
                 new Vector3d(-100, -100, -3),
@@ -94,7 +134,11 @@ public class CollisionHandler {
         ))));
     }
 
-    public void addWallBox(Box box) {
+    /**
+     * Add the collision objects that make up the walls of a box
+     * @param box the box
+     */
+    public void addBoxWallColliders(Box box) {
         Vector3d up = new Vector3d(0, 0, box.geometry.displacement.z);
         addCollisionObject(new CollisionPlane(box,
                 new Plane(
@@ -154,8 +198,13 @@ public class CollisionHandler {
                 )
         ));
     }
-    public void addFloorBoxSides(Box box) {
-        addWallBox(box);
+    /**
+     * Add the collision objects that make up the sides of the
+     * floor of a box
+     * @param box the box
+     */
+    public void addBoxFloorSideColliders(Box box) {
+        addBoxWallColliders(box);
 
         addCollisionObject(new CollisionSphere(box,
                 new Sphere(new Vector3d(box.geometry.x1(), box.geometry.y1(), box.geometry.z2()), ball.getRadius())
@@ -198,8 +247,12 @@ public class CollisionHandler {
                 )
         ));
     }
-    public void addFloorBox(Box box) {
-        addFloorBoxSides(box);
+    /**
+     * Add the collision objects that make up the floor of the box
+     * @param box the box
+     */
+    public void addBoxFloorColliders(Box box) {
+        addBoxFloorSideColliders(box);
 
         addCollisionObject(new CollisionPlane(box,
                 new Plane(
@@ -209,7 +262,11 @@ public class CollisionHandler {
                 )
         ));
     }
-    public void addHoleBox(HoleBox box) {
+    /**
+     * Add the collision objects that make up hole boxes
+     * @param box the box
+     */
+    public void addHoleBoxColliders(HoleBox box) {
         addTrigger(new GoalTrigger(new CollisionPlane(box, new Plane(
                 box.geometry.position,
                 new Vector3d(box.geometry.displacement.x, 0, 0),
@@ -218,7 +275,7 @@ public class CollisionHandler {
 
         // Act as a regular tile if the correct ball has fallen into the hole
         if (box.hasReachedGoal()) {
-            addFloorBox(box);
+            addBoxFloorColliders(box);
             return;
         }
 
@@ -360,9 +417,14 @@ public class CollisionHandler {
                 )
         ));
 
-        addFloorBoxSides(box);
+        addBoxFloorSideColliders(box);
     }
-    public void addBallCollision(Ball ball) {
+
+    /**
+     * Add the collision objects that make up a ball
+     * @param ball the ball
+     */
+    public void addBallColliders(Ball ball) {
         addCollisionObject(new CollisionSphere(ball,
                 new Sphere(
                         ball.getPosition(),

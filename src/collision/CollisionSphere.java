@@ -7,6 +7,9 @@ import org.joml.Vector3d;
 
 import static math.Geometry.*;
 
+/**
+ * Defines the collision properties of a sphere
+ */
 public class CollisionSphere extends CollisionObject {
     private final Sphere sphere;
     public CollisionSphere(GameObject parent, Sphere sphere) {
@@ -15,7 +18,7 @@ public class CollisionSphere extends CollisionObject {
     }
 
     @Override
-    public void reflectLine(Line3 line, Vector3d intersection, double length) {
+    public void reflectLine(Line3 line, Vector3d intersection) {
         parent.reflectLine(line, intersection, sphere.normal(intersection));
     }
 

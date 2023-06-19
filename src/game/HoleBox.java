@@ -3,12 +3,20 @@ package game;
 import org.joml.Vector3f;
 import shape.Line3;
 
+/**
+ * Represents the holes you have to get the balls into
+ */
 public class HoleBox extends Box {
     private double radius;
     private int holeColor;
     private boolean hasReachedGoal;
     private final FrameTimer coverTimer;
     public final HoleBoxCover cover;
+
+    /**
+     * @param geometry the dimensions of the box
+     * @param radius the radius of the circular hole
+     */
     public HoleBox(Line3 geometry, double radius) {
         super(geometry);
         this.radius = radius;

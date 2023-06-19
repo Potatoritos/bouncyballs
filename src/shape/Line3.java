@@ -2,6 +2,9 @@ package shape;
 
 import org.joml.Vector3d;
 
+/**
+ * Represents a 3-D line defined by a position and a direction
+ */
 public class Line3 {
     public final Vector3d position;
     public final Vector3d displacement;

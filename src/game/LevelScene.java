@@ -3,6 +3,7 @@ package game;
 import collision.CollisionHandler3;
 import graphics.*;
 import mesh.Quad;
+import org.joml.Vector2f;
 import shape.Line3;
 import shape.Sphere;
 import org.joml.Vector3d;
@@ -32,7 +33,7 @@ public class LevelScene extends Scene {
     private final ShaderProgram outlineInstanced;
     private final ShaderProgram outShader;
     private final ShaderProgram depthInstanced;
-    private final ShaderProgram textureShader;
+//    private final ShaderProgram textureShader;
     private final EmptyFbo edgeSourceFbo;
     private final ShadowMap shadowMap;
     private final Vector3d rotation;
@@ -53,6 +54,7 @@ public class LevelScene extends Scene {
     private boolean isPaused;
     private boolean inPreviewMode;
     private final ContinuousFrameTimer previewRotation;
+
 
     private int windowWidth;
     private int windowHeight;
@@ -100,7 +102,7 @@ public class LevelScene extends Scene {
         outlineInstanced = ShaderProgram.fromFile("outline_instanced.glsl");
         outShader = ShaderProgram.fromFile("shadows_sobelfilter.glsl");
         depthInstanced = ShaderProgram.fromFile("depth_instanced.glsl");
-        textureShader = ShaderProgram.fromFile("texture.glsl");
+//        textureShader = ShaderProgram.fromFile("texture.glsl");
 
         rotation = new Vector3d();
 
@@ -110,16 +112,16 @@ public class LevelScene extends Scene {
         wallXTiles = new ArrayList<>();
         wallYTiles = new ArrayList<>();
         balls = new ArrayList<>();
-        gameObjects = new ArrayList[] {floorTiles, holeTiles, coverTiles, wallXTiles, wallYTiles, balls, };
+        gameObjects = new ArrayList[] {floorTiles, holeTiles, coverTiles, wallXTiles, wallYTiles, balls};
 
         camera.position.z = 6;
 
         edgeSourceFbo = new EmptyFbo(windowWidth, windowHeight);
         handleWindowResize(windowWidth, windowHeight);
-        shadowMap = new ShadowMap(2048, 2048, 3.5f);
+        shadowMap = new ShadowMap(2048, 2048, 3.5f, 0.1f, 10f);
 
 //        view = texturedRectangle(new Vector2f(0, 0), new Vector2f(1, 1), shadowMap.depthMap.getDepthTexture());
-//        viewEntity = new RenderEntity(view, new Vector3f(1, 1, 2));
+//        viewEntity = new RenderEntity(view, new Vector3f(1, 1, 8));
 
         hasDied = false;
         hasWon = false;
@@ -128,7 +130,8 @@ public class LevelScene extends Scene {
         previewRotation = new ContinuousFrameTimer(576);
     }
     public void updatePreviewCameraDistance() {
-        camera.position.set(0, -cameraDistanceFactor()*11/12, cameraDistanceFactor()*2/3);
+        float factor = cameraDistanceFactor();
+        camera.position.set(0, -factor*11/12, factor*2/3);
     }
     public void enterPreviewMode() {
         previewRotation.start();
@@ -136,6 +139,7 @@ public class LevelScene extends Scene {
         camera.rotation.x = -(float)Math.PI/4f;
         updatePreviewCameraDistance();
         shadowMap.setSourcePosition(new Vector3f(-2, 2, 4));
+        shadowMap.updateLightSpaceMatrix();
         rotation.set(0, 0, 0);
     }
     public void exitPreviewMode() {
@@ -144,6 +148,7 @@ public class LevelScene extends Scene {
         camera.position.set(0, 0, cameraDistanceFactor());
         camera.rotation.x = 0;
         shadowMap.setSourcePosition(new Vector3f(0, 0, 4));
+        shadowMap.updateLightSpaceMatrix();
         rotation.z = 0;
     }
     public boolean hasDied() {
@@ -343,6 +348,11 @@ public class LevelScene extends Scene {
         shadowMap.depthMap.getDepthTexture().bind();
 
         renderGameObjects(outShader);
+
+//        textureShader.bind();
+//        textureShader.setUniform("viewMatrix", camera.getViewMatrix(viewEntity.getWorldMatrix()));
+//        textureShader.setUniform("projectionMatrix", camera.getProjectionMatrix());
+//        viewEntity.getMesh().render();
     }
     @Override
     public void nvgRender(NanoVGContext nvg) {
@@ -364,7 +374,11 @@ public class LevelScene extends Scene {
         hasWon = false;
         hasDied = false;
 
-        camera.position.z = cameraDistanceFactor();
+        float factor = cameraDistanceFactor();
+        camera.position.z = factor;
+        shadowMap.setRadius(Math.max(level.getRows(), level.getColumns())*0.7f);
+//        shadowMap.setFarPlane(factor * 1.25f);
+        shadowMap.updateLightSpaceMatrix();
 
         for (int i = 0; i < level.getRows(); i++) {
             for (int j = 0; j < level.getColumns(); j++) {

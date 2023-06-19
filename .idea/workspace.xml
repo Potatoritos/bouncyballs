@@ -10,8 +10,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
+      <change afterPath="$PROJECT_DIR$/assets/levels/level4.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/LevelScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/LevelScene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/levels/level0.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/levels/level1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/level1.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/levels/level2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/level2.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/levels/level3.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/level3.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game/GameScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/GameScene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game/Level.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Level.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,7 +65,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "fixcamera",
+    "git-widget-placeholder": "main",
     "last_opened_file_path": "/home/potatoritos/BouncyBalls/assets/levels",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",

@@ -6,6 +6,7 @@ import org.joml.Vector4f;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static math.MathUtil.cubicInterpolation;
 import static math.MathUtil.cutMaxMin;
@@ -140,10 +141,10 @@ public class GameScene extends Scene {
         if (levelFiles == null || levelFiles.length == 0) {
             throw new RuntimeException("No level files found!");
         }
-        Arrays.sort(levelFiles);
         for (File levelFile : levelFiles) {
             levels.add(Level.fromFile(levelFile.getName()));
         }
+        Collections.sort(levels);
     }
     @Override
     public void handleWindowResize(int width, int height) {

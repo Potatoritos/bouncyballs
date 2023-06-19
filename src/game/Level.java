@@ -4,7 +4,7 @@ import org.joml.Vector3d;
 
 import java.io.*;
 
-public class Level {
+public class Level implements Comparable<Level> {
     private final int rows;
     private final int columns;
     private final FloorTile[][] floorState;
@@ -12,7 +12,9 @@ public class Level {
     private final boolean[][] wallYState;
     private final int[] ballRow;
     private final int[] ballColumn;
-    private Level(int rows, int columns, int numBalls) {
+    private final String name;
+    private Level(String name, int rows, int columns, int numBalls) {
+        this.name = name;
         this.rows = rows;
         this.columns = columns;
         this.floorState = new FloorTile[rows][columns];
@@ -20,6 +22,9 @@ public class Level {
         this.wallYState = new boolean[rows+1][columns];
         ballRow = new int[numBalls];
         ballColumn = new int[numBalls];
+    }
+    public String getName() {
+        return name;
     }
     public int getRows() {
         return rows;
@@ -77,6 +82,7 @@ public class Level {
     public static Level fromFile(String path) {
         try (FileReader fr = new FileReader("assets/levels/" + path);
              BufferedReader br = new BufferedReader(fr)) {
+            String name = br.readLine();
             int rows = Integer.parseInt(br.readLine());
             int columns = Integer.parseInt(br.readLine());
             int numBalls = Integer.parseInt(br.readLine());
@@ -86,7 +92,7 @@ public class Level {
             if (numBalls == 0 || numBalls > 3) {
                 throw new RuntimeException("Invalid level number of balls");
             }
-            Level level = new Level(rows, columns, numBalls);
+            Level level = new Level(name, rows, columns, numBalls);
             for (int i = 0; i < rows; i++) {
                 String row = br.readLine();
                 if (row.length() != columns) new RuntimeException("Invalid level file - special tiles malformed");
@@ -137,5 +143,8 @@ public class Level {
         } catch (IOException e) {
             throw new RuntimeException("IOException");
         }
+    }
+    public int compareTo(Level other) {
+        return name.compareTo(other.name);
     }
 }

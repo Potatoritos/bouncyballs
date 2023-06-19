@@ -137,6 +137,7 @@ public class GameScene extends Scene {
         if (completedLevels.contains(name)) {
             return;
         }
+        completedLevels.add(name);
         try(FileWriter fw = new FileWriter("assets/levels/completed_levels.txt", true);
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter out = new PrintWriter(bw)) {

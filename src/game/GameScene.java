@@ -413,7 +413,7 @@ public class GameScene extends Scene {
 
             nvg.setFontFace("montserrat");
             nvg.setFontSize(nvg.scaledHeightSize(40));
-            nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(250), "By Elliott Cheng. My first OpenGL project!");
+            nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(250), "By Elliott Cheng. My first OpenGL project (also my last high school project)!");
             nvg.setFontFace("montserrat_bold");
             nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(350), "Instructions:");
             nvg.setFontFace("montserrat");

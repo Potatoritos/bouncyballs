@@ -26,6 +26,7 @@ public class LevelScene extends Scene {
     private final GameObjectMesh holeCoverMesh;
     private final GameObjectMesh wallXMesh;
     private final GameObjectMesh wallYMesh;
+    private final GameObjectMesh tallTileMesh;
     private final GameObjectMesh ballMesh;
     private final GameObjectMesh[] gameObjectMeshes;
 
@@ -43,6 +44,7 @@ public class LevelScene extends Scene {
     private final ArrayList<HoleBoxCover> coverTiles;
     private final ArrayList<Box> wallXTiles;
     private final ArrayList<Box> wallYTiles;
+    private final ArrayList<Box> tallTiles;
     private final ArrayList<Ball> balls;
     private final ArrayList<? extends GameObject>[] gameObjects;
     private final CollisionHandler3 collisionHandler;
@@ -91,12 +93,17 @@ public class LevelScene extends Scene {
                 new Vector3f(0f, 0f, 0f)
         );
         wallYMesh = rectangularPrismMesh(
-                new Vector3f(0, -0, 0),
+                new Vector3f(0, 0, 0),
                 new Vector3f(1.1f, 0.1f, (float)(floorTileHeight+wallHeight)),
                 new Vector3f(0f, 0f, 0f)
         );
+        tallTileMesh = rectangularPrismMesh(
+                new Vector3f(0, 0, 0),
+                new Vector3f(1, 1, (float)(floorTileHeight+wallHeight)),
+                new Vector3f(0, 0, 0)
+        );
         ballMesh = generateGeodesicPolyhedronMesh(3, new Vector3f(0f, 1f, 0f));
-        gameObjectMeshes = new GameObjectMesh[] {floorMesh, holeMesh, holeCoverMesh, wallXMesh, wallYMesh, ballMesh};
+        gameObjectMeshes = new GameObjectMesh[] {floorMesh, holeMesh, holeCoverMesh, wallXMesh, wallYMesh, tallTileMesh, ballMesh};
 
         colorNormalsInstanced = ShaderProgram.fromFile("color_normals_instanced.glsl");
         outlineInstanced = ShaderProgram.fromFile("outline_instanced.glsl");
@@ -111,8 +118,9 @@ public class LevelScene extends Scene {
         coverTiles = new ArrayList<>();
         wallXTiles = new ArrayList<>();
         wallYTiles = new ArrayList<>();
+        tallTiles = new ArrayList<>();
         balls = new ArrayList<>();
-        gameObjects = new ArrayList[] {floorTiles, holeTiles, coverTiles, wallXTiles, wallYTiles, balls};
+        gameObjects = new ArrayList[] {floorTiles, holeTiles, coverTiles, wallXTiles, wallYTiles, tallTiles, balls};
 
         camera.position.z = 6;
 
@@ -210,6 +218,7 @@ public class LevelScene extends Scene {
             for (Box box : wallXTiles) collisionHandler.addFloorBox(box);
             for (Box box : wallYTiles) collisionHandler.addFloorBox(box);
             for (Box box : floorTiles) collisionHandler.addFloorBox(box);
+            for (Box box : tallTiles) collisionHandler.addFloorBox(box);
             for (HoleBox box : holeTiles) collisionHandler.addHoleBox(box);
 
             for (Ball collisionBall : balls) {
@@ -407,6 +416,13 @@ public class LevelScene extends Scene {
                     holeTiles.add(tile);
                     tile.cover.getColor(0).set(Colors.tile);
                     coverTiles.add(tile.cover);
+                } else if (level.getFloorState(i, j) == FloorTile.TALL) {
+                    Box tile = new Box(new Line3(
+                            new Vector3d(level.getPosX(j), level.getPosY(i), -floorTileHeight),
+                            new Vector3d(1, 1, floorTileHeight+wallHeight)
+                    ));
+                    tile.getColor(0).set(Colors.tile);
+                    tallTiles.add(tile);
                 }
             }
             for (int j = 0; j < level.getColumns()+1; j++) {

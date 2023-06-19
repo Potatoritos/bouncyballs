@@ -104,7 +104,8 @@ public class Level {
                 for (int j = 0; j < row.length(); j++) {
                     switch(row.charAt(j)) {
                         case '.' -> level.setFloorState(rows-1-i, j, FloorTile.NONE);
-                        case '#' -> level.setFloorState(rows-1-i, j, FloorTile.FLOOR);
+                        case 'x' -> level.setFloorState(rows-1-i, j, FloorTile.FLOOR);
+                        case '#' -> level.setFloorState(rows-1-i, j, FloorTile.TALL);
                         case '1' -> level.setFloorState(rows-1-i, j, FloorTile.GOAL1);
                         case '2' -> level.setFloorState(rows-1-i, j, FloorTile.GOAL2);
                         case '3' -> level.setFloorState(rows-1-i, j, FloorTile.GOAL3);

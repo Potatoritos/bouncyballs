@@ -10,10 +10,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2023-06-12,_4_41_p_m__[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2023-06-12__4_41_p_m___Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/completed_levels.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/completed_levels.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BouncyBalls.eml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BouncyBalls.userlibraries" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/BouncyBalls_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/BouncyBalls_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/assets/levels/main/level4.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/main/level4.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -69,7 +69,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
+    "project.structure.last.edited": "Artifacts",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "preferences.editor",
@@ -205,6 +205,7 @@
       <workItem from="1687145132256" duration="20233000" />
       <workItem from="1687166816664" duration="23779000" />
       <workItem from="1687272398343" duration="180000" />
+      <workItem from="1687274577589" duration="423000" />
     </task>
     <servers />
   </component>

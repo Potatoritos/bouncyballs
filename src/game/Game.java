@@ -115,7 +115,6 @@ public class Game {
 
             // Call update multiple times if catching up is required
             while (updateDelta >= nsPerUpdate) {
-                long time = System.nanoTime();
                 update();
                 updateDelta -= nsPerUpdate;
                 updateCount++;

@@ -1,6 +1,5 @@
 package game;
 
-import org.joml.Vector3f;
 import shape.Line3;
 
 /**
@@ -30,7 +29,7 @@ public class HoleBox extends Box {
     public void update() {
         cover.position.set(geometry.position);
         if (hasReachedGoal) {
-            coverTimer.update();
+            coverTimer.advanceFrame();
             cover.position.add(0, 0, (float)geometry.displacement.z*coverTimer.getFrame()/coverTimer.getTotalFrames());
 //            cover.color1.x = 1 - (float)coverTimer.getFrame()/coverTimer.getTotalFrames();
         }

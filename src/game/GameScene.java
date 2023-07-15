@@ -5,13 +5,11 @@ import org.joml.Vector2d;
 import org.joml.Vector4f;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
+import java.util.*;
+import java.util.jar.JarEntry;
 
 import static math.MathUtil.cubicInterpolation;
 import static math.MathUtil.cutMaxMin;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
 import static org.lwjgl.nanovg.NanoVG.*;
 
 /**
@@ -40,6 +38,7 @@ public class GameScene extends Scene {
     private boolean inAboutMenu;
     private boolean inTransition;
     private boolean atEndOfLevels;
+    private boolean pendingAdvance;
     private final ArrayList<Level> levels;
     private int selectedLevelIndex;
     private final UIButton levelSelectButton;
@@ -58,7 +57,9 @@ public class GameScene extends Scene {
     private double[] gameSpeeds;
     private int gameSpeedIndex;
     private boolean hasRequestedExit;
-    private final HashSet<String> completedLevels;
+
+    // Stores star levels in values
+    private final HashMap<String, Integer> completedLevels;
     public GameScene(int windowWidth, int windowHeight) {
         this.windowWidth = windowWidth;
         this.windowHeight = windowHeight;
@@ -77,7 +78,8 @@ public class GameScene extends Scene {
         gameExitTimer = new FrameTimer(72);
         levelTitleTimer = new FrameTimer(432);
 
-        timers = new FrameTimer[] {horizontalSwipeTimer, verticalSwipeTimer, levelClearTimer, levelClearDelayTimer, enterLevelSelectTimer, enterLevelTimer, levelResetTimer, advanceTimer, enterMainMenuTimer, enterAboutTimer, gameExitTimer, levelTitleTimer};
+        // levelClearTimer is not here intentionally
+        timers = new FrameTimer[] {horizontalSwipeTimer, verticalSwipeTimer, levelClearDelayTimer, enterLevelSelectTimer, enterLevelTimer, levelResetTimer, advanceTimer, enterMainMenuTimer, enterAboutTimer, gameExitTimer, levelTitleTimer};
 
         levels = new ArrayList<>();
 
@@ -98,7 +100,7 @@ public class GameScene extends Scene {
         buttonGap = 30;
         buttonLength = 300;
 
-        completedLevels = new HashSet<>();
+        completedLevels = new HashMap<>();
 
         loadLevels();
         loadCompletedLevels();
@@ -133,15 +135,34 @@ public class GameScene extends Scene {
      * Add a level to the completed levels file
      * @param name the name of the level
      */
-    private void addCompletedLevel(String name) {
-        if (completedLevels.contains(name)) {
+    private void addCompletedLevel(String name, int starLevel) {
+        if (completedLevels.containsKey(name)) {
+            if (starLevel < completedLevels.get(name)) {
+                completedLevels.put(name, starLevel);
+            } else {
+                return;
+            }
+            // Recreate completed levels file if name exists but star level is better
+            HashMap<String, Integer> completed = new HashMap<>(completedLevels);
+            completedLevels.clear();
+            try (FileWriter fw = new FileWriter("assets/levels/completed_levels.txt", false);
+                 BufferedWriter bw = new BufferedWriter(fw);
+                 PrintWriter out = new PrintWriter(bw)) {
+                out.print("");
+            } catch (IOException e) {
+                throw new RuntimeException("Error while adding to completion list");
+            }
+            for (Map.Entry<String, Integer> entry : completed.entrySet()) {
+                addCompletedLevel(entry.getKey(), entry.getValue());
+            }
             return;
         }
-        completedLevels.add(name);
-        try(FileWriter fw = new FileWriter("assets/levels/completed_levels.txt", true);
+
+        completedLevels.put(name, starLevel);
+        try (FileWriter fw = new FileWriter("assets/levels/completed_levels.txt", true);
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter out = new PrintWriter(bw)) {
-            out.println(name);
+            out.println(name + "," + starLevel);
         } catch (IOException e) {
             throw new RuntimeException("Error while adding to completion list");
         }
@@ -155,7 +176,10 @@ public class GameScene extends Scene {
             try (FileReader fr = new FileReader("assets/levels/completed_levels.txt"); BufferedReader br = new BufferedReader(fr)) {
                 String line;
                 while ((line = br.readLine()) != null) {
-                    completedLevels.add(line);
+                    int delim = line.indexOf(',');
+                    String name = line.substring(0, delim);
+                    int starLevel = Integer.parseInt(line.substring(delim+1));
+                    completedLevels.put(name, starLevel);
                 }
             }
         } catch (IOException e) {
@@ -244,14 +268,22 @@ public class GameScene extends Scene {
         inTransition = true;
     }
     private void startLevelClear() {
+        addCompletedLevel(currentLevel().getName(), levelScene.getStarLevel());
         levelClearTimer.start();
     }
+    private void midLevelClearPending() {
+        pendingAdvance = true;
+    }
     private void midLevelClear() {
+        pendingAdvance = false;
         advanceTimer.start();
         verticalSwipeTimer.start();
     }
+    private void endLevelClear() {
+        pendingAdvance = false;
+        levelClearDelayTimer.end();
+    }
     private void midAdvanceLevel() {
-        addCompletedLevel(currentLevel().getName());
         if (selectedLevelIndex >= levels.size()-1) {
             atEndOfLevels = true;
             endEnterLevelSelect();
@@ -273,6 +305,14 @@ public class GameScene extends Scene {
     }
     private void setLevelToSelected() {
         levelScene.loadLevel(currentLevel());
+        Colors.resetBackground();
+        if (completedLevels.containsKey(currentLevel().getName())) {
+            switch(completedLevels.get(currentLevel().getName())) {
+                case 0 -> Colors.background.set(Colors.red);
+                case 1 -> Colors.background.set(Colors.pink);
+                case 2 -> Colors.background.set(Colors.blue);
+            }
+        }
         if (inLevelSelect) {
             levelScene.updatePreviewCameraDistance();
         }
@@ -303,7 +343,10 @@ public class GameScene extends Scene {
     @Override
     public void update(InputState input) {
         for (FrameTimer timer : timers) {
-            timer.update();
+            timer.advanceFrame();
+        }
+        if (!pendingAdvance) {
+            levelClearTimer.advanceFrame();
         }
 
         // Handle state switching
@@ -323,7 +366,18 @@ public class GameScene extends Scene {
             endLevelReset();
         }
         if (levelClearTimer.getFrame() == 120) {
-            midLevelClear();
+            midLevelClearPending();
+        }
+        if (pendingAdvance) {
+            if (input.isSelectLevelPressed()) {
+                midLevelClear();
+            } else if (input.isResetKeyPressed()) {
+                endLevelClear();
+                startLevelReset();
+            } else if (input.isExitKeyPressed())  {
+                endLevelClear();
+                startEnterLevelSelect();
+            }
         }
         if (advanceTimer.getFrame() == 169) {
             midAdvanceLevel();
@@ -406,11 +460,136 @@ public class GameScene extends Scene {
             nvg.setFontSize(nvg.scaledWidthSize(120));
             nvg.setTextAlign(NVG_ALIGN_LEFT);
             nvg.setFillColor(color);
+
             String name = currentLevel().getName();
-            if (completedLevels.contains(name)) {
-                name += "*";
-            }
             nvg.drawText(nvg.left(), nvg.bottom(), name);
+            if (inLevelSelect && completedLevels.containsKey(name)) {
+                nvg.drawImage(nvg.starImage, nvg.left(), nvg.bottom() - nvg.scaledWidthSize(160), 0.0625f);
+
+                int starLevel = completedLevels.get(name);
+                if (starLevel <= 1) nvg.drawImage(nvg.starImage, nvg.left() + nvg.scaledWidthSize(64), nvg.bottom() - nvg.scaledWidthSize(160), 0.0625f);
+                if (starLevel <= 0) nvg.drawImage(nvg.starImage, nvg.left() + nvg.scaledWidthSize(128), nvg.bottom() - nvg.scaledWidthSize(160), 0.0625f);
+            }
+        }
+        if (inLevel) {
+            float width = nvg.scaledWidthSize(16);
+            float x = nvg.getWidth() - width - nvg.scaledWidthSize(96);
+            float starX = nvg.getWidth() - nvg.scaledWidthSize(88);
+            float starScale = 0.03125f;
+            float level2Height = 120;
+            float verticalMargin = 60;
+            int starLevel = levelScene.getStarLevel();
+
+            Vector4f[] colors = new Vector4f[] {
+                    Colors.red,
+                    Colors.pink,
+                    Colors.blue
+            };
+
+            UIRectangle[] rectangles = new UIRectangle[3];
+
+            nvg.setFillColor(Colors.black);
+            float border = nvg.scaledWidthSize(4);
+            nvg.fillRect(x-border, verticalMargin-border, nvg.scaledWidthSize(16) + 2*border, nvg.getHeight() - 2*verticalMargin + 2*border);
+
+            rectangles[2] = new UIRectangle(x, verticalMargin, width, nvg.scaledHeightSize(level2Height));
+            nvg.drawImage(nvg.starImage, starX, verticalMargin + nvg.scaledWidthSize(88), starScale);
+
+            float midpoint = (float)currentLevel().getStarTimeLimit(1) / (currentLevel().getStarTimeLimit(0) + currentLevel().getStarTimeLimit(1));
+            midpoint *= nvg.getHeight() - nvg.scaledHeightSize(level2Height) - 2*verticalMargin;
+
+            rectangles[1] = new UIRectangle(x, nvg.scaledHeightSize(level2Height) + verticalMargin, width, midpoint);
+            float y = nvg.scaledHeightSize(level2Height) + midpoint;
+            nvg.drawImage(nvg.starImage, starX, y-nvg.scaledHeightSize(32) + verticalMargin, starScale);
+            nvg.drawImage(nvg.starImage, starX, y-nvg.scaledHeightSize(64) + verticalMargin, starScale);
+
+            rectangles[0] = new UIRectangle(x, nvg.scaledHeightSize(level2Height)+midpoint + verticalMargin, width, nvg.getHeight()-y - 2*verticalMargin);
+            nvg.drawImage(nvg.starImage, starX, nvg.getHeight()-nvg.scaledHeightSize(32) - verticalMargin, starScale);
+            nvg.drawImage(nvg.starImage, starX, nvg.getHeight()-nvg.scaledHeightSize(64) - verticalMargin, starScale);
+            nvg.drawImage(nvg.starImage, starX, nvg.getHeight()-nvg.scaledHeightSize(96) - verticalMargin, starScale);
+
+            float percentage = (float)levelScene.stopwatch.getFrame() / (currentLevel().getStarTimeLimit(0) + currentLevel().getStarTimeLimit(1));
+            float arrowY = nvg.getHeight() - percentage * (nvg.getHeight() - nvg.scaledHeightSize(level2Height) - 2*verticalMargin) - nvg.scaledWidthSize(16) - verticalMargin;
+            nvg.drawImage(nvg.arrowImage, nvg.getWidth()-nvg.scaledWidthSize(144), Math.max(arrowY, verticalMargin), 0.25f);
+
+            nvg.setFillColor(Colors.red);
+            nvg.fillRect(rectangles[0]);
+            nvg.setFillColor(Colors.pink);
+            nvg.fillRect(rectangles[1]);
+            nvg.setFillColor(Colors.blue);
+            nvg.fillRect(rectangles[2]);
+
+            nvg.setStrokeWidth(nvg.scaledWidthSize(4));
+            nvg.drawLine(x, nvg.scaledHeightSize(level2Height)+verticalMargin, x+width, nvg.scaledHeightSize(level2Height)+verticalMargin);
+            nvg.drawLine(x, y+verticalMargin, x+width, y+verticalMargin);
+
+            rectangles[starLevel].setPadding(nvg.scaledWidthSize(2));
+            nvg.fillRectOutline(rectangles[starLevel], nvg.scaledWidthSize(4), Colors.black, colors[starLevel]);
+
+            if (levelScene.hasWon()) {
+                Vector4f color = new Vector4f(colors[starLevel]);
+                float expansionPercentage = Math.min(2 * levelClearTimer.fpercentage(), 1);
+                color.w = 1 - expansionPercentage;
+                float expansion = nvg.scaledWidthSize(600) * cubicInterpolation(expansionPercentage);
+                rectangles[starLevel].setX(rectangles[starLevel].getX() - expansion);
+                rectangles[starLevel].setWidth(rectangles[starLevel].getWidth() + expansion);
+                nvg.setFillColor(color);
+                nvg.fillRect(rectangles[starLevel]);
+            }
+
+//            nvg.drawLine(x+nvg.scaledWidthSize(16), verticalMargin, x+nvg.scaledWidthSize(16), nvg.getHeight() - verticalMargin);
+        }
+
+        if (levelClearTimer.isActive()) {
+            // Render the LEVEL CLEAR animation
+            float x = levelClearTimer.fpercentage()*1.4f;
+            float y = nvg.scaledWidthSize(-200 * x * (x - 2));
+//            nvg.fillRect(0, y, windowWidth, nvg.scaledWidthSize(300));
+
+            Vector4f bg = new Vector4f(Colors.tile);
+            bg.w = cubicInterpolation(0.8f * levelClearTimer.fpercentage());
+            nvg.setFillColor(bg);
+            nvg.fillRect(0, 0, nvg.getWidth(), nvg.getHeight());
+
+            nvg.setFontFace("montserrat_bold");
+            nvg.setFontSize(nvg.scaledWidthSize(120));
+            nvg.setTextAlign(NVG_ALIGN_CENTER);
+
+            Vector4f fg = new Vector4f(Colors.backgroundDarker);
+            fg.w = 1.5f * levelClearTimer.fpercentage();
+            fg.w *= fg.w;
+            nvg.setFillColor(fg);
+            nvg.drawText(windowWidth/2, y+nvg.scaledWidthSize(300), "LEVEL CLEAR");
+
+            if (levelClearTimer.getFrame() >= 120) {
+                switch(levelScene.getStarLevel()) {
+                    case 0 -> {
+                        nvg.drawImage(nvg.starImage, nvg.scaledWidthSize(1920 / 2 - 192), nvg.scaledWidthSize(530), 0.125f);
+                        nvg.drawImage(nvg.starImage, nvg.scaledWidthSize(1920 / 2 - 64), nvg.scaledWidthSize(530), 0.125f);
+                        nvg.drawImage(nvg.starImage, nvg.scaledWidthSize(1920 / 2 + 64), nvg.scaledWidthSize(530), 0.125f);
+                    }
+                    case 1 -> {
+                        nvg.drawImage(nvg.starImage, nvg.scaledWidthSize(1920 / 2 - 128), nvg.scaledWidthSize(530), 0.125f);
+                        nvg.drawImage(nvg.starImage, nvg.scaledWidthSize(1920 / 2), nvg.scaledWidthSize(530), 0.125f);
+                    }
+                    case 2 -> {
+                        nvg.drawImage(nvg.starImage, nvg.scaledWidthSize(1920/2 - 64), nvg.scaledWidthSize(530), 0.125f);
+                    }
+                }
+
+                nvg.setFillColor(fg);
+                nvg.setFontSize(nvg.scaledWidthSize(80));
+                nvg.setFontFace("montserrat");
+                nvg.drawText(windowWidth/2, y+nvg.scaledWidthSize(550), levelScene.stopwatch.timeElapsedString(requestedFpsCap));
+
+                nvg.setFontSize(nvg.scaledWidthSize(40));
+                nvg.setTextAlign(NVG_ALIGN_LEFT);
+                nvg.setFontFace("montserrat_bold");
+                nvg.drawText(nvg.left() + nvg.scaledWidthSize(80), nvg.bottom() - nvg.scaledWidthSize(10), "next level");
+
+                nvg.drawImage(nvg.mouse1Image, nvg.left(), nvg.bottom()-nvg.scaledWidthSize(nvg.mouse1Image.getHeight())*0.75f, 0.75f);
+            }
+
         }
         if (inLevelSelect) {
             // Draw key indicators
@@ -479,9 +658,9 @@ public class GameScene extends Scene {
             nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(350), "Instructions:");
             nvg.setFontFace("montserrat");
             nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(400), "Move your mouse to tilt the board.");
-            nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(450), "Your objective is to maneuver all balls into their respective holes.");
+            nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(450), "Your objective is to manoeuvre all balls into their respective holes.");
             nvg.setFontFace("montserrat_bold");
-            nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(550), "Non-explicitly-stated controls:");
+            nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(550), "Non-implied controls:");
             nvg.drawText(nvg.adjustedSceneX(150), nvg.scaledHeightSize(600), "Esc");
             nvg.drawText(nvg.adjustedSceneX(150), nvg.scaledHeightSize(650), "R");
             nvg.setFontFace("montserrat");
@@ -499,19 +678,6 @@ public class GameScene extends Scene {
             } else {
                 nvg.fillRect(windowWidth * cubicInterpolation((float) (horizontalSwipeTimer.getFrame() - 72) / 48), 0, windowWidth, windowHeight);
             }
-        }
-        if (levelClearTimer.isActive()) {
-            // Render the LEVEL CLEAR animation
-            nvg.setFillColor(Colors.green);
-            float x = levelClearTimer.fpercentage()*1.4f;
-            float y = nvg.scaledWidthSize(-400 * x * (x - 2));
-            nvg.fillRect(0, y, windowWidth, nvg.scaledWidthSize(300));
-
-            nvg.setFontFace("montserrat_bold");
-            nvg.setFontSize(nvg.scaledWidthSize(120));
-            nvg.setTextAlign(NVG_ALIGN_CENTER);
-            nvg.setFillColor(Colors.backgroundDarker);
-            nvg.drawText(windowWidth/2, y+nvg.scaledWidthSize(190), "LEVEL CLEAR");
         }
         if (verticalSwipeTimer.isActive()) {
             // Render the vertical swipe animation

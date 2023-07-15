@@ -11,6 +11,7 @@ import org.lwjgl.system.MemoryUtil;
 import util.Deletable;
 
 import java.nio.FloatBuffer;
+import java.time.Duration;
 import java.util.ArrayList;
 
 import static math.MathUtil.cutMaxMin;
@@ -58,6 +59,7 @@ public class LevelScene extends Scene {
     private final ContinuousFrameTimer previewRotation;
     private final ContinuousFrameTimer mainMenuVelocity;
 
+    public final FrameTimer stopwatch;
 
     private int windowWidth;
     private int windowHeight;
@@ -134,6 +136,8 @@ public class LevelScene extends Scene {
         previewRotation = new ContinuousFrameTimer(576);
         mainMenuVelocity = new ContinuousFrameTimer(576);
 
+        stopwatch = new FrameTimer(Integer.MAX_VALUE-1);
+
     }
 
     /**
@@ -199,6 +203,10 @@ public class LevelScene extends Scene {
         edgeSourceFbo.resize(width, height);
         windowWidth = width;
         windowHeight = height;
+    }
+
+    public int getStarLevel() {
+        return level.getStarLevel(stopwatch.getFrame());
     }
 
     /**
@@ -292,6 +300,9 @@ public class LevelScene extends Scene {
 
         if (isPaused) {
             return;
+        }
+        if (!hasWon) {
+            stopwatch.advanceFrame();
         }
 
         updateBalls();
@@ -458,6 +469,8 @@ public class LevelScene extends Scene {
         shadowMap.setRadius(Math.max(level.getRows(), level.getColumns())*0.7f);
 //        shadowMap.setFarPlane(factor * 1.25f);
         shadowMap.updateLightSpaceMatrix();
+
+        stopwatch.start();
 
         for (int i = 0; i < level.getRows(); i++) {
             // Load all floor tiles

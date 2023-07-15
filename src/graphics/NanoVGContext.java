@@ -2,6 +2,7 @@ package graphics;
 
 import game.Colors;
 import game.UIButton;
+import game.UIRectangle;
 import org.joml.Vector4f;
 import org.lwjgl.nanovg.NVGColor;
 import org.lwjgl.nanovg.NVGPaint;
@@ -19,6 +20,8 @@ public class NanoVGContext {
     public final NanoVGImage escapeImage;
     public final NanoVGImage mouse1Image;
     public final NanoVGImage mousewheelImage;
+    public final NanoVGImage starImage;
+    public final NanoVGImage arrowImage;
 
     private int montserratBold;
     private int montserrat;
@@ -34,6 +37,8 @@ public class NanoVGContext {
         escapeImage = new NanoVGImage(handle, "assets/images/escape.png", 83, 68);
         mouse1Image = new NanoVGImage(handle, "assets/images/mouse1.png", 83, 68);
         mousewheelImage = new NanoVGImage(handle, "assets/images/mousewheel.png", 83, 104);
+        starImage = new NanoVGImage(handle, "assets/images/star2.png", 1024, 1024);
+        arrowImage = new NanoVGImage(handle, "assets/images/arrow_right.png", 128, 128);
 
         montserratBold = nvgCreateFont(handle, "montserrat_bold", "assets/fonts/Montserrat-Bold.otf");
         montserrat = nvgCreateFont(handle, "montserrat", "assets/fonts/Montserrat-Medium.otf");
@@ -92,6 +97,18 @@ public class NanoVGContext {
         nvgRect(handle, x, y, width, height);
         nvgFill(handle);
         nvgClosePath(handle);
+    }
+    public void fillRect(UIRectangle rectangle) {
+        fillRect(rectangle.getX(), rectangle.getY(), rectangle.getWidth(), rectangle.getHeight());
+    }
+    public void fillRectOutline(UIRectangle rectangle, float outlineWidth, Vector4f outlineColor, Vector4f color) {
+        float padding = rectangle.getPadding();
+        rectangle.setPadding(padding + outlineWidth);
+        setFillColor(outlineColor);
+        fillRect(rectangle);
+        rectangle.setPadding(padding);
+        setFillColor(color);
+        fillRect(rectangle);
     }
     /**
      * Draws the outline of a rectangle
@@ -196,6 +213,9 @@ public class NanoVGContext {
     }
     public void setStrokeColor(Vector4f color) {
         nvgStrokeColor(handle, nvgRGBAf(color.x, color.y, color.z, color.w, nvgColor2));
+    }
+    public void setRotation(float angle) {
+        nvgRotate(handle, angle);
     }
 
     /**

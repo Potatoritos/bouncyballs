@@ -16,6 +16,7 @@ public class Level implements Comparable<Level> {
     private final int[] ballRow;
     private final int[] ballColumn;
     private final String name;
+    private final int[] starTimeLimits;
     private boolean isMainMenu;
     private Level(String name, int rows, int columns, int numBalls) {
         this.name = name;
@@ -26,6 +27,7 @@ public class Level implements Comparable<Level> {
         this.wallYState = new boolean[rows+1][columns];
         ballRow = new int[numBalls];
         ballColumn = new int[numBalls];
+        starTimeLimits = new int[3];
     }
     public boolean isMainMenu() {
         return isMainMenu;
@@ -81,6 +83,19 @@ public class Level implements Comparable<Level> {
     public int getBallColumn(int ball) {
         return ballColumn[ball];
     }
+    public void setStarTimeLimit(int starLevel, int frames) {
+        starTimeLimits[starLevel] = frames;
+    }
+    public int getStarTimeLimit(int starLevel) {
+        return starTimeLimits[starLevel];
+    }
+    public int getStarLevel(int framesElapsed) {
+        int level = 0, sum = 0;
+        while (level < 2 && framesElapsed > (sum += getStarTimeLimit(level))) {
+            level++;
+        }
+        return level;
+    }
 
     /**
      * Creates a file that stores the level's data
@@ -117,6 +132,12 @@ public class Level implements Comparable<Level> {
             if (name.equals("mainmenu")) {
                 level.setMainMenu(true);
             }
+            level.setStarTimeLimit(0, Integer.parseInt(br.readLine()));
+            level.setStarTimeLimit(1, Integer.parseInt(br.readLine()));
+            if (level.getStarTimeLimit(1) < level.getStarTimeLimit(0) || level.getStarTimeLimit(0) < 0) {
+                throw new RuntimeException("Invalid level star time limits");
+            }
+            level.setStarTimeLimit(2, Integer.MAX_VALUE/2);
 
             // Process the spawn positions of each ball,
             // represented by a (rows) * (columns) grid

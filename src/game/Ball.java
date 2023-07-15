@@ -1,7 +1,6 @@
 package game;
 
 import math.Geometry;
-import org.joml.Vector3f;
 import shape.Line3;
 import shape.Sphere;
 import org.joml.Matrix4f;
@@ -37,8 +36,7 @@ public class Ball extends GameObject {
     }
     @Override
     public void update() {
-        // Handle explosion animation
-        explosionTimer.update();
+        explosionTimer.advanceFrame();
         if (explosionTimer.isActive()) {
             geometry.position.set(explosionPosition);
             geometry.setRadius(0.35 + 1.5*cubicInterpolation(explosionTimer.percentage()));
@@ -49,7 +47,6 @@ public class Ball extends GameObject {
             return;
         }
 
-        // Perform numerical integration (add velocity to position)
         geometry.position.add(velocity);
         if (velocityDeferred) {
             velocity.set(deferredVelocity);

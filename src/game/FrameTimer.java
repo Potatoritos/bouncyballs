@@ -1,5 +1,7 @@
 package game;
 
+import java.time.Duration;
+
 /**
  * A timer that counts frames
  */
@@ -26,7 +28,7 @@ public class FrameTimer {
     public void start(int startFrame) {
         frame = startFrame;
     }
-    public void update() {
+    public void advanceFrame() {
         frame = Math.min(totalFrames, frame+1);
     }
     public boolean isActive() {
@@ -51,5 +53,12 @@ public class FrameTimer {
     }
     public void end() {
         frame = totalFrames;
+    }
+    public Duration timeElapsed(int fps) {
+        return Duration.ofMillis(Math.round(1000.0 * (frame-1) / fps));
+    }
+    public String timeElapsedString(int fps) {
+        Duration duration = timeElapsed(fps);
+        return String.format("%02d:%02d.%02d", duration.toMinutes(), duration.toSecondsPart(), duration.toMillisPart()/10);
     }
 }

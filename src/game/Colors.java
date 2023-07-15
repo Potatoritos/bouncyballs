@@ -15,4 +15,8 @@ public class Colors {
     public static final Vector4f black = hexRGBA(0x000000ff);
     public static final Vector4f pink = hexRGBA(0xeb9de4ff);
     public static final Vector4f[] base = {red, blue, green};
+    public static void resetBackground() {
+        // TODO: use an instance of Colors instead of changing the global state
+        background.set(hexRGBA(0x8ea2adff));
+    }
 }

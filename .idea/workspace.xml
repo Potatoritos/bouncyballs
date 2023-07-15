@@ -12,6 +12,7 @@
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/assets/levels/completed_levels.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/completed_levels.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game/Colors.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Colors.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/game/GameScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/GameScene.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -210,7 +211,7 @@
       <workItem from="1688754325687" duration="5518000" />
       <workItem from="1688760295960" duration="10242000" />
       <workItem from="1688877818393" duration="369000" />
-      <workItem from="1689374278638" duration="10384000" />
+      <workItem from="1689374278638" duration="11262000" />
     </task>
     <servers />
   </component>

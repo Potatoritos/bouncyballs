@@ -10,10 +10,13 @@ public class Colors {
     public static final Vector4f background = hexRGBA(0x8ea2adff);
     public static final Vector4f backgroundDarker = hexRGBA(0x2b3134ff);
     public static final Vector4f red = hexRGBA(0xff5b5bff);
+    public static final Vector4f redDarker = hexRGBA(0xdc5754ff);
     public static final Vector4f blue = hexRGBA(0x8884ffff);
+    public static final Vector4f blueDarker = hexRGBA(0x7470d2ff);
     public static final Vector4f green = hexRGBA(0x8feb65ff);
     public static final Vector4f black = hexRGBA(0x000000ff);
     public static final Vector4f pink = hexRGBA(0xeb9de4ff);
+    public static final Vector4f pinkDarker = hexRGBA(0xd992d3ff);
     public static final Vector4f[] base = {red, blue, green};
     public static void resetBackground() {
         // TODO: use an instance of Colors instead of changing the global state

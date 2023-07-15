@@ -309,9 +309,9 @@ public class GameScene extends Scene {
         Colors.resetBackground();
         if (completedLevels.containsKey(currentLevel().getName())) {
             switch(completedLevels.get(currentLevel().getName())) {
-                case 0 -> Colors.background.set(Colors.red);
-                case 1 -> Colors.background.set(Colors.pink);
-                case 2 -> Colors.background.set(Colors.blue);
+                case 0 -> Colors.background.set(Colors.redDarker);
+                case 1 -> Colors.background.set(Colors.pinkDarker);
+                case 2 -> Colors.background.set(Colors.blueDarker);
             }
         }
     }

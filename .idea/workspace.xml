@@ -10,37 +10,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
-      <change afterPath="$PROJECT_DIR$/assets/images/arrow_right.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/images/star.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/images/star2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/game/UIRectangle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/BouncyBalls_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/BouncyBalls_jar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2023-06-14,_8_58_p_m__[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2023-06-14,_9_09_p_m__[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2023-06-14,_9_09_p_m__[Changes]1/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2023-06-14__8_58_p_m___Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2023-06-14__9_09_p_m___Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2023-06-14__9_09_p_m___Changes_1.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BouncyBalls.eml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BouncyBalls.userlibraries" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/assets/levels/completed_levels.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/completed_levels.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/level_mainmenu.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/level_mainmenu.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/main/level1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/main/level1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/main/level2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/main/level2.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/main/level3.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/main/level3.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/main/level4.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/main/level4.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/main/level5.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/main/level5.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/Ball.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Ball.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/Colors.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Colors.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/FrameTimer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/FrameTimer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Game.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/game/GameScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/GameScene.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/HoleBox.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/HoleBox.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/Level.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Level.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/LevelScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/LevelScene.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/NanoVGContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/NanoVGContext.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mesh/Quad.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/mesh/Quad.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -238,7 +210,7 @@
       <workItem from="1688754325687" duration="5518000" />
       <workItem from="1688760295960" duration="10242000" />
       <workItem from="1688877818393" duration="369000" />
-      <workItem from="1689374278638" duration="9922000" />
+      <workItem from="1689374278638" duration="10384000" />
     </task>
     <servers />
   </component>

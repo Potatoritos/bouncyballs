@@ -215,6 +215,7 @@ public class GameScene extends Scene {
     }
     private void endEnterMainMenu() {
         levelScene.loadLevel(Level.fromFile("level_mainmenu.txt"));
+        Colors.resetBackground();
         inLevel = false;
         inLevelSelect = false;
         inMainMenu = true;
@@ -245,6 +246,7 @@ public class GameScene extends Scene {
     private void midLevelReset() {
         levelScene.reset();
         levelScene.setPaused(true);
+        updateLevelBackground();
     }
     private void endLevelReset() {
         levelScene.setPaused(false);
@@ -303,8 +305,7 @@ public class GameScene extends Scene {
         selectedLevelIndex = index;
         setLevelToSelected();
     }
-    private void setLevelToSelected() {
-        levelScene.loadLevel(currentLevel());
+    private void updateLevelBackground() {
         Colors.resetBackground();
         if (completedLevels.containsKey(currentLevel().getName())) {
             switch(completedLevels.get(currentLevel().getName())) {
@@ -313,6 +314,10 @@ public class GameScene extends Scene {
                 case 2 -> Colors.background.set(Colors.blue);
             }
         }
+    }
+    private void setLevelToSelected() {
+        updateLevelBackground();
+        levelScene.loadLevel(currentLevel());
         if (inLevelSelect) {
             levelScene.updatePreviewCameraDistance();
         }

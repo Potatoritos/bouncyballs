@@ -83,13 +83,13 @@ public class GameScene extends Scene {
         menuBack.setPosition(origin);
 
         horizontalSwipeTimer = new FrameTimer(120);
-        verticalSwipeTimer = new FrameTimer(240);
+        verticalSwipeTimer = new FrameTimer(120);
         levelClearTimer = new FrameTimer(180);
         levelClearDelayTimer = new FrameTimer(48);
         enterLevelSelectTimer = new FrameTimer(49);
         enterLevelTimer = new FrameTimer(49);
         levelResetTimer = new FrameTimer(120);
-        advanceTimer = new FrameTimer(240);
+        advanceTimer = new FrameTimer(120);
         enterMainMenuTimer = new FrameTimer(49);
         enterAboutTimer = new FrameTimer(49);
         gameExitTimer = new FrameTimer(72);
@@ -127,7 +127,7 @@ public class GameScene extends Scene {
         requestedGameSpeed = 1;
         gameSpeeds = new double[] {0.5, 0.75, 1, 1.5, 2};
         gameSpeedIndex = 2;
-        verticalSwipeTimer.start(160);
+        verticalSwipeTimer.start(80);
 
         endEnterMainMenu();
     }
@@ -386,15 +386,18 @@ public class GameScene extends Scene {
         if (pendingAdvance) {
             if (input.isSelectLevelPressed()) {
                 midLevelClear();
+                menuClick.play();
             } else if (input.isResetKeyPressed()) {
                 endLevelClear();
                 startLevelReset();
+                menuBack.play();
             } else if (input.isExitKeyPressed())  {
                 endLevelClear();
                 startEnterLevelSelect();
+                menuBack.play();
             }
         }
-        if (advanceTimer.getFrame() == 169) {
+        if (advanceTimer.getFrame() == 49) {
             midAdvanceLevel();
         } else if (advanceTimer.isOnLastFrame()) {
             endAdvanceLevel();
@@ -596,6 +599,9 @@ public class GameScene extends Scene {
             nvg.setFillColor(fg);
             nvg.drawText(windowWidth/2, y+nvg.scaledWidthSize(300), "LEVEL CLEAR");
 
+            if (levelClearTimer.getFrame() == 119) {
+                menuHover.play();
+            }
             if (levelClearTimer.getFrame() >= 120) {
                 switch(levelScene.getStarLevel()) {
                     case 0 -> {
@@ -719,10 +725,10 @@ public class GameScene extends Scene {
             nvg.setFillColor(Colors.black);
             if (verticalSwipeTimer.getFrame() <= 48) {
                 nvg.fillRect(0, 0, windowWidth, windowHeight * cubicInterpolation((float)verticalSwipeTimer.getFrame() / 48));
-            } else if (verticalSwipeTimer.getFrame() <= 192) {
+            } else if (verticalSwipeTimer.getFrame() <= 72) {
                 nvg.fillRect(0, 0, windowWidth, windowHeight);
             } else {
-                nvg.fillRect(0, windowHeight * cubicInterpolation((float)(verticalSwipeTimer.getFrame()-192) / 48), windowWidth, windowHeight);
+                nvg.fillRect(0, windowHeight * cubicInterpolation((float)(verticalSwipeTimer.getFrame()-72) / 48), windowWidth, windowHeight);
             }
         }
     }

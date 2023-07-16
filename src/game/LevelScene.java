@@ -29,7 +29,9 @@ public class LevelScene extends Scene {
     private final GameObjectMesh holeMesh;
     private final GameObjectMesh holeCoverMesh;
     private final GameObjectMesh wallXMesh;
+    private final GameObjectMesh wallXMeshThinner;
     private final GameObjectMesh wallYMesh;
+    private final GameObjectMesh wallYMeshThinner;
     private final GameObjectMesh tallTileMesh;
     private final GameObjectMesh ballMesh;
     private final HashMap<String, GameObjectMesh> gameObjectMeshes;
@@ -47,7 +49,9 @@ public class LevelScene extends Scene {
     private final ArrayList<HoleBox> holeTiles;
     private final ArrayList<HoleBoxCover> coverTiles;
     private final ArrayList<Box> wallXTiles;
+    private final ArrayList<Box>[] coloredWallsX;
     private final ArrayList<Box> wallYTiles;
+    private final ArrayList<Box>[] coloredWallsY;
     private final ArrayList<Box> tallTiles;
     private final ArrayList<Ball> balls;
     private final ArrayList<Ball> ballExplosions;
@@ -104,9 +108,19 @@ public class LevelScene extends Scene {
                 new Vector3f(0.1f, 1.1f, (float)(floorTileHeight+wallHeight)),
                 new Vector3f(0f, 0f, 0f)
         );
+        wallXMeshThinner = rectangularPrismMesh(
+                new Vector3f(0.001f, 0.001f, 0),
+                new Vector3f(0.098f, 1.098f, (float)(floorTileHeight+wallHeight)-0.01f),
+                new Vector3f(0f, 0f, 0f)
+        );
         wallYMesh = rectangularPrismMesh(
                 new Vector3f(0, 0, 0),
                 new Vector3f(1.1f, 0.1f, (float)(floorTileHeight+wallHeight)),
+                new Vector3f(0f, 0f, 0f)
+        );
+        wallYMeshThinner = rectangularPrismMesh(
+                new Vector3f(0.001f, 0.001f, 0),
+                new Vector3f(1.098f, 0.098f, (float)(floorTileHeight+wallHeight)-0.01f),
                 new Vector3f(0f, 0f, 0f)
         );
         tallTileMesh = rectangularPrismMesh(
@@ -120,7 +134,13 @@ public class LevelScene extends Scene {
         gameObjectMeshes.put("hole", holeMesh);
         gameObjectMeshes.put("cover", holeCoverMesh);
         gameObjectMeshes.put("wallX", wallXMesh);
+        gameObjectMeshes.put("wallX1", wallXMeshThinner);
+        gameObjectMeshes.put("wallX2", wallXMeshThinner);
+        gameObjectMeshes.put("wallX3", wallXMeshThinner);
         gameObjectMeshes.put("wallY", wallYMesh);
+        gameObjectMeshes.put("wallY1", wallYMeshThinner);
+        gameObjectMeshes.put("wallY2", wallYMeshThinner);
+        gameObjectMeshes.put("wallY3", wallYMeshThinner);
         gameObjectMeshes.put("tall", tallTileMesh);
         gameObjectMeshes.put("ball", ballMesh);
         gameObjectMeshes.put("explosion", ballMesh);
@@ -141,13 +161,21 @@ public class LevelScene extends Scene {
         tallTiles = new ArrayList<>();
         balls = new ArrayList<>();
         ballExplosions = new ArrayList<>();
+        coloredWallsX = new ArrayList[] { new ArrayList<Box>(), new ArrayList<Box>(), new ArrayList<Box>() };
+        coloredWallsY = new ArrayList[] { new ArrayList<Box>(), new ArrayList<Box>(), new ArrayList<Box>() };
 
         gameObjects = new HashMap<>();
         gameObjects.put("floor", floorTiles);
         gameObjects.put("hole", holeTiles);
         gameObjects.put("cover", coverTiles);
         gameObjects.put("wallX", wallXTiles);
+        gameObjects.put("wallX1", coloredWallsX[0]);
+        gameObjects.put("wallX2", coloredWallsX[1]);
+        gameObjects.put("wallX3", coloredWallsX[2]);
         gameObjects.put("wallY", wallYTiles);
+        gameObjects.put("wallY1", coloredWallsY[0]);
+        gameObjects.put("wallY2", coloredWallsY[1]);
+        gameObjects.put("wallY3", coloredWallsY[2]);
         gameObjects.put("tall", tallTiles);
         gameObjects.put("ball", balls);
         gameObjects.put("explosion", ballExplosions);
@@ -283,6 +311,10 @@ public class LevelScene extends Scene {
                 ball.update(rotationMatrix);
                 // Hide the ball if it has reached its goal
                 ball.geometry.position.set(0, 0, 10000);
+
+                // Remove colored walls
+                gameObjects.remove("wallX" + ball.getHoleColor());
+                gameObjects.remove("wallY" + ball.getHoleColor());
                 continue;
             }
             // Fade the ball out when it falls
@@ -543,13 +575,8 @@ public class LevelScene extends Scene {
                     tile.getColor(0).set(Colors.tile);
                     floorTiles.add(tile);
 
-                } else if (level.getFloorState(i, j) == FloorTile.GOAL1 || level.getFloorState(i, j) == FloorTile.GOAL2 || level.getFloorState(i, j) == FloorTile.GOAL3) {
-                    int holeColor = 1;
-                    if (level.getFloorState(i, j) == FloorTile.GOAL2) {
-                        holeColor = 2;
-                    } else if (level.getFloorState(i, j) == FloorTile.GOAL3) {
-                        holeColor = 3;
-                    }
+                } else if (FloorTile.goalColor(level.getFloorState(i, j)) != 0) {
+                    int holeColor = FloorTile.goalColor(level.getFloorState(i, j));
                     HoleBox tile = new HoleBox(new Line3(
                             new Vector3d(level.getPosX(j), level.getPosY(i), -floorTileHeight),
                             new Vector3d(1, 1, floorTileHeight)
@@ -571,26 +598,36 @@ public class LevelScene extends Scene {
             }
             // Load all vertically-oriented walls
             for (int j = 0; j < level.getColumns()+1; j++) {
-                if (level.getWallXState(i, j)) {
-                    Box tile = new Box(new Line3(
-                            new Vector3d(level.getPosX(j)-0.05, level.getPosY(i)-0.05, -floorTileHeight),
-                            new Vector3d(0.1, 1.1, floorTileHeight+wallHeight)
-                    ));
+                Box tile = new Box(new Line3(
+                        new Vector3d(level.getPosX(j)-0.05, level.getPosY(i)-0.05, -floorTileHeight),
+                        new Vector3d(0.1, 1.1, floorTileHeight+wallHeight)
+                ));
+                int holeColor = WallTile.wallColor(level.getWallXState(i, j));
+
+                if (level.getWallXState(i, j) == WallTile.WALL) {
                     tile.getColor(0).set(Colors.tile);
                     wallXTiles.add(tile);
+                } else if (holeColor != 0) {
+                    tile.getColor(0).set(Colors.base[holeColor-1]);
+                    coloredWallsX[holeColor-1].add(tile);
                 }
             }
         }
         // Load all horizontally-oriented walls
         for (int i = 0; i < level.getRows()+1; i++) {
             for (int j = 0; j < level.getColumns(); j++) {
-                if (level.getWallYState(i, j)) {
-                    Box tile = new Box(new Line3(
-                            new Vector3d(level.getPosX(j)-0.05, level.getPosY(i)-0.05, -floorTileHeight),
-                            new Vector3d(1.1, 0.1, floorTileHeight+wallHeight)
-                    ));
+                Box tile = new Box(new Line3(
+                        new Vector3d(level.getPosX(j)-0.05, level.getPosY(i)-0.05, -floorTileHeight),
+                        new Vector3d(1.1, 0.1, floorTileHeight+wallHeight)
+                ));
+                int holeColor = WallTile.wallColor(level.getWallYState(i, j));
+
+                if (level.getWallYState(i, j) == WallTile.WALL) {
                     tile.getColor(0).set(Colors.tile);
                     wallYTiles.add(tile);
+                } else if (holeColor != 0) {
+                    tile.getColor(0).set(Colors.base[holeColor-1]);
+                    coloredWallsY[holeColor-1].add(tile);
                 }
             }
         }

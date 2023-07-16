@@ -11,8 +11,8 @@ public class Level implements Comparable<Level> {
     private final int rows;
     private final int columns;
     private final FloorTile[][] floorState;
-    private final boolean[][] wallXState;
-    private final boolean[][] wallYState;
+    private final WallTile[][] wallXState;
+    private final WallTile[][] wallYState;
     private final int[] ballRow;
     private final int[] ballColumn;
     private final String name;
@@ -24,8 +24,8 @@ public class Level implements Comparable<Level> {
         this.rows = rows;
         this.columns = columns;
         this.floorState = new FloorTile[rows][columns];
-        this.wallXState = new boolean[rows][columns+1];
-        this.wallYState = new boolean[rows+1][columns];
+        this.wallXState = new WallTile[rows][columns+1];
+        this.wallYState = new WallTile[rows+1][columns];
         ballRow = new int[numBalls];
         ballColumn = new int[numBalls];
         starTimeLimits = new int[3];
@@ -57,16 +57,16 @@ public class Level implements Comparable<Level> {
     public void setFloorState(int row, int column, FloorTile value) {
         floorState[row][column] = value;
     }
-    public boolean getWallXState(int row, int column) {
+    public WallTile getWallXState(int row, int column) {
         return wallXState[row][column];
     }
-    public void setWallXState(int row, int column, boolean value) {
+    public void setWallXState(int row, int column, WallTile value) {
         wallXState[row][column] = value;
     }
-    public boolean getWallYState(int row, int column) {
+    public WallTile getWallYState(int row, int column) {
         return wallYState[row][column];
     }
-    public void setWallYState(int row, int column, boolean value) {
+    public void setWallYState(int row, int column, WallTile value) {
         wallYState[row][column] = value;
     }
     public int numberBalls() {
@@ -181,7 +181,13 @@ public class Level implements Comparable<Level> {
                 String row = br.readLine();
                 if (row.length() != columns+1) throw new RuntimeException("Invalid level file - vertical walls malformed");
                 for (int j = 0; j < row.length(); j++) {
-                    if (row.charAt(j) == '|') level.setWallXState(rows-1-i, j, true);
+                    switch (row.charAt(j)) {
+                        case '.' -> level.setWallXState(rows-1-i, j, WallTile.NONE);
+                        case '|' -> level.setWallXState(rows-1-i, j, WallTile.WALL);
+                        case '1' -> level.setWallXState(rows-1-i, j, WallTile.WALL1);
+                        case '2' -> level.setWallXState(rows-1-i, j, WallTile.WALL2);
+                        case '3' -> level.setWallXState(rows-1-i, j, WallTile.WALL3);
+                    }
                 }
             }
             // Process the horizontally-oriented walls,
@@ -190,7 +196,13 @@ public class Level implements Comparable<Level> {
                 String row = br.readLine();
                 if (row.length() != columns) throw new RuntimeException("Invalid level file - horizontal walls malformed");
                 for (int j = 0; j < row.length(); j++) {
-                    if (row.charAt(j) == '_') level.setWallYState(rows-i, j, true);
+                    switch (row.charAt(j)) {
+                        case '.' -> level.setWallYState(rows-i, j, WallTile.NONE);
+                        case '_' -> level.setWallYState(rows-i, j, WallTile.WALL);
+                        case '1' -> level.setWallYState(rows-i, j, WallTile.WALL1);
+                        case '2' -> level.setWallYState(rows-i, j, WallTile.WALL2);
+                        case '3' -> level.setWallYState(rows-i, j, WallTile.WALL3);
+                    }
                 }
             }
 

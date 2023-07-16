@@ -508,16 +508,13 @@ public class LevelScene extends Scene {
         renderGameNormals(colorNormalsShader);
 
         // Draw colors to colorSourceFbo (also used in edge drawing)
-//        colorSourceFbo.bind();
-
-        glViewport(0, 0, windowWidth, windowHeight);
+        colorSourceFbo.bind();
         glClearColor(0f, 0f, 0f, 0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         colorShader.bind();
         colorShader.setUniform("projectionMatrix", camera.getProjectionMatrix());
         renderGameColors(colorShader);
 
-        /*
         // Compute a shadow map
         // This is used to determine whether a fragment is in a shadow
         depthShader.bind();
@@ -536,7 +533,8 @@ public class LevelScene extends Scene {
         levelShader.setUniform("inShadowColor", Colors.levelBackgrounds[level.getColor()]);
         levelShader.setUniform("normalTexture", 0);
         levelShader.setUniform("depthTexture", 1);
-        levelShader.setUniform("shadowMap", 2);
+        levelShader.setUniform("colorTexture", 2);
+        levelShader.setUniform("shadowMap", 3);
         levelShader.setUniform("projectionMatrix", camera.getProjectionMatrix());
         levelShader.setUniform("lightSpaceMatrix", shadowMap.lightSpaceMatrix);
 
@@ -545,11 +543,11 @@ public class LevelScene extends Scene {
         glActiveTexture(GL_TEXTURE1);
         edgeSourceFbo.getDepthTexture().bind();
         glActiveTexture(GL_TEXTURE2);
+        colorSourceFbo.getColorTexture().bind();
+        glActiveTexture(GL_TEXTURE3);
         shadowMap.depthMap.getDepthTexture().bind();
 
         renderGameObjects(levelShader);
-        */
-
     }
     @Override
     public void nvgRender(NanoVGContext nvg) {
@@ -578,6 +576,8 @@ public class LevelScene extends Scene {
         tallTiles.clear();
         for (Ball ball : balls) ball.delete();
         for (Ball ball : ballExplosions) ball.delete();
+        for (ArrayList<Box> box : coloredWallsX) box.clear();
+        for (ArrayList<Box> box : coloredWallsY) box.clear();
         balls.clear();
         ballExplosions.clear();
 
@@ -681,11 +681,14 @@ public class LevelScene extends Scene {
         isPaused = value;
     }
     public void delete() {
-        for (Deletable obj : new Deletable[] {floorMesh, holeMesh, holeCoverMesh, wallXMesh, wallYMesh, tallTileMesh, ballMesh, colorNormalsShader, outlineShader, depthShader, levelShader, textureShader}) {
-            obj.delete();
-        }
         for (Ball ball : balls) {
             ball.delete();
+        }
+        for (Ball ball : ballExplosions) {
+            ball.delete();
+        }
+        for (Deletable obj : new Deletable[] {floorMesh, holeMesh, holeCoverMesh, wallXMesh, wallXMeshThinner, wallYMesh, wallYMeshThinner, tallTileMesh, ballMesh, colorNormalsShader, outlineShader, depthShader, levelShader, textureShader}) {
+            obj.delete();
         }
     }
 }

@@ -47,6 +47,7 @@ out vec4 fragColor;
 
 uniform sampler2D normalTexture;
 uniform sampler2D depthTexture;
+uniform sampler2D colorTexture;
 uniform sampler2D shadowMap;
 
 mat3 sobelX = mat3(
@@ -93,24 +94,34 @@ float shadow(vec4 fragPosLightSpace) {
     return shadow;
 }
 void main() {
-    mat3 r, g, b, depth;
+    mat3 normalR, normalG, normalB, depth, r, g, b;
     int size = 2;
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             vec3 normalSample = texelFetch(normalTexture, ivec2(gl_FragCoord) + size*ivec2(i-1,j-1), 0).rgb;
-            r[i][j] = normalSample.r;
-            g[i][j] = normalSample.g;
-            b[i][j] = normalSample.b;
+            normalR[i][j] = normalSample.r;
+            normalG[i][j] = normalSample.g;
+            normalB[i][j] = normalSample.b;
 
             float depthSample = texelFetch(depthTexture, ivec2(gl_FragCoord) + size*ivec2(i-1,j-1), 0).r;
             depth[i][j] = (linearizeDepth(depthSample) - near) / (far - near);
         }
     }
 
-    float gradientNormal = max(max(gradient(r), gradient(g)), gradient(b));
+    float gradientNormal = max(max(gradient(normalR), gradient(normalG)), gradient(normalB));
     float gradientDepth = gradient(depth);
 
-    if (gradientDepth >= 0.02 || gradientNormal >= 1.25) {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            vec3 colorSample = texelFetch(colorTexture, ivec2(gl_FragCoord) + size*ivec2(i-1,j-1), 0).rgb;
+            r[i][j] = colorSample.r;
+            g[i][j] = colorSample.g;
+            b[i][j] = colorSample.b;
+        }
+    }
+    float gradientColor = max(max(gradient(r), gradient(g)), gradient(b));
+
+    if (gradientDepth >= 0.02 || gradientNormal >= 1.25 || gradientColor >= 1.25) {
         fragColor = vec4(0, 0, 0, color.a);
     } else {
         float shadowFactor = glow*shadow(fragPosLightSpace);

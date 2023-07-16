@@ -11,7 +11,6 @@
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/shaders/sobel_filter_and_shadows.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/assets/shaders/sobel_filter_and_shadows.glsl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/game/LevelScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/LevelScene.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -225,7 +224,7 @@
       <workItem from="1689446957485" duration="670000" />
       <workItem from="1689448096173" duration="1364000" />
       <workItem from="1689456175851" duration="13751000" />
-      <workItem from="1689531761775" duration="9144000" />
+      <workItem from="1689531761775" duration="9574000" />
     </task>
     <servers />
   </component>

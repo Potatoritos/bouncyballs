@@ -275,6 +275,16 @@ public class LevelScene extends Scene {
         collisionHandler.setBall(ball);
         for (Box box : wallXTiles) collisionHandler.addBoxFloorColliders(box);
         for (Box box : wallYTiles) collisionHandler.addBoxFloorColliders(box);
+        for (int i = 0; i < coloredWallsX.length; i++) {
+            if (gameObjects.containsKey("wallX" + (i+1))) {
+                for (Box box : coloredWallsX[i]) collisionHandler.addBoxFloorColliders(box);
+            }
+        }
+        for (int i = 0; i < coloredWallsY.length; i++) {
+            if (gameObjects.containsKey("wallY" + (i+1))) {
+                for (Box box : coloredWallsY[i]) collisionHandler.addBoxFloorColliders(box);
+            }
+        }
         for (Box box : floorTiles) collisionHandler.addBoxFloorColliders(box);
         for (Box box : tallTiles) collisionHandler.addBoxFloorColliders(box);
         for (HoleBox box : holeTiles) collisionHandler.addHoleBoxColliders(box);
@@ -576,8 +586,8 @@ public class LevelScene extends Scene {
         tallTiles.clear();
         for (Ball ball : balls) ball.delete();
         for (Ball ball : ballExplosions) ball.delete();
-        for (ArrayList<Box> box : coloredWallsX) box.clear();
-        for (ArrayList<Box> box : coloredWallsY) box.clear();
+        for (ArrayList<Box> walls : coloredWallsX) walls.clear();
+        for (ArrayList<Box> walls : coloredWallsY) walls.clear();
         balls.clear();
         ballExplosions.clear();
 

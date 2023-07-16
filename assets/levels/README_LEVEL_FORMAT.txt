@@ -7,5 +7,5 @@
 [Background color; 0: grey, 1: blue, 2: pink, 3: red]
 [rows * columns grid denoting ball spawnpoints; '.' for nothing, '1'/'2'/'3' for ball 1/2/3 spawnpoint]
 [rows * columns grid denoting floor tiles; '.' for air, 'x' for floor, '#' for block]
-[rows * (columns+1) grid denoting '|'-shaped wall tiles; '.' for air, '|' for wall]
-[(rows+1) * columns grid denoting '_'-shaped wall tiles; '.' for air, '_' for wall]
+[rows * (columns+1) grid denoting '|'-shaped wall tiles; '.' for air, '|' for wall, '1'/'2'/'3' for colored wall]
+[(rows+1) * columns grid denoting '_'-shaped wall tiles; '.' for air, '_' for wall, '1'/'2'/'3' for colored wall]

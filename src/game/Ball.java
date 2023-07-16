@@ -150,7 +150,7 @@ public class Ball extends GameObject {
     @Override
     public void reflectLine(Line3 line, Vector3d intersection, Vector3d normal) {
         // Rebound the ball colliding into this one
-        Geometry.reflectLineFixedRebound(line, intersection, normal, 0.026);
+        Geometry.reflectLineFixedRebound(line, intersection, normal, 0.03);
 
         // Rebound this ball as well
         // Velocity is deferred to the next frame to ensure that collisions are handled before the velocity adds to position
@@ -159,7 +159,7 @@ public class Ball extends GameObject {
         project(deferredVelocity, normal, normalComponent);
         deferredVelocity.sub(normalComponent);
 
-        normalComponent.set(normal).normalize(0.026);
+        normalComponent.set(normal).normalize(0.03);
         deferredVelocity.sub(normalComponent);
         velocityDeferred = true;
 

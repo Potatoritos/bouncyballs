@@ -38,6 +38,7 @@ public class Ball extends GameObject {
     private final Vector3f previousPosition;
     private boolean shouldSplash;
     private boolean hasSplashed;
+    private final Vector3f snapPosition;
     public Ball(AudioHandler audioHandler) {
         super();
         velocity = new Vector3d();
@@ -50,6 +51,7 @@ public class Ball extends GameObject {
         snapSound = new AudioSource(audioHandler.snapSound, false, false);
         goalSound = new AudioSource(audioHandler.splashSound, false, false);
         previousPosition = new Vector3f(-727, 0, 0);
+        snapPosition = new Vector3f();
     }
     public Ball(Sphere geometry, AudioHandler audioHandler) {
         this(audioHandler);
@@ -88,7 +90,7 @@ public class Ball extends GameObject {
             lastCollisionSpeed = 0;
         }
         if (shouldSnap) {
-            snapSound.setPosition(position);
+            snapSound.setPosition(snapPosition.mul(globalRotationMatrix));
             snapSound.play();
             shouldSnap = false;
         }
@@ -132,8 +134,9 @@ public class Ball extends GameObject {
     public Vector3d getPosition() {
         return geometry.position;
     }
-    public void queueSnap() {
+    public void queueSnap(Vector3f position) {
         shouldSnap = true;
+        snapPosition.set(position);
     }
     public void queueSplash() {
         shouldSplash = true;
@@ -163,7 +166,7 @@ public class Ball extends GameObject {
         deferredVelocity.sub(normalComponent);
         velocityDeferred = true;
 
-        queueSnap();
+        queueSnap(vector3dTo3f(intersection));
     }
 
     public void delete() {

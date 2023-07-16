@@ -2,7 +2,7 @@ package collision;
 
 import game.GameObject;
 import shape.Cylinder;
-import shape.Line3;
+import shape.Line3d;
 import shape.Sphere;
 import org.joml.Vector3d;
 
@@ -21,7 +21,7 @@ public class CollisionCylinder extends CollisionObject {
     }
 
     @Override
-    public void reflectLine(Line3 line, Vector3d intersection) {
+    public void reflectLine(Line3d line, Vector3d intersection) {
         parent.reflectLine(line, intersection, cylinder.normal(intersection));
     }
 
@@ -31,7 +31,7 @@ public class CollisionCylinder extends CollisionObject {
     }
 
     @Override
-    public boolean intersect(Line3 line, Vector3d result) {
+    public boolean intersect(Line3d line, Vector3d result) {
         boolean intersects = intersectionLineCylinder(line, cylinder, result);
         return intersects && cylinder.normal(result).dot(line.displacement) < 0;
     }

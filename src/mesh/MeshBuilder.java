@@ -2,6 +2,8 @@ package mesh;
 
 import graphics.GameObjectMesh;
 import org.joml.Vector3f;
+import shape.Line3d;
+import shape.Line3f;
 
 import java.util.ArrayList;
 
@@ -55,6 +57,70 @@ public class MeshBuilder {
         vertices.addToList(this.vertices);
         normals.addToList(this.normals);
         colors.addToList(this.colors);
+    }
+
+    public void addAxisAlignedBox(Line3f box, Vector3f color) {
+        Quad colors = new Quad(color);
+        addQuad(
+                new Quad(
+                        new Vector3f(box.x2(), box.y1(), box.z1()),
+                        new Vector3f(box.x1(), box.y1(), box.z1()),
+                        new Vector3f(box.x1(), box.y2(), box.z1()),
+                        new Vector3f(box.x2(), box.y2(), box.z1())
+                ),
+                new Quad(new Vector3f(0, 0, -1)),
+                colors
+        );
+        addQuad(
+                new Quad(
+                        new Vector3f(box.x1(), box.y1(), box.z2()),
+                        new Vector3f(box.x2(), box.y1(), box.z2()),
+                        new Vector3f(box.x2(), box.y2(), box.z2()),
+                        new Vector3f(box.x1(), box.y2(), box.z2())
+                ),
+                new Quad(new Vector3f(0, 0, 1)),
+                colors
+        );
+        addQuad(
+                new Quad(
+                        new Vector3f(box.x1(), box.y1(), box.z1()),
+                        new Vector3f(box.x1(), box.y1(), box.z2()),
+                        new Vector3f(box.x1(), box.y2(), box.z2()),
+                        new Vector3f(box.x1(), box.y2(), box.z1())
+                ),
+                new Quad(new Vector3f(-1, 0, 0)),
+                colors
+        );
+        addQuad(
+                new Quad(
+                        new Vector3f(box.x2(), box.y1(), box.z2()),
+                        new Vector3f(box.x2(), box.y1(), box.z1()),
+                        new Vector3f(box.x2(), box.y2(), box.z1()),
+                        new Vector3f(box.x2(), box.y2(), box.z2())
+                ),
+                new Quad(new Vector3f(1, 0, 0)),
+                colors
+        );
+        addQuad(
+                new Quad(
+                        new Vector3f(box.x1(), box.y1(), box.z1()),
+                        new Vector3f(box.x2(), box.y1(), box.z1()),
+                        new Vector3f(box.x2(), box.y1(), box.z2()),
+                        new Vector3f(box.x1(), box.y1(), box.z2())
+                ),
+                new Quad(new Vector3f(0, -1, 0)),
+                colors
+        );
+        addQuad(
+                new Quad(
+                        new Vector3f(box.x2(), box.y2(), box.z1()),
+                        new Vector3f(box.x1(), box.y2(), box.z1()),
+                        new Vector3f(box.x1(), box.y2(), box.z2()),
+                        new Vector3f(box.x2(), box.y2(), box.z2())
+                ),
+                new Quad(new Vector3f(0, 1, 0)),
+                colors
+        );
     }
 
     /**

@@ -1,10 +1,12 @@
 package mesh;
 
 import graphics.GameObjectMesh;
+import graphics.Mesh;
 import graphics.Texture;
 import graphics.TextureMesh;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import shape.Line3f;
 
 import java.util.ArrayList;
 
@@ -315,77 +317,14 @@ public class MeshGeometry {
     }
 
     /**
-     * Creates the mesh of a rectangular prism
-     * @param position the position of the mesh
-     * @param dimensions the dimensions of the rectangular prism
+     * Creates the mesh of an axis-aligned box
+     * @param box the position and dimensions of the rectangular prism
      * @param color the color of the prism
      * @return the mesh
      */
-    public static GameObjectMesh rectangularPrismMesh(Vector3f position, Vector3f dimensions, Vector3f color) {
-        Vector3f p = position, d = dimensions;
-        Quad colors = new Quad(color);
-
+    public static GameObjectMesh axisAlignedBoxMesh(Line3f box, Vector3f color) {
         MeshBuilder builder = new MeshBuilder();
-        builder.addQuad(
-                new Quad(
-                        new Vector3f(p.x+d.x, p.y, p.z),
-                        new Vector3f(p.x, p.y, p.z),
-                        new Vector3f(p.x, p.y+d.y, p.z),
-                        new Vector3f(p.x+d.x, p.y+d.y, p.z)
-                ),
-                new Quad(new Vector3f(0, 0, -1)),
-                colors
-        );
-        builder.addQuad(
-                new Quad(
-                        new Vector3f(p.x, p.y, p.z+d.z),
-                        new Vector3f(p.x+d.x, p.y, p.z+d.z),
-                        new Vector3f(p.x+d.x, p.y+d.y, p.z+d.z),
-                        new Vector3f(p.x, p.y+d.y, p.z+d.z)
-                ),
-                new Quad(new Vector3f(0, 0, 1)),
-                colors
-        );
-        builder.addQuad(
-                new Quad(
-                        new Vector3f(p.x, p.y, p.z),
-                        new Vector3f(p.x, p.y, p.z+d.z),
-                        new Vector3f(p.x, p.y+d.y, p.z+d.z),
-                        new Vector3f(p.x, p.y+d.y, p.z)
-                ),
-                new Quad(new Vector3f(-1, 0, 0)),
-                colors
-        );
-        builder.addQuad(
-                new Quad(
-                        new Vector3f(p.x+d.x, p.y, p.z+d.z),
-                        new Vector3f(p.x+d.x, p.y, p.z),
-                        new Vector3f(p.x+d.x, p.y+d.y, p.z),
-                        new Vector3f(p.x+d.x, p.y+d.y, p.z+d.z)
-                ),
-                new Quad(new Vector3f(1, 0, 0)),
-                colors
-        );
-        builder.addQuad(
-                new Quad(
-                        new Vector3f(p.x, p.y, p.z),
-                        new Vector3f(p.x+d.x, p.y, p.z),
-                        new Vector3f(p.x+d.x, p.y, p.z+d.z),
-                        new Vector3f(p.x, p.y, p.z+d.z)
-                ),
-                new Quad(new Vector3f(0, -1, 0)),
-                colors
-        );
-        builder.addQuad(
-                new Quad(
-                        new Vector3f(p.x+d.x, p.y+d.y, p.z),
-                        new Vector3f(p.x, p.y+d.y, p.z),
-                        new Vector3f(p.x, p.y+d.y, p.z+d.z),
-                        new Vector3f(p.x+d.x, p.y+d.y, p.z+d.z)
-                ),
-                new Quad(new Vector3f(0, 1, 0)),
-                colors
-        );
+        builder.addAxisAlignedBox(box, color);
         return builder.createMesh();
     }
 

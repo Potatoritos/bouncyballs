@@ -1,7 +1,7 @@
 package collision;
 
 import game.GameObject;
-import shape.Line3;
+import shape.Line3d;
 import shape.Plane;
 import org.joml.Vector3d;
 
@@ -16,7 +16,7 @@ public class CollisionPlaneTriangle extends CollisionPlane {
     }
 
     @Override
-    public boolean intersect(Line3 line, Vector3d result) {
+    public boolean intersect(Line3d line, Vector3d result) {
         // Return false if line.displacement is moving away from the surface (i.e, when it is within 90° of the normal)
         if (plane.normal().dot(line.displacement) > 0) {
             return false;

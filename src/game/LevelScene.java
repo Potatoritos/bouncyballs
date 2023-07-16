@@ -5,7 +5,8 @@ import collision.CollisionHandler;
 import graphics.*;
 import mesh.Quad;
 import org.joml.Matrix3f;
-import shape.Line3;
+import shape.Line3d;
+import shape.Line3f;
 import shape.Sphere;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
@@ -84,9 +85,8 @@ public class LevelScene extends Scene {
         this.windowHeight = windowHeight;
         this.audioHandler = audioHandler;
         rotationMatrix = new Matrix3f();
-        floorMesh = rectangularPrismMesh(
-                new Vector3f(0, 0, 0),
-                new Vector3f(1, 1, (float)floorTileHeight),
+        floorMesh = axisAlignedBoxMesh(
+                new Line3f(new Vector3f(0, 0, 0), new Vector3f(1, 1, (float)floorTileHeight)),
                 new Vector3f(0f, 0f, 0f)
         );
         holeMesh = holeTileMesh(
@@ -104,29 +104,24 @@ public class LevelScene extends Scene {
                 ),
                 new Vector3f(0, 0, 0)
         );
-        wallXMesh = rectangularPrismMesh(
-                new Vector3f(0, 0, 0),
-                new Vector3f(0.1f, 1.1f, (float)(floorTileHeight+wallHeight)),
+        wallXMesh = axisAlignedBoxMesh(
+                new Line3f(new Vector3f(0, 0, 0), new Vector3f(0.1f, 1.1f, (float)(floorTileHeight+wallHeight))),
                 new Vector3f(0f, 0f, 0f)
         );
-        wallXMeshThinner = rectangularPrismMesh(
-                new Vector3f(0.001f, 0.001f, 0),
-                new Vector3f(0.098f, 1.098f, (float)(floorTileHeight+wallHeight)-0.01f),
+        wallXMeshThinner = axisAlignedBoxMesh(
+                new Line3f(new Vector3f(0.001f, 0.001f, 0), new Vector3f(0.098f, 1.098f, (float)(floorTileHeight+wallHeight)-0.01f)),
                 new Vector3f(0f, 0f, 0f)
         );
-        wallYMesh = rectangularPrismMesh(
-                new Vector3f(0, 0, 0),
-                new Vector3f(1.1f, 0.1f, (float)(floorTileHeight+wallHeight)),
+        wallYMesh = axisAlignedBoxMesh(
+                new Line3f(new Vector3f(0, 0, 0), new Vector3f(1.1f, 0.1f, (float)(floorTileHeight+wallHeight))),
                 new Vector3f(0f, 0f, 0f)
         );
-        wallYMeshThinner = rectangularPrismMesh(
-                new Vector3f(0.001f, 0.001f, 0),
-                new Vector3f(1.098f, 0.098f, (float)(floorTileHeight+wallHeight)-0.01f),
+        wallYMeshThinner = axisAlignedBoxMesh(
+                new Line3f(new Vector3f(0.001f, 0.001f, 0), new Vector3f(1.098f, 0.098f, (float)(floorTileHeight+wallHeight)-0.01f)),
                 new Vector3f(0f, 0f, 0f)
         );
-        tallTileMesh = rectangularPrismMesh(
-                new Vector3f(0, 0, 0),
-                new Vector3f(1, 1, (float)(floorTileHeight+wallHeight)),
+        tallTileMesh = axisAlignedBoxMesh(
+                new Line3f(new Vector3f(0, 0, 0), new Vector3f(1, 1, (float)(floorTileHeight+wallHeight))),
                 new Vector3f(0, 0, 0)
         );
         ballMesh = generateGeodesicPolyhedronMesh(3, new Vector3f(0f, 1f, 0f));
@@ -605,7 +600,7 @@ public class LevelScene extends Scene {
             // Load all floor tiles
             for (int j = 0; j < level.getColumns(); j++) {
                 if (level.getFloorState(i, j) == FloorTile.FLOOR) {
-                    Box tile = new Box(new Line3(
+                    Box tile = new Box(new Line3d(
                             new Vector3d(level.getPosX(j), level.getPosY(i), -floorTileHeight),
                             new Vector3d(1, 1, floorTileHeight)
                     ));
@@ -614,7 +609,7 @@ public class LevelScene extends Scene {
 
                 } else if (FloorTile.goalColor(level.getFloorState(i, j)) != 0) {
                     int holeColor = FloorTile.goalColor(level.getFloorState(i, j));
-                    HoleBox tile = new HoleBox(new Line3(
+                    HoleBox tile = new HoleBox(new Line3d(
                             new Vector3d(level.getPosX(j), level.getPosY(i), -floorTileHeight),
                             new Vector3d(1, 1, floorTileHeight)
                     ), 0.4);
@@ -625,7 +620,7 @@ public class LevelScene extends Scene {
                     tile.cover.getColor(0).set(Colors.tile);
                     coverTiles.add(tile.cover);
                 } else if (level.getFloorState(i, j) == FloorTile.TALL) {
-                    Box tile = new Box(new Line3(
+                    Box tile = new Box(new Line3d(
                             new Vector3d(level.getPosX(j), level.getPosY(i), -floorTileHeight),
                             new Vector3d(1, 1, floorTileHeight+wallHeight)
                     ));
@@ -635,7 +630,7 @@ public class LevelScene extends Scene {
             }
             // Load all vertically-oriented walls
             for (int j = 0; j < level.getColumns()+1; j++) {
-                Box tile = new Box(new Line3(
+                Box tile = new Box(new Line3d(
                         new Vector3d(level.getPosX(j)-0.05, level.getPosY(i)-0.05, -floorTileHeight),
                         new Vector3d(0.1, 1.1, floorTileHeight+wallHeight)
                 ));
@@ -653,7 +648,7 @@ public class LevelScene extends Scene {
         // Load all horizontally-oriented walls
         for (int i = 0; i < level.getRows()+1; i++) {
             for (int j = 0; j < level.getColumns(); j++) {
-                Box tile = new Box(new Line3(
+                Box tile = new Box(new Line3d(
                         new Vector3d(level.getPosX(j)-0.05, level.getPosY(i)-0.05, -floorTileHeight),
                         new Vector3d(1.1, 0.1, floorTileHeight+wallHeight)
                 ));

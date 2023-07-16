@@ -1,19 +1,18 @@
 package game;
 
-import org.joml.Vector3f;
-import shape.Line2;
+import shape.Line2d;
 
 /**
  * Represents a button (seen in the main menu)
  */
 public class UIButton {
-    public final Line2 geometry;
+    public final Line2d geometry;
     private boolean isHoveredOver;
     private boolean isClicked;
     private String text;
     private String secondaryText;
     public UIButton() {
-        geometry = new Line2();
+        geometry = new Line2d();
         text = "";
         secondaryText = "";
     }

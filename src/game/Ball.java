@@ -5,7 +5,7 @@ import audio.AudioSource;
 import math.Geometry;
 import org.joml.Matrix3f;
 import org.joml.Vector3f;
-import shape.Line3;
+import shape.Line3d;
 import shape.Sphere;
 import org.joml.Matrix4f;
 import org.joml.Vector3d;
@@ -152,7 +152,7 @@ public class Ball extends GameObject {
                 .scale((float)getRadius());
     }
     @Override
-    public void reflectLine(Line3 line, Vector3d intersection, Vector3d normal) {
+    public void reflectLine(Line3d line, Vector3d intersection, Vector3d normal) {
         // Rebound the ball colliding into this one
         Geometry.reflectLineFixedRebound(line, intersection, normal, 0.03);
 

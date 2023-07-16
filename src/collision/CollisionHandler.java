@@ -4,7 +4,7 @@ import game.Ball;
 import game.Box;
 import game.HoleBox;
 import shape.Cylinder;
-import shape.Line3;
+import shape.Line3d;
 import shape.Plane;
 import shape.Sphere;
 import org.joml.Vector3d;
@@ -42,14 +42,14 @@ import static math.Geometry.distance;
  */
 public class CollisionHandler {
     private Ball ball;
-    private final Line3 ballMotion;
+    private final Line3d ballMotion;
     private final ArrayList<CollisionObject> collisionObjects;
     private final ArrayList<CollisionTrigger> triggers;
     private final Vector3d minIntersection;
     private CollisionObject minCollisionObject;
     private final Sphere ballSphere;
     public CollisionHandler() {
-        ballMotion = new Line3();
+        ballMotion = new Line3d();
         collisionObjects = new ArrayList<>();
         triggers = new ArrayList<>();
         minIntersection = new Vector3d();

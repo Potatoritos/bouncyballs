@@ -5,18 +5,18 @@ import org.joml.Vector2d;
 /**
  * Represents a 2-D line defined by a position and a direction
  */
-public class Line2 {
+public class Line2d {
     public final Vector2d position;
     public final Vector2d displacement;
-    public Line2() {
+    public Line2d() {
         this.position = new Vector2d();
         this.displacement = new Vector2d();
     }
-    public Line2(Vector2d position, Vector2d displacement) {
+    public Line2d(Vector2d position, Vector2d displacement) {
         this();
         set(position, displacement);
     }
-    public Line2(Line2 line) {
+    public Line2d(Line2d line) {
         this();
         set(line);
     }
@@ -24,7 +24,7 @@ public class Line2 {
         this.position.set(position);
         this.displacement.set(displacement);
     }
-    public void set(Line2 line) {
+    public void set(Line2d line) {
         set(line.position, line.displacement);
     }
     public double x1() {

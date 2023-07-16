@@ -1,6 +1,5 @@
 package math;
 
-import math.Quadratic;
 import org.joml.Matrix3d;
 import org.joml.Vector2d;
 import org.joml.Vector3d;
@@ -36,7 +35,7 @@ public class Geometry {
      * @param normal the normal of the surface at the point of intersection
      * @param restitution the ratio between the initial and final "velocity" of the line after hitting the surface
      */
-    public static void reflectLine(Line3 line, Vector3d intersection, Vector3d normal, double restitution) {
+    public static void reflectLine(Line3d line, Vector3d intersection, Vector3d normal, double restitution) {
         Vector3d normalComponent = new Vector3d();
         project(line.displacement, normal, normalComponent);
 
@@ -56,7 +55,7 @@ public class Geometry {
      * @param normal the normal of the surface at the point of intersection
      * @param reboundVelocity the velocity of the line after hitting the surface
      */
-    public static void reflectLineFixedRebound(Line3 line, Vector3d intersection, Vector3d normal, double reboundVelocity) {
+    public static void reflectLineFixedRebound(Line3d line, Vector3d intersection, Vector3d normal, double reboundVelocity) {
         Vector3d normalComponent = new Vector3d();
         project(line.displacement, normal, normalComponent);
         line.displacement.sub(normalComponent.mul(1 + reboundVelocity/normalComponent.length()));
@@ -68,7 +67,7 @@ public class Geometry {
      * @param t the position's distance along the line (a value in [0,1])
      * @return true if t is not -1; false otherwise
      */
-    public static boolean scaleLine(Line3 line, double t, Vector3d result) {
+    public static boolean scaleLine(Line3d line, double t, Vector3d result) {
         if (t == -1) return false;
         result.set(line.displacement).mul(t).add(line.position);
         return true;
@@ -79,7 +78,7 @@ public class Geometry {
      * @param t the position's distance along the line (a value in [0,1])
      * @return true if t is not -1; false otherwise
      */
-    public static boolean scaleLine(Line2 line, double t, Vector2d result) {
+    public static boolean scaleLine(Line2d line, double t, Vector2d result) {
         if (t == -1) return false;
         result.set(line.displacement).mul(t).add(line.position);
         return true;
@@ -92,7 +91,7 @@ public class Geometry {
      * u, v: the POI's distance along the plane's direction vectors.
      * Sets t to -1 if there is no intersection.
      */
-    public static void intersectionLinePlaneTUV(Line3 line, Plane plane, Vector3d result) {
+    public static void intersectionLinePlaneTUV(Line3d line, Plane plane, Vector3d result) {
         if (line.displacement.lengthSquared() == 0) {
             result.x = -1;
             return;
@@ -130,7 +129,7 @@ public class Geometry {
      * Finds the intersection between a line and the triangle defined by a plane's postition and its two direction vectors
      * @return the POI's distance along the line; -1 if there is no intersection
      */
-    public static double intersectionLinePlaneTriangle(Line3 line, Plane plane) {
+    public static double intersectionLinePlaneTriangle(Line3d line, Plane plane) {
         Vector3d result = new Vector3d();
         intersectionLinePlaneTUV(line, plane, result);
         double t = result.x, u = result.y, v = result.z;
@@ -144,7 +143,7 @@ public class Geometry {
      * Stores into result the intersection between a line and the triangle defined by a plane's postition and its two direction vectors
      * @return true if there exists a POI; false otherwise
      */
-    public static boolean intersectionLinePlaneTriangle(Line3 line, Plane plane, Vector3d result) {
+    public static boolean intersectionLinePlaneTriangle(Line3d line, Plane plane, Vector3d result) {
         return scaleLine(line, intersectionLinePlaneTriangle(line, plane), result);
     }
 
@@ -152,7 +151,7 @@ public class Geometry {
      * Finds the intersection between a line and a plane
      * @return the POI's distance along the line; -1 if there is no intersection
      */
-    public static double intersectionLinePlane(Line3 line, Plane plane) {
+    public static double intersectionLinePlane(Line3d line, Plane plane) {
         Vector3d result = new Vector3d();
         intersectionLinePlaneTUV(line, plane, result);
         double t = result.x, u = result.y, v = result.z;
@@ -167,7 +166,7 @@ public class Geometry {
      * Stores the point of intersection between a line and a plane into result
      * @return true if there is a POI; false otherwise
      */
-    public static boolean intersectionLinePlane(Line3 line, Plane plane, Vector3d result) {
+    public static boolean intersectionLinePlane(Line3d line, Plane plane, Vector3d result) {
         return scaleLine(line, intersectionLinePlane(line, plane), result);
     }
 
@@ -175,14 +174,14 @@ public class Geometry {
      * Finds the intersection between a line and a cylinder
      * @return the POI's distance along the line
      */
-    public static double intersectionLineCylinder(Line3 line, Cylinder cylinder) {
+    public static double intersectionLineCylinder(Line3d line, Cylinder cylinder) {
         if (line.displacement.lengthSquared() == 0) {
             return -1;
         }
         // Rotate everything such that the cylinder's axis lies on the z-axis
         // Only works for cylinders that are aligned to the X axis, Y axis, Z axis, or XY plane (too lazy to figure out the proper way of doing this)
-        Line3 rotatedLine = new Line3(line);
-        Line3 rotatedCylinderAxis = new Line3(cylinder.position, cylinder.axis);
+        Line3d rotatedLine = new Line3d(line);
+        Line3d rotatedCylinderAxis = new Line3d(cylinder.position, cylinder.axis);
         if (cylinder.axis.z == 0) {
             Matrix3d rotationMatrix = new Matrix3d();
             if (cylinder.axis.x == 0) {
@@ -200,7 +199,7 @@ public class Geometry {
         }
 
         // Project the rotated line and cylinder to the XY plane
-        Line2 lineXY = new Line2(
+        Line2d lineXY = new Line2d(
                 new Vector2d(rotatedLine.position.x, rotatedLine.position.y),
                 new Vector2d(rotatedLine.displacement.x, rotatedLine.displacement.y)
         );
@@ -231,7 +230,7 @@ public class Geometry {
      * Stores the intersection between a line and a cylinder into result
      * @return true if there exists a POI; false otherwise
      */
-    public static boolean intersectionLineCylinder(Line3 line, Cylinder cylinder, Vector3d result) {
+    public static boolean intersectionLineCylinder(Line3d line, Cylinder cylinder, Vector3d result) {
         return scaleLine(line, intersectionLineCylinder(line, cylinder), result);
     }
 
@@ -239,7 +238,7 @@ public class Geometry {
      * Finds the intersection between a line and a sphere
      * @return the POI's distance along the line
      */
-    public static double intersectionLineSphere(Line3 line, Sphere sphere) {
+    public static double intersectionLineSphere(Line3d line, Sphere sphere) {
         if (line.displacement.lengthSquared() == 0) {
             return -1;
         }
@@ -263,7 +262,7 @@ public class Geometry {
      * Stores the intersection between a line and a sphere into result
      * @return true if a POI exists; false otherwise
      */
-    public static boolean intersectionLineSphere(Line3 line, Sphere sphere, Vector3d result) {
+    public static boolean intersectionLineSphere(Line3d line, Sphere sphere, Vector3d result) {
         return scaleLine(line, intersectionLineSphere(line, sphere), result);
     }
 
@@ -271,7 +270,7 @@ public class Geometry {
      * Finds the intersection between a line and a circle
      * @return the POI's distance along the line
      */
-    public static double intersectionLineCircle(Line2 line, Circle circle) {
+    public static double intersectionLineCircle(Line2d line, Circle circle) {
         if (line.displacement.lengthSquared() == 0) {
             return -1;
         }
@@ -295,7 +294,7 @@ public class Geometry {
      * Stores the intersection between a line and a circle into result
      * @return true if a POI exists; false otherwise
      */
-    public static boolean intersectionLineCircle(Line2 line, Circle circle, Vector2d result) {
+    public static boolean intersectionLineCircle(Line2d line, Circle circle, Vector2d result) {
         return scaleLine(line, intersectionLineCircle(line, circle), result);
     }
 
@@ -303,7 +302,7 @@ public class Geometry {
      * Finds the distance from a line segment to a point
      * @return the distance
      */
-    public static double distanceLineSegmentPoint(Line2 line, Vector2d point) {
+    public static double distanceLineSegmentPoint(Line2d line, Vector2d point) {
         double l = line.displacement.lengthSquared();
         if (l == 0) return distance(line.position, point);
         Vector2d u = new Vector2d();

@@ -1,8 +1,7 @@
 package game;
 
-import audio.AudioHandler;
 import org.joml.Vector4f;
-import shape.Line3;
+import shape.Line3d;
 import org.joml.Matrix4f;
 import org.joml.Vector3d;
 
@@ -45,7 +44,7 @@ public abstract class GameObject {
      * @param intersection the point at which the ball intersects with the object
      * @param normal the normal of the surface at the point of intersection
      */
-    public void reflectLine(Line3 line, Vector3d intersection, Vector3d normal) {
+    public void reflectLine(Line3d line, Vector3d intersection, Vector3d normal) {
 
     }
 }

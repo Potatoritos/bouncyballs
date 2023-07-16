@@ -1,7 +1,6 @@
 package game;
 
-import audio.AudioHandler;
-import shape.Line3;
+import shape.Line3d;
 
 /**
  * Represents the holes you have to get the balls into
@@ -17,7 +16,7 @@ public class HoleBox extends Box {
      * @param geometry the dimensions of the box
      * @param radius the radius of the circular hole
      */
-    public HoleBox(Line3 geometry, double radius) {
+    public HoleBox(Line3d geometry, double radius) {
         super(geometry);
         this.radius = radius;
         hasReachedGoal = false;

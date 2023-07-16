@@ -1,20 +1,19 @@
 package game;
 
-import collision.CollisionObjectContainer;
 import math.Geometry;
-import shape.Line3;
+import shape.Line3d;
 import org.joml.Vector3d;
 
 /**
  * Represents any game object that is a rectangular prism (e.g, walls, floor)
  */
 public class Box extends GameObject {
-    public final Line3 geometry;
+    public final Line3d geometry;
     public Box() {
         super();
-        geometry = new Line3();
+        geometry = new Line3d();
     }
-    public Box(Line3 geometry) {
+    public Box(Line3d geometry) {
         this();
         this.geometry.set(geometry);
     }
@@ -22,7 +21,7 @@ public class Box extends GameObject {
         return geometry.position;
     }
     @Override
-    public void reflectLine(Line3 line, Vector3d intersection, Vector3d normal) {
+    public void reflectLine(Line3d line, Vector3d intersection, Vector3d normal) {
         Geometry.reflectLine(line, intersection, normal, 0.5);
     }
 }

@@ -64,6 +64,7 @@ public class GameScene extends Scene {
     private final AudioSource menuHover;
     private final AudioSource menuClick;
     private final AudioSource menuBack;
+    private int buttonHovered;
 
     // Stores star levels in values
     private final HashMap<String, Integer> completedLevels;
@@ -348,6 +349,12 @@ public class GameScene extends Scene {
         super.handleWindowResize(width, height);
         levelScene.handleWindowResize(width, height);
     }
+    public void playButtonHoverSound(int button) {
+        if (buttonHovered != button) {
+            menuHover.play();
+            buttonHovered = button;
+        }
+    }
     @Override
     public void update(InputState input) {
         for (FrameTimer timer : timers) {
@@ -411,40 +418,60 @@ public class GameScene extends Scene {
             if (inLevelSelect) {
                 if (input.isPreviousLevelPressed()) {
                     changeSelectedLevelIndex(Math.max(selectedLevelIndex-1, 0));
+                    menuHover.play();
                 } else if (input.isNextLevelPressed()) {
                     changeSelectedLevelIndex(Math.min(selectedLevelIndex+1, levels.size()-1));
+                    menuHover.play();
                 } else if (input.isSelectLevelPressed()) {
                     startEnterLevel();
+                    menuClick.play();
                 } else if (input.isExitKeyPressed()) {
                     startEnterMainMenu();
+                    menuBack.play();
                 }
             } else if (inLevel) {
                 if (levelScene.hasWon()) {
                     startLevelClearDelay();
                 } else if (input.isExitKeyPressed()) {
                     startEnterLevelSelect();
-                } else if (levelScene.hasDied() || input.isResetKeyPressed()) {
+                    menuBack.play();
+                } else if (levelScene.hasDied()) {
                     startLevelReset();
+                } else if (input.isResetKeyPressed()) {
+                    startLevelReset();
+                    menuBack.play();
                 }
             } else if (inMainMenu) {
+                if (levelSelectButton.isHoveredOver()) playButtonHoverSound(1);
+                else if (fpsCapButton.isHoveredOver()) playButtonHoverSound(2);
+                else if (gameSpeedButton.isHoveredOver()) playButtonHoverSound(3);
+                else if (aboutButton.isHoveredOver()) playButtonHoverSound(4);
+                else buttonHovered = 0;
+
                 if (levelSelectButton.isClicked()) {
                     startEnterLevelSelect();
+                    menuClick.play();
                 } else if (fpsCapButton.isClicked()) {
                     fpsCapIndex = (fpsCapIndex+1) % fpsCaps.length;
                     requestedFpsCap = fpsCaps[fpsCapIndex];
                     fpsCapButton.setSecondaryText(Integer.toString(requestedFpsCap));
+                    menuClick.play();
                 } else if (gameSpeedButton.isClicked()) {
                     gameSpeedIndex = (gameSpeedIndex+1) % gameSpeeds.length;
                     requestedGameSpeed = gameSpeeds[gameSpeedIndex];
                     gameSpeedButton.setSecondaryText(String.format("%.2fx", requestedGameSpeed));
+                    menuClick.play();
                 } else if (aboutButton.isClicked()) {
                     startEnterAboutMenu();
+                    menuClick.play();
                 } else if (input.isExitKeyPressed()) {
                     startRequestExit();
+                    menuBack.play();
                 }
             } else if (inAboutMenu) {
                 if (input.isExitKeyPressed()) {
                     startEnterMainMenu();
+                    menuBack.play();
                 }
             }
         }

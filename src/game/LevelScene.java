@@ -15,6 +15,8 @@ import util.Deletable;
 import java.nio.FloatBuffer;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static math.MathUtil.cutMaxMin;
 import static mesh.MeshGeometry.*;
@@ -30,7 +32,7 @@ public class LevelScene extends Scene {
     private final GameObjectMesh wallYMesh;
     private final GameObjectMesh tallTileMesh;
     private final GameObjectMesh ballMesh;
-    private final GameObjectMesh[] gameObjectMeshes;
+    private final HashMap<String, GameObjectMesh> gameObjectMeshes;
 
     private final ShaderProgram colorNormalsInstanced;
     private final ShaderProgram outlineInstanced;
@@ -48,7 +50,9 @@ public class LevelScene extends Scene {
     private final ArrayList<Box> wallYTiles;
     private final ArrayList<Box> tallTiles;
     private final ArrayList<Ball> balls;
-    private final ArrayList<? extends GameObject>[] gameObjects;
+    private final ArrayList<Ball> ballExplosions;
+//    private final ArrayList<? extends GameObject>[] gameObjects;
+    private final HashMap<String, ArrayList<? extends GameObject>> gameObjects;
     private final CollisionHandler collisionHandler;
     private final double floorTileHeight = 0.5;
     private final double wallHeight = 0.75;
@@ -111,7 +115,15 @@ public class LevelScene extends Scene {
                 new Vector3f(0, 0, 0)
         );
         ballMesh = generateGeodesicPolyhedronMesh(3, new Vector3f(0f, 1f, 0f));
-        gameObjectMeshes = new GameObjectMesh[] {floorMesh, holeMesh, holeCoverMesh, wallXMesh, wallYMesh, tallTileMesh, ballMesh};
+        gameObjectMeshes = new HashMap<>();
+        gameObjectMeshes.put("floor", floorMesh);
+        gameObjectMeshes.put("hole", holeMesh);
+        gameObjectMeshes.put("cover", holeCoverMesh);
+        gameObjectMeshes.put("wallX", wallXMesh);
+        gameObjectMeshes.put("wallY", wallYMesh);
+        gameObjectMeshes.put("tall", tallTileMesh);
+        gameObjectMeshes.put("ball", ballMesh);
+        gameObjectMeshes.put("explosion", ballMesh);
 
         colorNormalsInstanced = ShaderProgram.fromFile("color_normals_instanced.glsl");
         outlineInstanced = ShaderProgram.fromFile("outline_instanced.glsl");
@@ -128,7 +140,17 @@ public class LevelScene extends Scene {
         wallYTiles = new ArrayList<>();
         tallTiles = new ArrayList<>();
         balls = new ArrayList<>();
-        gameObjects = new ArrayList[] {floorTiles, holeTiles, coverTiles, wallXTiles, wallYTiles, tallTiles, balls};
+        ballExplosions = new ArrayList<>();
+
+        gameObjects = new HashMap<>();
+        gameObjects.put("floor", floorTiles);
+        gameObjects.put("hole", holeTiles);
+        gameObjects.put("cover", coverTiles);
+        gameObjects.put("wallX", wallXTiles);
+        gameObjects.put("wallY", wallYTiles);
+        gameObjects.put("tall", tallTiles);
+        gameObjects.put("ball", balls);
+        gameObjects.put("explosion", ballExplosions);
 
         camera.position.z = 6;
 
@@ -216,11 +238,39 @@ public class LevelScene extends Scene {
         return level.getStarLevel(stopwatch.getFrame());
     }
 
+    public void setupCollisions(Ball ball) {
+        collisionHandler.reset();
+        collisionHandler.setBall(ball);
+        for (Box box : wallXTiles) collisionHandler.addBoxFloorColliders(box);
+        for (Box box : wallYTiles) collisionHandler.addBoxFloorColliders(box);
+        for (Box box : floorTiles) collisionHandler.addBoxFloorColliders(box);
+        for (Box box : tallTiles) collisionHandler.addBoxFloorColliders(box);
+        for (HoleBox box : holeTiles) collisionHandler.addHoleBoxColliders(box);
+        collisionHandler.addFallDeathTrigger();
+    }
+
     /**
      * Update balls and handle their collisions
      */
     public void updateBalls() {
         int ballsWon = 0;
+
+        for (int i = balls.size()-1; i >= 0; i--) {
+            if (balls.get(i).isInExplosionAnimation()) {
+                ballExplosions.add(balls.get(i));
+                balls.remove(i);
+            }
+        }
+
+        for (Ball ball : ballExplosions) {
+            ball.velocity.z = 0;
+            ball.update(rotationMatrix);
+            if (ball.isDead()) {
+                hasDied = true;
+            }
+            setupCollisions(ball);
+            collisionHandler.processCollisions();
+        }
 
         for (Ball ball : balls) {
             if (ball.isDead()) {
@@ -233,10 +283,6 @@ public class LevelScene extends Scene {
                 ball.update(rotationMatrix);
                 // Hide the ball if it has reached its goal
                 ball.geometry.position.set(0, 0, 10000);
-                continue;
-            }
-            if (ball.isInExplosionAnimation()) {
-                ball.update(rotationMatrix);
                 continue;
             }
             // Fade the ball out when it falls
@@ -252,24 +298,16 @@ public class LevelScene extends Scene {
             ball.velocity.z -= 0.00045;
 
             // Handle collisions
-            collisionHandler.reset();
-            collisionHandler.setBall(ball);
-            for (Box box : wallXTiles) collisionHandler.addBoxFloorColliders(box);
-            for (Box box : wallYTiles) collisionHandler.addBoxFloorColliders(box);
-            for (Box box : floorTiles) collisionHandler.addBoxFloorColliders(box);
-            for (Box box : tallTiles) collisionHandler.addBoxFloorColliders(box);
-            for (HoleBox box : holeTiles) collisionHandler.addHoleBoxColliders(box);
-
+            setupCollisions(ball);
             for (Ball collisionBall : balls) {
                 if (ball == collisionBall) continue;
                 collisionHandler.addBallColliders(collisionBall);
             }
-            collisionHandler.addFallDeathTrigger();
-
             collisionHandler.processCollisions();
 
             ball.update(rotationMatrix);
         }
+
 
         if (ballsWon == balls.size()) {
             hasWon = true;
@@ -332,10 +370,11 @@ public class LevelScene extends Scene {
      * Render all game objects. Meant for use with the normal coloring shader
      */
     private void renderGameNormals(ShaderProgram shader) {
-        for (int i = 0; i < gameObjects.length; i++) {
-            setViewMatrices(shader, gameObjects[i]);
-            setTransparencies(shader, gameObjects[i]);
-            gameObjectMeshes[i].renderInstanced(gameObjects[i].size());
+        for (Map.Entry<String, ArrayList<? extends GameObject>> entry : gameObjects.entrySet()) {
+            if (entry.getValue().isEmpty()) continue;
+            setViewMatrices(shader, entry.getValue());
+            setTransparencies(shader, entry.getValue());
+            gameObjectMeshes.get(entry.getKey()).renderInstanced(entry.getValue().size());
         }
     }
 
@@ -343,9 +382,10 @@ public class LevelScene extends Scene {
      * Render all game objects. Meant for use with the shadow (depth) map shader
      */
     private void renderDepths(ShaderProgram shader) {
-        for (int i = 0; i < gameObjects.length; i++) {
-            setWorldMatrices(shader, gameObjects[i]);
-            gameObjectMeshes[i].renderInstanced(gameObjects[i].size());
+        for (Map.Entry<String, ArrayList<? extends GameObject>> entry : gameObjects.entrySet()) {
+            if (entry.getKey().equals("explosion") || entry.getValue().isEmpty()) continue;
+            setWorldMatrices(shader, entry.getValue());
+            gameObjectMeshes.get(entry.getKey()).renderInstanced(entry.getValue().size());
         }
     }
 
@@ -353,12 +393,13 @@ public class LevelScene extends Scene {
      * Render all game objects. Meant for use with the shadows + sobel filter shader
      */
     private void renderGameObjects(ShaderProgram shader) {
-        for (int i = 0; i < gameObjects.length; i++) {
-            setViewMatrices(shader, gameObjects[i]);
-            setColors(0, shader, gameObjects[i]);
-            setColors(1, shader, gameObjects[i]);
-            setWorldMatrices(shader, gameObjects[i]);
-            gameObjectMeshes[i].renderInstanced(gameObjects[i].size());
+        for (Map.Entry<String, ArrayList<? extends GameObject>> entry : gameObjects.entrySet()) {
+            if (entry.getValue().isEmpty()) continue;
+            setViewMatrices(shader, entry.getValue());
+            setColors(0, shader, entry.getValue());
+            setColors(1, shader, entry.getValue());
+            setWorldMatrices(shader, entry.getValue());
+            gameObjectMeshes.get(entry.getKey()).renderInstanced(entry.getValue().size());
         }
     }
 
@@ -476,10 +517,10 @@ public class LevelScene extends Scene {
         wallXTiles.clear();
         wallYTiles.clear();
         tallTiles.clear();
-        for (Ball ball : balls) {
-             ball.delete();
-        }
+        for (Ball ball : balls) ball.delete();
+        for (Ball ball : ballExplosions) ball.delete();
         balls.clear();
+        ballExplosions.clear();
 
         hasWon = false;
         hasDied = false;

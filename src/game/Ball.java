@@ -1,6 +1,5 @@
 package game;
 
-import audio.AudioBuffer;
 import audio.AudioHandler;
 import audio.AudioSource;
 import math.Geometry;
@@ -30,7 +29,6 @@ public class Ball extends GameObject {
     private int holeColor;
 
     private double lastCollisionSpeed;
-//    private final AudioBuffer buffer;
     private final AudioSource collisionSound;
     private final AudioSource snapSound;
     private final AudioSource goalSound;
@@ -61,8 +59,11 @@ public class Ball extends GameObject {
         explosionTimer.advanceFrame();
         if (explosionTimer.isActive()) {
             geometry.position.set(explosionPosition);
-            geometry.setRadius(0.35 + 1.5*cubicInterpolation(explosionTimer.percentage()));
-            getColor(0).w = 1 - explosionTimer.fpercentage();
+            geometry.setRadius(0.35 + 1.5*cubicInterpolation(cubicInterpolation(explosionTimer.percentage())));
+
+            // this is supposed to fade out the explosion, but it doesn't seem to be working
+//            getColor(0).w = Math.max(0, 1 - 2*explosionTimer.fpercentage());
+
             if (explosionTimer.isOnLastFrame()) {
                 isDead = true;
             }

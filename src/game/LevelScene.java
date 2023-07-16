@@ -13,7 +13,6 @@ import org.lwjgl.system.MemoryUtil;
 import util.Deletable;
 
 import java.nio.FloatBuffer;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,12 +35,14 @@ public class LevelScene extends Scene {
     private final GameObjectMesh ballMesh;
     private final HashMap<String, GameObjectMesh> gameObjectMeshes;
 
-    private final ShaderProgram colorNormalsInstanced;
-    private final ShaderProgram outlineInstanced;
-    private final ShaderProgram outInstanced;
-    private final ShaderProgram depthInstanced;
+    private final ShaderProgram colorShader;
+    private final ShaderProgram colorNormalsShader;
+    private final ShaderProgram outlineShader;
+    private final ShaderProgram levelShader;
+    private final ShaderProgram depthShader;
     private final ShaderProgram textureShader;
     private final EmptyFbo edgeSourceFbo;
+    private final EmptyFbo colorSourceFbo;
     private final ShadowMap shadowMap;
     private final Vector3d rotation;
 
@@ -145,10 +146,11 @@ public class LevelScene extends Scene {
         gameObjectMeshes.put("ball", ballMesh);
         gameObjectMeshes.put("explosion", ballMesh);
 
-        colorNormalsInstanced = ShaderProgram.fromFile("color_normals_instanced.glsl");
-        outlineInstanced = ShaderProgram.fromFile("outline_instanced.glsl");
-        outInstanced = ShaderProgram.fromFile("shadows_sobelfilter.glsl");
-        depthInstanced = ShaderProgram.fromFile("depth_instanced.glsl");
+        colorShader = ShaderProgram.fromFile("color.glsl");
+        colorNormalsShader = ShaderProgram.fromFile("color_normals.glsl");
+        outlineShader = ShaderProgram.fromFile("outline.glsl");
+        levelShader = ShaderProgram.fromFile("sobel_filter_and_shadows.glsl");
+        depthShader = ShaderProgram.fromFile("depth.glsl");
         textureShader = ShaderProgram.fromFile("texture.glsl");
 
         rotation = new Vector3d();
@@ -183,6 +185,7 @@ public class LevelScene extends Scene {
         camera.position.z = 6;
 
         edgeSourceFbo = new EmptyFbo(windowWidth, windowHeight);
+        colorSourceFbo = new EmptyFbo(windowWidth, windowHeight);
         handleWindowResize(windowWidth, windowHeight);
         shadowMap = new ShadowMap(2048, 2048, 3.5f, 0.1f, 10f);
 
@@ -258,6 +261,7 @@ public class LevelScene extends Scene {
     public void handleWindowResize(int width, int height) {
         super.handleWindowResize(width, height);
         edgeSourceFbo.resize(width, height);
+        colorSourceFbo.resize(width, height);
         windowWidth = width;
         windowHeight = height;
     }
@@ -410,6 +414,16 @@ public class LevelScene extends Scene {
         }
     }
 
+    private void renderGameColors(ShaderProgram shader) {
+        for (Map.Entry<String, ArrayList<? extends GameObject>> entry : gameObjects.entrySet()) {
+            if (entry.getValue().isEmpty()) continue;
+            setViewMatrices(shader, entry.getValue());
+            setColors(0, shader, entry.getValue());
+            setColors(1, shader, entry.getValue());
+            gameObjectMeshes.get(entry.getKey()).renderInstanced(entry.getValue().size());
+        }
+    }
+
     /**
      * Render all game objects. Meant for use with the shadow (depth) map shader
      */
@@ -483,37 +497,48 @@ public class LevelScene extends Scene {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         // Draw normals to edgeSourceFbo
-        // These normals are used to draw edges (using sobel filter edge detection)
+        // These normals are used to draw edges (using a sobel filter)
         edgeSourceFbo.bind();
         glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        colorNormalsInstanced.bind();
-        colorNormalsInstanced.setUniform("projectionMatrix", camera.getProjectionMatrix());
+        colorNormalsShader.bind();
+        colorNormalsShader.setUniform("projectionMatrix", camera.getProjectionMatrix());
 
-        renderGameNormals(colorNormalsInstanced);
+        renderGameNormals(colorNormalsShader);
 
+        // Draw colors to colorSourceFbo (also used in edge drawing)
+//        colorSourceFbo.bind();
+
+        glViewport(0, 0, windowWidth, windowHeight);
+        glClearColor(0f, 0f, 0f, 0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        colorShader.bind();
+        colorShader.setUniform("projectionMatrix", camera.getProjectionMatrix());
+        renderGameColors(colorShader);
+
+        /*
         // Compute a shadow map
         // This is used to determine whether a fragment is in a shadow
-        depthInstanced.bind();
+        depthShader.bind();
         shadowMap.depthMap.bind();
         glViewport(0, 0, shadowMap.getWidth(), shadowMap.getHeight());
         glClear(GL_DEPTH_BUFFER_BIT);
 //        glCullFace(GL_FRONT);
-        depthInstanced.setUniform("lightSpaceMatrix", shadowMap.lightSpaceMatrix);
-        renderDepths(depthInstanced);
+        depthShader.setUniform("lightSpaceMatrix", shadowMap.lightSpaceMatrix);
+        renderDepths(depthShader);
         FrameBufferObject.unbind();
         glCullFace(GL_BACK);
 
         // Draw to screen
         glViewport(0, 0, windowWidth, windowHeight);
-        outInstanced.bind();
-        outInstanced.setUniform("inShadowColor", Colors.levelBackgrounds[level.getColor()]);
-        outInstanced.setUniform("normalTexture", 0);
-        outInstanced.setUniform("depthTexture", 1);
-        outInstanced.setUniform("shadowMap", 2);
-        outInstanced.setUniform("projectionMatrix", camera.getProjectionMatrix());
-        outInstanced.setUniform("lightSpaceMatrix", shadowMap.lightSpaceMatrix);
+        levelShader.bind();
+        levelShader.setUniform("inShadowColor", Colors.levelBackgrounds[level.getColor()]);
+        levelShader.setUniform("normalTexture", 0);
+        levelShader.setUniform("depthTexture", 1);
+        levelShader.setUniform("shadowMap", 2);
+        levelShader.setUniform("projectionMatrix", camera.getProjectionMatrix());
+        levelShader.setUniform("lightSpaceMatrix", shadowMap.lightSpaceMatrix);
 
         glActiveTexture(GL_TEXTURE0);
         edgeSourceFbo.getColorTexture().bind();
@@ -522,7 +547,9 @@ public class LevelScene extends Scene {
         glActiveTexture(GL_TEXTURE2);
         shadowMap.depthMap.getDepthTexture().bind();
 
-        renderGameObjects(outInstanced);
+        renderGameObjects(levelShader);
+        */
+
     }
     @Override
     public void nvgRender(NanoVGContext nvg) {
@@ -654,7 +681,7 @@ public class LevelScene extends Scene {
         isPaused = value;
     }
     public void delete() {
-        for (Deletable obj : new Deletable[] {floorMesh, holeMesh, holeCoverMesh, wallXMesh, wallYMesh, tallTileMesh, ballMesh, colorNormalsInstanced, outlineInstanced, depthInstanced, outInstanced, textureShader}) {
+        for (Deletable obj : new Deletable[] {floorMesh, holeMesh, holeCoverMesh, wallXMesh, wallYMesh, tallTileMesh, ballMesh, colorNormalsShader, outlineShader, depthShader, levelShader, textureShader}) {
             obj.delete();
         }
         for (Ball ball : balls) {

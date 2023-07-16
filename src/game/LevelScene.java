@@ -399,7 +399,7 @@ public class LevelScene extends Scene {
     public void render() {
         if (level == null) return;
 
-        glClearColor(Colors.background.x, Colors.background.y, Colors.background.z, 1);
+        glClearColor(Colors.levelBackgrounds[level.getColor()].x, Colors.levelBackgrounds[level.getColor()].y, Colors.levelBackgrounds[level.getColor()].z, 1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
@@ -435,7 +435,7 @@ public class LevelScene extends Scene {
         // Draw to screen
         glViewport(0, 0, windowWidth, windowHeight);
         outInstanced.bind();
-        outInstanced.setUniform("inShadowColor", Colors.background);
+        outInstanced.setUniform("inShadowColor", Colors.levelBackgrounds[level.getColor()]);
         outInstanced.setUniform("normalTexture", 0);
         outInstanced.setUniform("depthTexture", 1);
         outInstanced.setUniform("shadowMap", 2);

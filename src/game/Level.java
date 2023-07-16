@@ -18,6 +18,7 @@ public class Level implements Comparable<Level> {
     private final String name;
     private final int[] starTimeLimits;
     private boolean isMainMenu;
+    private int color;
     private Level(String name, int rows, int columns, int numBalls) {
         this.name = name;
         this.rows = rows;
@@ -96,6 +97,12 @@ public class Level implements Comparable<Level> {
         }
         return level;
     }
+    public void setColor(int value) {
+        color = value;
+    }
+    public int  getColor() {
+        return color;
+    }
 
     /**
      * Creates a file that stores the level's data
@@ -135,6 +142,8 @@ public class Level implements Comparable<Level> {
             level.setStarTimeLimit(0, Integer.parseInt(br.readLine()));
             level.setStarTimeLimit(1, Integer.parseInt(br.readLine()));
             level.setStarTimeLimit(2, Integer.MAX_VALUE/2);
+
+            level.setColor(Integer.parseInt(br.readLine()));
 
             // Process the spawn positions of each ball,
             // represented by a (rows) * (columns) grid

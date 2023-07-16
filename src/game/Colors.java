@@ -18,8 +18,5 @@ public class Colors {
     public static final Vector4f pink = hexRGBA(0xeb9de4ff);
     public static final Vector4f pinkDarker = hexRGBA(0xd992d3ff);
     public static final Vector4f[] base = {red, blue, green};
-    public static void resetBackground() {
-        // TODO: use an instance of Colors instead of changing the global state
-        background.set(hexRGBA(0x8ea2adff));
-    }
+    public static final Vector4f[] levelBackgrounds = {background, blueDarker, pinkDarker, redDarker};
 }

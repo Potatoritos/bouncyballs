@@ -61,6 +61,9 @@ public class GameScene extends Scene {
     private int gameSpeedIndex;
     private boolean hasRequestedExit;
 
+    private final AudioSource menuHover;
+    private final AudioSource menuClick;
+    private final AudioSource menuBack;
 
     // Stores star levels in values
     private final HashMap<String, Integer> completedLevels;
@@ -69,6 +72,14 @@ public class GameScene extends Scene {
         this.windowHeight = windowHeight;
         levelScene = new LevelScene(windowWidth, windowHeight, audioHandler);
 
+        menuHover = new AudioSource(audioHandler.menuHover, false, true);
+        menuClick = new AudioSource(audioHandler.menuClick, false, true);
+        menuBack = new AudioSource(audioHandler.menuBack, false, true);
+
+        Vector3f origin = new Vector3f(0, 0, 0);
+        menuHover.setPosition(origin);
+        menuClick.setPosition(origin);
+        menuBack.setPosition(origin);
 
         horizontalSwipeTimer = new FrameTimer(120);
         verticalSwipeTimer = new FrameTimer(240);
@@ -220,7 +231,6 @@ public class GameScene extends Scene {
     }
     private void endEnterMainMenu() {
         levelScene.loadLevel(Level.fromFile("level_mainmenu.txt"));
-        Colors.resetBackground();
         inLevel = false;
         inLevelSelect = false;
         inMainMenu = true;
@@ -251,7 +261,6 @@ public class GameScene extends Scene {
     private void midLevelReset() {
         levelScene.reset();
         levelScene.setPaused(true);
-        updateLevelBackground();
     }
     private void endLevelReset() {
         levelScene.setPaused(false);
@@ -310,18 +319,7 @@ public class GameScene extends Scene {
         selectedLevelIndex = index;
         setLevelToSelected();
     }
-    private void updateLevelBackground() {
-        Colors.resetBackground();
-        if (completedLevels.containsKey(currentLevel().getName())) {
-            switch(completedLevels.get(currentLevel().getName())) {
-                case 0 -> Colors.background.set(Colors.redDarker);
-                case 1 -> Colors.background.set(Colors.pinkDarker);
-                case 2 -> Colors.background.set(Colors.blueDarker);
-            }
-        }
-    }
     private void setLevelToSelected() {
-        updateLevelBackground();
         levelScene.loadLevel(currentLevel());
         if (inLevelSelect) {
             levelScene.updatePreviewCameraDistance();
@@ -703,6 +701,9 @@ public class GameScene extends Scene {
     }
     @Override
     public void delete() {
+        menuHover.delete();
+        menuClick.delete();
+        menuBack.delete();
         levelScene.delete();
     }
 }

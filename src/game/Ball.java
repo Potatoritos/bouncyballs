@@ -33,7 +33,11 @@ public class Ball extends GameObject {
 //    private final AudioBuffer buffer;
     private final AudioSource collisionSound;
     private final AudioSource snapSound;
+    private final AudioSource goalSound;
     private boolean shouldSnap;
+    private final Vector3f previousPosition;
+    private boolean shouldSplash;
+    private boolean hasSplashed;
     public Ball(AudioHandler audioHandler) {
         super();
         velocity = new Vector3d();
@@ -44,6 +48,8 @@ public class Ball extends GameObject {
 
         collisionSound = new AudioSource(audioHandler.clackSound, false, false);
         snapSound = new AudioSource(audioHandler.snapSound, false, false);
+        goalSound = new AudioSource(audioHandler.splashSound, false, false);
+        previousPosition = new Vector3f(-727, 0, 0);
     }
     public Ball(Sphere geometry, AudioHandler audioHandler) {
         this(audioHandler);
@@ -68,19 +74,28 @@ public class Ball extends GameObject {
         }
 
         Vector3f position = vector3dTo3f(geometry.position).mul(globalRotationMatrix);
-        Vector3f velocity = vector3dTo3f(this.velocity).mul(globalRotationMatrix);
+//        if (previousPosition.x == -727) {
+//            previousPosition.set(position);
+//        }
+//        Vector3f velocity = new Vector3f(position).sub(previousPosition);
+//        previousPosition.set(position);
+//        Vector3f velocity = vector3dTo3f(this.velocity);
         if (lastCollisionSpeed > 0.001) {
             collisionSound.setPosition(position);
-            float gain = Math.min(4, (float)((lastCollisionSpeed) / 0.01));
+            float gain = Math.min(4, (float)lastCollisionSpeed / 0.01f);
             collisionSound.setGain(gain);
             collisionSound.play();
             lastCollisionSpeed = 0;
         }
-//        snapSound.setVelocity(velocity);
         if (shouldSnap) {
             snapSound.setPosition(position);
             snapSound.play();
             shouldSnap = false;
+        }
+        if (shouldSplash && !hasSplashed) {
+            goalSound.setPosition(position);
+            goalSound.play();
+            hasSplashed = true;
         }
     }
     public void setLastCollisionSpeed(double value) {
@@ -120,6 +135,9 @@ public class Ball extends GameObject {
     public void queueSnap() {
         shouldSnap = true;
     }
+    public void queueSplash() {
+        shouldSplash = true;
+    }
     @Override
     public Matrix4f getWorldMatrix(Vector3d globalRotation) {
         return worldMatrix.identity()
@@ -150,6 +168,8 @@ public class Ball extends GameObject {
 
     public void delete() {
         collisionSound.delete();
+        snapSound.delete();
+        goalSound.delete();
 //        buffer.delete();
     }
 }

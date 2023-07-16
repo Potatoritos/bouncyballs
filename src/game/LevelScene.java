@@ -219,7 +219,7 @@ public class LevelScene extends Scene {
     /**
      * Update balls and handle their collisions
      */
-    public void updateBalls(AudioHandler audioHandler) {
+    public void updateBalls() {
         int ballsWon = 0;
 
         for (Ball ball : balls) {
@@ -229,6 +229,8 @@ public class LevelScene extends Scene {
             }
             if (ball.hasReachedGoal()) {
                 ballsWon++;
+                ball.queueSplash();
+                ball.update(rotationMatrix);
                 // Hide the ball if it has reached its goal
                 ball.geometry.position.set(0, 0, 10000);
                 continue;
@@ -290,7 +292,7 @@ public class LevelScene extends Scene {
                 ball.velocity.x -= 0.00004 * Math.sin(2*Math.PI*mainMenuVelocity.percentage());
                 ball.velocity.y -= 0.00005;
             }
-            updateBalls(audioHandler);
+            updateBalls();
             return;
         }
         if (inPreviewMode) {
@@ -319,10 +321,10 @@ public class LevelScene extends Scene {
             stopwatch.advanceFrame();
         }
 
-        updateBalls(audioHandler);
+        updateBalls();
 
         for (HoleBox hole : holeTiles) {
-            hole.update(audioHandler);
+            hole.update();
         }
     }
 

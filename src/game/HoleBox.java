@@ -27,7 +27,7 @@ public class HoleBox extends Box {
         cover.position.set(geometry.position);
     }
     @Override
-    public void update(AudioHandler audioHandler) {
+    public void update() {
         cover.position.set(geometry.position);
         if (hasReachedGoal) {
             coverTimer.advanceFrame();

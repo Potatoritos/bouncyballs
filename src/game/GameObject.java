@@ -35,7 +35,7 @@ public abstract class GameObject {
                 .rotateZ((float)globalRotation.z)
                 .translate((float)getPosition().x, (float)getPosition().y, (float)getPosition().z);
     }
-    public void update(AudioHandler audioHandler) {
+    public void update() {
 
     }
 

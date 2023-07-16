@@ -16,7 +16,7 @@ public class AudioHandler implements Deletable {
     private long device;
     public final AudioListener listener;
     public final AudioBuffer clackSound;
-    public final AudioBuffer plingSound;
+    public final AudioBuffer splashSound;
     public final AudioBuffer snapSound;
     public AudioHandler() {
         device = alcOpenDevice((ByteBuffer) null);
@@ -34,12 +34,12 @@ public class AudioHandler implements Deletable {
         listener = new AudioListener();
 
         clackSound = new AudioBuffer("assets/sounds/clack.ogg");
-        plingSound = new AudioBuffer("assets/sounds/pling.ogg");
         snapSound = new AudioBuffer("assets/sounds/snap.ogg");
+        splashSound = new AudioBuffer("assets/sounds/splash.ogg");
     }
     public void delete() {
         clackSound.delete();
-        plingSound.delete();
+        splashSound.delete();
         snapSound.delete();
 
         if (context != NULL) alcDestroyContext(context);

@@ -10,30 +10,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
-      <change afterPath="$PROJECT_DIR$/assets/sounds/clack.ogg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/sounds/pling.ogg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/sounds/snap.ogg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/audio/AudioBuffer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/audio/AudioHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/audio/AudioListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/audio/AudioSource.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/BouncyBalls_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/BouncyBalls_jar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/sounds/roll.ogg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/sounds/splash.ogg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/completed_levels.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/completed_levels.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/main/level1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/main/level1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/collision/CollisionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/CollisionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/sounds/clack.ogg" beforeDir="false" afterPath="$PROJECT_DIR$/assets/sounds/clack.ogg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/audio/AudioHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/audio/AudioHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/game/Ball.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Ball.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/FrameTimer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/FrameTimer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Game.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/game/GameObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/GameObject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/GameScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/GameScene.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/game/HoleBox.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/HoleBox.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/Level.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Level.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/game/LevelScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/LevelScene.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/Scene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Scene.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics/Window.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Window.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/util/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/Util.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +67,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "/home/potatoritos/BouncyBalls/out/artifacts",
+    "last_opened_file_path": "/home/potatoritos/BouncyBalls/out/artifacts/BouncyBalls_jar",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -97,8 +82,8 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/out/artifacts" />
       <recent name="$PROJECT_DIR$/out/artifacts/BouncyBalls_jar" />
+      <recent name="$PROJECT_DIR$/out/artifacts" />
       <recent name="$PROJECT_DIR$/assets/levels" />
       <recent name="$PROJECT_DIR$/assets/shaders" />
     </key>
@@ -244,7 +229,7 @@
       <workItem from="1689446941742" duration="7000" />
       <workItem from="1689446957485" duration="670000" />
       <workItem from="1689448096173" duration="1364000" />
-      <workItem from="1689456175851" duration="8497000" />
+      <workItem from="1689456175851" duration="12022000" />
     </task>
     <servers />
   </component>

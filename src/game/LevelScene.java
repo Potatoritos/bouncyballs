@@ -1,8 +1,10 @@
 package game;
 
+import audio.AudioHandler;
 import collision.CollisionHandler;
 import graphics.*;
 import mesh.Quad;
+import org.joml.Matrix3f;
 import shape.Line3;
 import shape.Sphere;
 import org.joml.Vector3d;
@@ -64,10 +66,15 @@ public class LevelScene extends Scene {
     private int windowWidth;
     private int windowHeight;
 
-    public LevelScene(int windowWidth, int windowHeight) {
+    private final AudioHandler audioHandler;
+    private final Matrix3f rotationMatrix;
+
+    public LevelScene(int windowWidth, int windowHeight, AudioHandler audioHandler) {
         super();
         this.windowWidth = windowWidth;
         this.windowHeight = windowHeight;
+        this.audioHandler = audioHandler;
+        rotationMatrix = new Matrix3f();
         floorMesh = rectangularPrismMesh(
                 new Vector3f(0, 0, 0),
                 new Vector3f(1, 1, (float)floorTileHeight),
@@ -212,7 +219,7 @@ public class LevelScene extends Scene {
     /**
      * Update balls and handle their collisions
      */
-    public void updateBalls() {
+    public void updateBalls(AudioHandler audioHandler) {
         int ballsWon = 0;
 
         for (Ball ball : balls) {
@@ -227,7 +234,7 @@ public class LevelScene extends Scene {
                 continue;
             }
             if (ball.isInExplosionAnimation()) {
-                ball.update();
+                ball.update(rotationMatrix);
                 continue;
             }
             // Fade the ball out when it falls
@@ -240,7 +247,7 @@ public class LevelScene extends Scene {
             ball.velocity.y = cutMaxMin(ball.velocity.y, -0.04f, 0.04f);
 
             // Apply gravity
-            ball.velocity.z -= 0.00048;
+            ball.velocity.z -= 0.00045;
 
             // Handle collisions
             collisionHandler.reset();
@@ -259,14 +266,16 @@ public class LevelScene extends Scene {
 
             collisionHandler.processCollisions();
 
-            ball.update();
+            ball.update(rotationMatrix);
         }
 
         if (ballsWon == balls.size()) {
             hasWon = true;
         }
     }
+    @Override
     public void update(InputState input) {
+        audioHandler.listener.updatePosition(camera);
         if (inMainMenuMode) {
             // Continuously spawn balls that move downwards
             mainMenuVelocity.update();
@@ -281,7 +290,7 @@ public class LevelScene extends Scene {
                 ball.velocity.x -= 0.00004 * Math.sin(2*Math.PI*mainMenuVelocity.percentage());
                 ball.velocity.y -= 0.00005;
             }
-            updateBalls();
+            updateBalls(audioHandler);
             return;
         }
         if (inPreviewMode) {
@@ -298,6 +307,11 @@ public class LevelScene extends Scene {
             rotation.normalize(Math.PI/6);
         }
 
+        rotationMatrix.identity()
+                .rotateX((float)rotation.x)
+                .rotateY((float)rotation.y)
+                .rotateZ((float)rotation.z);
+
         if (isPaused) {
             return;
         }
@@ -305,10 +319,10 @@ public class LevelScene extends Scene {
             stopwatch.advanceFrame();
         }
 
-        updateBalls();
+        updateBalls(audioHandler);
 
         for (HoleBox hole : holeTiles) {
-            hole.update();
+            hole.update(audioHandler);
         }
     }
 
@@ -460,6 +474,9 @@ public class LevelScene extends Scene {
         wallXTiles.clear();
         wallYTiles.clear();
         tallTiles.clear();
+        for (Ball ball : balls) {
+             ball.delete();
+        }
         balls.clear();
 
         hasWon = false;
@@ -538,7 +555,8 @@ public class LevelScene extends Scene {
         // Load all balls
         for (int i = 0; i < level.numberBalls(); i++) {
             Ball ball = new Ball(
-                    new Sphere(new Vector3d(level.getPosX(level.getBallColumn(i))+0.5, level.getPosY(level.getBallRow(i))+0.5, 0.35), 0.35)
+                    new Sphere(new Vector3d(level.getPosX(level.getBallColumn(i))+0.5, level.getPosY(level.getBallRow(i))+0.5, 0.35), 0.35),
+                    audioHandler
             );
             ball.getColor(0).set(Colors.base[i]);
             ball.setHoleColor(i+1);
@@ -558,6 +576,9 @@ public class LevelScene extends Scene {
     public void delete() {
         for (Deletable obj : new Deletable[] {floorMesh, holeMesh, holeCoverMesh, wallXMesh, wallYMesh, tallTileMesh, ballMesh, colorNormalsInstanced, outlineInstanced, depthInstanced, outInstanced, textureShader}) {
             obj.delete();
+        }
+        for (Ball ball : balls) {
+            ball.delete();
         }
     }
 }

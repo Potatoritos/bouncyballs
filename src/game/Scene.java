@@ -1,5 +1,6 @@
 package game;
 
+import audio.AudioHandler;
 import graphics.NanoVGContext;
 import graphics.PerspectiveCamera;
 import util.Deletable;

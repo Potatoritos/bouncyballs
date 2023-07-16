@@ -134,9 +134,6 @@ public class Level implements Comparable<Level> {
             }
             level.setStarTimeLimit(0, Integer.parseInt(br.readLine()));
             level.setStarTimeLimit(1, Integer.parseInt(br.readLine()));
-            if (level.getStarTimeLimit(1) < level.getStarTimeLimit(0) || level.getStarTimeLimit(0) < 0) {
-                throw new RuntimeException("Invalid level star time limits");
-            }
             level.setStarTimeLimit(2, Integer.MAX_VALUE/2);
 
             // Process the spawn positions of each ball,

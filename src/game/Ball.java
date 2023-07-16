@@ -1,6 +1,11 @@
 package game;
 
+import audio.AudioBuffer;
+import audio.AudioHandler;
+import audio.AudioSource;
 import math.Geometry;
+import org.joml.Matrix3f;
+import org.joml.Vector3f;
 import shape.Line3;
 import shape.Sphere;
 import org.joml.Matrix4f;
@@ -8,6 +13,7 @@ import org.joml.Vector3d;
 
 import static math.Geometry.project;
 import static math.MathUtil.cubicInterpolation;
+import static util.Util.vector3dTo3f;
 
 /**
  * Represents the balls you have to maneuver into the holes
@@ -22,20 +28,28 @@ public class Ball extends GameObject {
     private final FrameTimer explosionTimer;
     private final Vector3d explosionPosition;
     private int holeColor;
-    public Ball() {
+
+    private double lastCollisionSpeed;
+//    private final AudioBuffer buffer;
+    private final AudioSource collisionSound;
+    private final AudioSource snapSound;
+    private boolean shouldSnap;
+    public Ball(AudioHandler audioHandler) {
         super();
         velocity = new Vector3d();
         geometry = new Sphere();
         deferredVelocity = new Vector3d(0, 0, 0);
         explosionTimer = new FrameTimer(72);
         explosionPosition = new Vector3d();
+
+        collisionSound = new AudioSource(audioHandler.clackSound, false, false);
+        snapSound = new AudioSource(audioHandler.snapSound, false, false);
     }
-    public Ball(Sphere geometry) {
-        this();
+    public Ball(Sphere geometry, AudioHandler audioHandler) {
+        this(audioHandler);
         this.geometry.set(geometry);
     }
-    @Override
-    public void update() {
+    public void update(Matrix3f globalRotationMatrix) {
         explosionTimer.advanceFrame();
         if (explosionTimer.isActive()) {
             geometry.position.set(explosionPosition);
@@ -52,6 +66,25 @@ public class Ball extends GameObject {
             velocity.set(deferredVelocity);
             velocityDeferred = false;
         }
+
+        Vector3f position = vector3dTo3f(geometry.position).mul(globalRotationMatrix);
+        Vector3f velocity = vector3dTo3f(this.velocity).mul(globalRotationMatrix);
+        if (lastCollisionSpeed > 0.001) {
+            collisionSound.setPosition(position);
+            float gain = Math.min(4, (float)((lastCollisionSpeed) / 0.01));
+            collisionSound.setGain(gain);
+            collisionSound.play();
+            lastCollisionSpeed = 0;
+        }
+//        snapSound.setVelocity(velocity);
+        if (shouldSnap) {
+            snapSound.setPosition(position);
+            snapSound.play();
+            shouldSnap = false;
+        }
+    }
+    public void setLastCollisionSpeed(double value) {
+        lastCollisionSpeed = value;
     }
     public void setHasReachedGoal(boolean value) {
         hasReachedGoal = value;
@@ -84,6 +117,9 @@ public class Ball extends GameObject {
     public Vector3d getPosition() {
         return geometry.position;
     }
+    public void queueSnap() {
+        shouldSnap = true;
+    }
     @Override
     public Matrix4f getWorldMatrix(Vector3d globalRotation) {
         return worldMatrix.identity()
@@ -96,7 +132,7 @@ public class Ball extends GameObject {
     @Override
     public void reflectLine(Line3 line, Vector3d intersection, Vector3d normal) {
         // Rebound the ball colliding into this one
-        Geometry.reflectLineFixedRebound(line, intersection, normal, 0.022);
+        Geometry.reflectLineFixedRebound(line, intersection, normal, 0.026);
 
         // Rebound this ball as well
         // Velocity is deferred to the next frame to ensure that collisions are handled before the velocity adds to position
@@ -105,8 +141,15 @@ public class Ball extends GameObject {
         project(deferredVelocity, normal, normalComponent);
         deferredVelocity.sub(normalComponent);
 
-        normalComponent.set(normal).normalize(0.022);
+        normalComponent.set(normal).normalize(0.026);
         deferredVelocity.sub(normalComponent);
         velocityDeferred = true;
+
+        queueSnap();
+    }
+
+    public void delete() {
+        collisionSound.delete();
+//        buffer.delete();
     }
 }

@@ -1,10 +1,10 @@
-package graphics;
+package game;
 
-import game.InputState;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
+import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.HashSet;
 
@@ -109,6 +109,7 @@ public class Window {
             }
 //            System.out.printf("key=%s, scanCode=%s, action=%s, mods=%d\n", key, scanCode, action, mods);
         });
+
     }
     public boolean shouldClose() {
         return glfwWindowShouldClose(handle);

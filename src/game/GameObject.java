@@ -1,5 +1,6 @@
 package game;
 
+import audio.AudioHandler;
 import org.joml.Vector4f;
 import shape.Line3;
 import org.joml.Matrix4f;
@@ -34,7 +35,7 @@ public abstract class GameObject {
                 .rotateZ((float)globalRotation.z)
                 .translate((float)getPosition().x, (float)getPosition().y, (float)getPosition().z);
     }
-    public void update() {
+    public void update(AudioHandler audioHandler) {
 
     }
 

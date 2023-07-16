@@ -1,7 +1,10 @@
 package game;
 
+import audio.AudioHandler;
+import audio.AudioSource;
 import graphics.NanoVGContext;
 import org.joml.Vector2d;
+import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 import java.io.*;
@@ -58,12 +61,14 @@ public class GameScene extends Scene {
     private int gameSpeedIndex;
     private boolean hasRequestedExit;
 
+
     // Stores star levels in values
     private final HashMap<String, Integer> completedLevels;
-    public GameScene(int windowWidth, int windowHeight) {
+    public GameScene(int windowWidth, int windowHeight, AudioHandler audioHandler) {
         this.windowWidth = windowWidth;
         this.windowHeight = windowHeight;
-        levelScene = new LevelScene(windowWidth, windowHeight);
+        levelScene = new LevelScene(windowWidth, windowHeight, audioHandler);
+
 
         horizontalSwipeTimer = new FrameTimer(120);
         verticalSwipeTimer = new FrameTimer(240);

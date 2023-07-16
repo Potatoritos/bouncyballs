@@ -1,5 +1,6 @@
 package game;
 
+import audio.AudioHandler;
 import shape.Line3;
 
 /**
@@ -26,7 +27,7 @@ public class HoleBox extends Box {
         cover.position.set(geometry.position);
     }
     @Override
-    public void update() {
+    public void update(AudioHandler audioHandler) {
         cover.position.set(geometry.position);
         if (hasReachedGoal) {
             coverTimer.advanceFrame();

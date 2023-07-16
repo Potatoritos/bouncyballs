@@ -59,6 +59,6 @@ public class FrameTimer {
     }
     public String timeElapsedString(int fps) {
         Duration duration = timeElapsed(fps);
-        return String.format("%02d:%02d.%02d", duration.toMinutes(), duration.toSecondsPart(), duration.toMillisPart()/10);
+        return String.format("%02d:%02d.%03d", duration.toMinutes(), duration.toSecondsPart(), duration.toMillisPart());
     }
 }

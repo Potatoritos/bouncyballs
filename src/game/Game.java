@@ -1,12 +1,10 @@
 package game;
 
+import audio.AudioHandler;
 import graphics.*;
-import graphics.Window;
 import org.lwjgl.glfw.GLFWErrorCallback;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.nanovg.NanoVG.*;
-import static org.lwjgl.nanovg.NanoVGGL3.*;
 import static org.lwjgl.opengl.GL30.*;
 
 public class Game {
@@ -16,6 +14,7 @@ public class Game {
     private GameScene gameScene;
 
     private NanoVGContext nvg;
+    private AudioHandler audioHandler;
     private long nsPerUpdate;
     private long nsPerRender;
 
@@ -49,8 +48,9 @@ public class Game {
         }
         window = new Window();
         nvg = new NanoVGContext();
+        audioHandler = new AudioHandler();
 
-        gameScene = new GameScene(window.getWidth(), window.getHeight());
+        gameScene = new GameScene(window.getWidth(), window.getHeight(), audioHandler);
 
         loop();
     }

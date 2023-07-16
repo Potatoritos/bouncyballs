@@ -39,7 +39,6 @@ import static math.Geometry.distance;
  *      is closest to the ball's position
  * 4.   Repeat steps 1-3 until the line no longer intersects any
  *      objects
- * 5.   Pray that the ball doesn't somehow clip through anything
  */
 public class CollisionHandler {
     private Ball ball;
@@ -88,6 +87,9 @@ public class CollisionHandler {
     public void processCollisions() {
         int i = 0;
         Vector3d intersection = new Vector3d();
+
+        boolean collided = false;
+
         // Limit the max. number of iterations to avoid infinite loops
         while (i++ < 11) {
             // See if the ball collides with any triggers
@@ -117,6 +119,16 @@ public class CollisionHandler {
 
             // Reflect the ball off of the aforementioned closest collision object
             minCollisionObject.reflectLine(ballMotion, minIntersection);
+//            if (minCollisionObject.parent instanceof Ball) {
+//                ball.queueSnap();
+//            }
+
+            collided = true;
+        }
+
+        if (collided) {
+            Vector3d v = new Vector3d(ballMotion.displacement).sub(ball.velocity);
+            ball.setLastCollisionSpeed(v.length());
         }
 
         ball.geometry.position.set(ballMotion.position);

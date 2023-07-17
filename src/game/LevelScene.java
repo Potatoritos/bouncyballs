@@ -34,6 +34,7 @@ public class LevelScene extends Scene {
     private final GameObjectMesh wallYMeshThinner;
     private final GameObjectMesh tallTileMesh;
     private final GameObjectMesh ballMesh;
+    private final GameObjectMesh spikeMesh;
     private final HashMap<String, GameObjectMesh> gameObjectMeshes;
 
     private final ShaderProgram colorShader;
@@ -57,7 +58,7 @@ public class LevelScene extends Scene {
     private final ArrayList<Box> tallTiles;
     private final ArrayList<Ball> balls;
     private final ArrayList<Ball> ballExplosions;
-//    private final ArrayList<? extends GameObject>[] gameObjects;
+    private final ArrayList<Box> spikeTiles;
     private final HashMap<String, ArrayList<? extends GameObject>> gameObjects;
     private final CollisionHandler collisionHandler;
     private final double floorTileHeight = 0.5;
@@ -125,6 +126,11 @@ public class LevelScene extends Scene {
                 new Vector3f(0, 0, 0)
         );
         ballMesh = generateGeodesicPolyhedronMesh(3, new Vector3f(0f, 1f, 0f));
+        spikeMesh = spikeTileMesh(
+                new Line3f(new Vector3f(0, 0, 0), new Vector3f(1, 1, (float)floorTileHeight)),
+                new Vector3f(0f, 0f, 0f),
+                0.5f, 3
+        );
         gameObjectMeshes = new HashMap<>();
         gameObjectMeshes.put("floor", floorMesh);
         gameObjectMeshes.put("hole", holeMesh);
@@ -140,6 +146,7 @@ public class LevelScene extends Scene {
         gameObjectMeshes.put("tall", tallTileMesh);
         gameObjectMeshes.put("ball", ballMesh);
         gameObjectMeshes.put("explosion", ballMesh);
+        gameObjectMeshes.put("spike", spikeMesh);
 
         colorShader = ShaderProgram.fromFile("color.glsl");
         colorNormalsShader = ShaderProgram.fromFile("color_normals.glsl");
@@ -160,6 +167,7 @@ public class LevelScene extends Scene {
         ballExplosions = new ArrayList<>();
         coloredWallsX = new ArrayList[] { new ArrayList<Box>(), new ArrayList<Box>(), new ArrayList<Box>() };
         coloredWallsY = new ArrayList[] { new ArrayList<Box>(), new ArrayList<Box>(), new ArrayList<Box>() };
+        spikeTiles = new ArrayList<>();
 
         gameObjects = new HashMap<>();
         gameObjects.put("floor", floorTiles);
@@ -176,6 +184,7 @@ public class LevelScene extends Scene {
         gameObjects.put("tall", tallTiles);
         gameObjects.put("ball", balls);
         gameObjects.put("explosion", ballExplosions);
+        gameObjects.put("spike", spikeTiles);
 
         camera.position.z = 6;
 
@@ -192,7 +201,6 @@ public class LevelScene extends Scene {
         mainMenuVelocity = new ContinuousFrameTimer(576);
 
         stopwatch = new FrameTimer(Integer.MAX_VALUE-1);
-
     }
 
     /**
@@ -585,6 +593,14 @@ public class LevelScene extends Scene {
         for (ArrayList<Box> walls : coloredWallsY) walls.clear();
         balls.clear();
         ballExplosions.clear();
+        spikeTiles.clear();
+
+        gameObjects.put("wallX1", coloredWallsX[0]);
+        gameObjects.put("wallX2", coloredWallsX[1]);
+        gameObjects.put("wallX3", coloredWallsX[2]);
+        gameObjects.put("wallY1", coloredWallsY[0]);
+        gameObjects.put("wallY2", coloredWallsY[1]);
+        gameObjects.put("wallY3", coloredWallsY[2]);
 
         hasWon = false;
         hasDied = false;
@@ -626,6 +642,13 @@ public class LevelScene extends Scene {
                     ));
                     tile.getColor(0).set(Colors.tile);
                     tallTiles.add(tile);
+                } else if (level.getFloorState(i, j) == FloorTile.SPIKE) {
+                    Box tile = new Box(new Line3d(
+                            new Vector3d(level.getPosX(j), level.getPosY(i), -floorTileHeight),
+                            new Vector3d(1, 1, floorTileHeight)
+                    ));
+                    tile.getColor(0).set(Colors.tile);
+                    spikeTiles.add(tile);
                 }
             }
             // Load all vertically-oriented walls
@@ -692,7 +715,7 @@ public class LevelScene extends Scene {
         for (Ball ball : ballExplosions) {
             ball.delete();
         }
-        for (Deletable obj : new Deletable[] {floorMesh, holeMesh, holeCoverMesh, wallXMesh, wallXMeshThinner, wallYMesh, wallYMeshThinner, tallTileMesh, ballMesh, colorNormalsShader, outlineShader, depthShader, levelShader, textureShader}) {
+        for (Deletable obj : new Deletable[] {floorMesh, holeMesh, holeCoverMesh, wallXMesh, wallXMeshThinner, wallYMesh, wallYMeshThinner, tallTileMesh, ballMesh, spikeMesh, colorNormalsShader, outlineShader, depthShader, levelShader, textureShader}) {
             obj.delete();
         }
     }

@@ -20,10 +20,7 @@ public class Quad {
     }
     public Quad(Vector3f v) {
         this();
-        this.a.set(v);
-        this.b.set(v);
-        this.c.set(v);
-        this.d.set(v);
+        set(v, v, v, v);
     }
 
     /**
@@ -31,6 +28,10 @@ public class Quad {
      */
     public Quad(Vector3f a, Vector3f b, Vector3f c, Vector3f d) {
         this();
+        set(a, b, c, d);
+    }
+
+    public void set(Vector3f a, Vector3f b, Vector3f c, Vector3f d) {
         this.a.set(a);
         this.b.set(b);
         this.c.set(c);

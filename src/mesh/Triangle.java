@@ -21,9 +21,19 @@ public class Triangle {
      * The points a, b, c should be in counter-clockwise order
      */
     public Triangle(Vector3f a, Vector3f b, Vector3f c) {
-        this.a = a;
-        this.b = b;
-        this.c = c;
+        this();
+        set (a, b, c);
+    }
+
+    public Triangle(Vector3f v) {
+        this();
+        set(v, v, v);
+    }
+
+    public void set(Vector3f a, Vector3f b, Vector3f c) {
+        this.a.set(a);
+        this.b.set(b);
+        this.c.set(c);
     }
 
     /**

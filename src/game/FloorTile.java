@@ -4,6 +4,7 @@ public enum FloorTile {
     NONE,
     FLOOR,
     TALL,
+    SPIKE,
     GOAL1,
     GOAL2,
     GOAL3;

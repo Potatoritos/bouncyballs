@@ -33,6 +33,9 @@ public class MeshGeometry {
         c.sub(a, v);
         return u.cross(v).normalize();
     }
+    public static Vector3f triangleNormal(Triangle triangle) {
+        return triangleNormal(triangle.a, triangle.b, triangle.c);
+    }
 
     /**
      * Adds three Vector3fs to a list
@@ -325,6 +328,37 @@ public class MeshGeometry {
     public static GameObjectMesh axisAlignedBoxMesh(Line3f box, Vector3f color) {
         MeshBuilder builder = new MeshBuilder();
         builder.addAxisAlignedBox(box, color);
+        return builder.createMesh();
+    }
+
+    public static GameObjectMesh spikeTileMesh(Line3f box, Vector3f color, float spikeHeight, int n) {
+        MeshBuilder builder = new MeshBuilder();
+        builder.addAxisAlignedBox(box, color);
+        Vector3f top = new Vector3f();
+        Triangle triangleColor = new Triangle(color);
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                float i1 = (float)i / n, i2 = (float)(i+1) / n;
+                float j1 = (float)j / n, j2 = (float)(j+1) / n;
+                float x1 = box.x1() + i1*box.displacement.x;
+                float x2 = box.x1() + i2*box.displacement.x;
+                float y1 = box.y1() + j1*box.displacement.y;
+                float y2 = box.y1() + j2*box.displacement.y;
+                top.set((x1+x2)/2, (y1+y2)/2, box.z2() + spikeHeight);
+
+                Triangle triangle = new Triangle(top, new Vector3f(x1, y1, box.z2()), new Vector3f(x2, y1, box.z2()));
+                builder.addTriangle(triangle, new Triangle(triangleNormal(triangle)), triangleColor);
+
+                triangle = new Triangle(top, new Vector3f(x2, y1, box.z2()), new Vector3f(x2, y2, box.z2()));
+                builder.addTriangle(triangle, new Triangle(triangleNormal(triangle)), triangleColor);
+
+                triangle = new Triangle(top, new Vector3f(x2, y2, box.z2()), new Vector3f(x1, y2, box.z2()));
+                builder.addTriangle(triangle, new Triangle(triangleNormal(triangle)), triangleColor);
+
+                triangle = new Triangle(top, new Vector3f(x1, y2, box.z2()), new Vector3f(x1, y1, box.z2()));
+                builder.addTriangle(triangle, new Triangle(triangleNormal(triangle)), triangleColor);
+            }
+        }
         return builder.createMesh();
     }
 

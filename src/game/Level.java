@@ -169,6 +169,7 @@ public class Level implements Comparable<Level> {
                         case '.' -> level.setFloorState(rows-1-i, j, FloorTile.NONE);
                         case 'x' -> level.setFloorState(rows-1-i, j, FloorTile.FLOOR);
                         case '#' -> level.setFloorState(rows-1-i, j, FloorTile.TALL);
+                        case '^' -> level.setFloorState(rows-1-i, j, FloorTile.SPIKE);
                         case '1' -> level.setFloorState(rows-1-i, j, FloorTile.GOAL1);
                         case '2' -> level.setFloorState(rows-1-i, j, FloorTile.GOAL2);
                         case '3' -> level.setFloorState(rows-1-i, j, FloorTile.GOAL3);

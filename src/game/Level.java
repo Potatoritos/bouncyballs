@@ -17,17 +17,19 @@ public class Level implements Comparable<Level> {
     private final int[] ballColumn;
     private final String name;
     private final int[] starTimeLimits;
+    private final int balls;
     private boolean isMainMenu;
     private int color;
-    private Level(String name, int rows, int columns, int numBalls) {
+    private Level(String name, int rows, int columns, int balls) {
         this.name = name;
         this.rows = rows;
         this.columns = columns;
+        this.balls = balls;
         this.floorState = new FloorTile[rows][columns];
         this.wallXState = new WallTile[rows][columns+1];
         this.wallYState = new WallTile[rows+1][columns];
-        ballRow = new int[numBalls];
-        ballColumn = new int[numBalls];
+        ballRow = new int[this.balls];
+        ballColumn = new int[this.balls];
         starTimeLimits = new int[3];
     }
     public boolean isMainMenu() {
@@ -102,6 +104,9 @@ public class Level implements Comparable<Level> {
     }
     public int  getColor() {
         return color;
+    }
+    public int getNumberBalls() {
+        return balls;
     }
 
     /**

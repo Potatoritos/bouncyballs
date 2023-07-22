@@ -359,7 +359,7 @@ public class LevelScene extends Scene {
         }
 
 
-        if (ballsWon == balls.size()) {
+        if (ballsWon == level.getNumberBalls()) {
             hasWon = true;
         }
     }

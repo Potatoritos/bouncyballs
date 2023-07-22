@@ -13,7 +13,7 @@ level 03
 .......
 ...2...
 xxxx..x
-x##xxxx
+x##x^xx
 xxxxxxx
 xxxxxxx
 xxxxxxx

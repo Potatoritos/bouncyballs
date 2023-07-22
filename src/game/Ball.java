@@ -32,11 +32,13 @@ public class Ball extends GameObject {
     private final AudioSource collisionSound;
     private final AudioSource snapSound;
     private final AudioSource goalSound;
+    private final AudioSource explosionSound;
     private boolean shouldSnap;
     private final Vector3f previousPosition;
     private boolean shouldSplash;
     private boolean hasSplashed;
     private final Vector3f snapPosition;
+    private boolean shouldExplode;
     public Ball(AudioHandler audioHandler) {
         super();
         velocity = new Vector3d();
@@ -48,6 +50,7 @@ public class Ball extends GameObject {
         collisionSound = new AudioSource(audioHandler.clackSound, false, false);
         snapSound = new AudioSource(audioHandler.snapSound, false, false);
         goalSound = new AudioSource(audioHandler.splashSound, false, false);
+        explosionSound = new AudioSource(audioHandler.explosionSound, false, false);
         previousPosition = new Vector3f(-727, 0, 0);
         snapPosition = new Vector3f();
     }
@@ -57,15 +60,21 @@ public class Ball extends GameObject {
     }
     public void update(Matrix3f globalRotationMatrix) {
         explosionTimer.advanceFrame();
+
+        Vector3f position = vector3dTo3f(geometry.position).mul(globalRotationMatrix);
         if (explosionTimer.isActive()) {
             geometry.position.set(explosionPosition);
-            geometry.setRadius(0.35 + 1.5*cubicInterpolation(cubicInterpolation(explosionTimer.percentage())));
+            geometry.setRadius(1.5 - 1.5*cubicInterpolation(cubicInterpolation(explosionTimer.percentage())));
 
-            // this is supposed to fade out the explosion, but it doesn't seem to be working
+            // fade out the explosion
 //            getColor(0).w = Math.max(0, 1 - 2*explosionTimer.fpercentage());
 
             if (explosionTimer.isOnLastFrame()) {
                 isDead = true;
+            }
+            if (explosionTimer.getFrame() == 2) {
+                explosionSound.setPosition(position);
+                explosionSound.play();
             }
             return;
         }
@@ -76,7 +85,6 @@ public class Ball extends GameObject {
             velocityDeferred = false;
         }
 
-        Vector3f position = vector3dTo3f(geometry.position).mul(globalRotationMatrix);
 //        if (previousPosition.x == -727) {
 //            previousPosition.set(position);
 //        }

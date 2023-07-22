@@ -146,34 +146,41 @@ public class CollisionHandler {
         ))));
     }
 
-    /**
-     * Add the collision objects that make up the walls of a box
-     * @param box the box
-     */
     public void addBoxWallColliders(Box box) {
+        ArrayList<CollisionObject> colliders = new ArrayList<>();
+        boxWallColliders(colliders, box);
+        for (CollisionObject object : colliders) {
+            addCollisionObject(object);
+        }
+    }
+
+    /**
+     * the walls of a box
+     */
+    public void boxWallColliders(ArrayList<CollisionObject> list, Box box) {
         Vector3d up = new Vector3d(0, 0, box.geometry.displacement.z);
-        addCollisionObject(new CollisionPlane(box,
+        list.add(new CollisionPlane(box,
                 new Plane(
                         new Vector3d(box.geometry.x1(), box.geometry.y1()-ball.getRadius(), box.geometry.z1()),
                         new Vector3d(box.geometry.displacement.x, 0, 0),
                         up
                 )
         ));
-        addCollisionObject(new CollisionPlane(box,
+        list.add(new CollisionPlane(box,
                 new Plane(
                         new Vector3d(box.geometry.x2()+ball.getRadius(), box.geometry.y1(), box.geometry.z1()),
                         new Vector3d(0, box.geometry.displacement.y, 0),
                         up
                 )
         ));
-        addCollisionObject(new CollisionPlane(box,
+        list.add(new CollisionPlane(box,
                 new Plane(
                         new Vector3d(box.geometry.x2(), box.geometry.y2()+ball.getRadius(), box.geometry.z1()),
                         new Vector3d(-box.geometry.displacement.x, 0, 0),
                         up
                 )
         ));
-        addCollisionObject(new CollisionPlane(box,
+        list.add(new CollisionPlane(box,
                 new Plane(
                         new Vector3d(box.geometry.x1()-ball.getRadius(), box.geometry.y2(), box.geometry.z1()),
                         new Vector3d(0, -box.geometry.displacement.y, 0),
@@ -181,28 +188,28 @@ public class CollisionHandler {
                 )
         ));
 
-        addCollisionObject(new CollisionCylinder(box,
+        list.add(new CollisionCylinder(box,
                 new Cylinder(
                          box.geometry.position,
                         up,
                         ball.getRadius()
                 )
         ));
-        addCollisionObject(new CollisionCylinder(box,
+        list.add(new CollisionCylinder(box,
                 new Cylinder(
                         new Vector3d(box.geometry.x2(), box.geometry.y1(), box.geometry.z1()),
                         up,
                         ball.getRadius()
                 )
         ));
-        addCollisionObject(new CollisionCylinder(box,
+        list.add(new CollisionCylinder(box,
                 new Cylinder(
                         new Vector3d(box.geometry.x2(), box.geometry.y2(), box.geometry.z1()),
                         up,
                         ball.getRadius()
                 )
         ));
-        addCollisionObject(new CollisionCylinder(box,
+        list.add(new CollisionCylinder(box,
                 new Cylinder(
                         new Vector3d(box.geometry.x1(), box.geometry.y2(), box.geometry.z1()),
                         up,
@@ -210,48 +217,54 @@ public class CollisionHandler {
                 )
         ));
     }
-    /**
-     * Add the collision objects that make up the sides of the
-     * floor of a box
-     * @param box the box
-     */
-    public void addBoxFloorSideColliders(Box box) {
-        addBoxWallColliders(box);
 
-        addCollisionObject(new CollisionSphere(box,
+    public void addBoxFloorSideColliders(Box box) {
+        ArrayList<CollisionObject> colliders = new ArrayList<>();
+        boxFloorSideColliders(colliders, box);
+        for (CollisionObject object : colliders) {
+            addCollisionObject(object);
+        }
+    }
+    /**
+     * the sides of the floor of a box
+     */
+    public void boxFloorSideColliders(ArrayList<CollisionObject> list, Box box) {
+        boxWallColliders(list, box);
+
+        list.add(new CollisionSphere(box,
                 new Sphere(new Vector3d(box.geometry.x1(), box.geometry.y1(), box.geometry.z2()), ball.getRadius())
         ));
-        addCollisionObject(new CollisionSphere(box,
+        list.add(new CollisionSphere(box,
                 new Sphere(new Vector3d(box.geometry.x1(), box.geometry.y2(), box.geometry.z2()), ball.getRadius())
         ));
-        addCollisionObject(new CollisionSphere(box,
+        list.add(new CollisionSphere(box,
                 new Sphere(new Vector3d(box.geometry.x2(), box.geometry.y2(), box.geometry.z2()), ball.getRadius())
         ));
-        addCollisionObject(new CollisionSphere(box,
+        list.add(new CollisionSphere(box,
                 new Sphere(new Vector3d(box.geometry.x2(), box.geometry.y1(), box.geometry.z2()), ball.getRadius())
         ));
-        addCollisionObject(new CollisionCylinder(box,
+        list.add(new CollisionCylinder(box,
                 new Cylinder(
                         new Vector3d(box.geometry.x1(), box.geometry.y1(), box.geometry.z2()),
                         new Vector3d(box.geometry.displacement.x, 0, 0),
                         ball.getRadius()
                 )
         ));
-        addCollisionObject(new CollisionCylinder(box,
+        list.add(new CollisionCylinder(box,
                 new Cylinder(
                         new Vector3d(box.geometry.x2(), box.geometry.y1(), box.geometry.z2()),
                         new Vector3d(0, box.geometry.displacement.y, 0),
                         ball.getRadius()
                 )
         ));
-        addCollisionObject(new CollisionCylinder(box,
+        list.add(new CollisionCylinder(box,
                 new Cylinder(
                         new Vector3d(box.geometry.x2(), box.geometry.y2(), box.geometry.z2()),
                         new Vector3d(-box.geometry.displacement.x, 0, 0),
                         ball.getRadius()
                 )
         ));
-        addCollisionObject(new CollisionCylinder(box,
+        list.add(new CollisionCylinder(box,
                 new Cylinder(
                         new Vector3d(box.geometry.x1(), box.geometry.y2(), box.geometry.z2()),
                         new Vector3d(0, -box.geometry.displacement.y, 0),
@@ -259,14 +272,22 @@ public class CollisionHandler {
                 )
         ));
     }
+
+    public void addBoxFloorColliders(Box box) {
+        ArrayList<CollisionObject> colliders = new ArrayList<>();
+        boxFloorColliders(colliders, box);
+        for (CollisionObject object : colliders) {
+            addCollisionObject(object);
+        }
+    }
     /**
      * Add the collision objects that make up the floor of the box
      * @param box the box
      */
-    public void addBoxFloorColliders(Box box) {
-        addBoxFloorSideColliders(box);
+    public void boxFloorColliders(ArrayList<CollisionObject> list, Box box) {
+        boxFloorSideColliders(list, box);
 
-        addCollisionObject(new CollisionPlane(box,
+        list.add(new CollisionPlane(box,
                 new Plane(
                         new Vector3d(box.geometry.x1(), box.geometry.y1(), box.geometry.z2() + ball.getRadius()),
                         new Vector3d(box.geometry.displacement.x, 0, 0),
@@ -443,5 +464,19 @@ public class CollisionHandler {
                         ball.getRadius() + this.ball.getRadius()
                 )
         ));
+    }
+
+    public void addSpikeColliders(Box box) {
+        addBoxFloorSideColliders(box);
+        ArrayList<CollisionObject> colliders = new ArrayList<>();
+
+        Line3d geometry = new Line3d(box.geometry);
+        geometry.position.set(geometry.position.x + 0.1, geometry.position.y + 0.1, box.geometry.z2());
+        geometry.displacement.set(geometry.displacement.x - 0.2, geometry.displacement.y - 0.2, 0.2);
+
+        boxFloorColliders(colliders, new Box(geometry));
+        for (CollisionObject object : colliders) {
+            addTrigger(new ExplosiveDeathTrigger(object));
+        }
     }
 }

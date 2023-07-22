@@ -659,7 +659,7 @@ public class GameScene extends Scene {
             nvg.setTextAlign(NVG_ALIGN_LEFT);
             nvg.setFillColor(Colors.backgroundDarker);
             nvg.setFontSize(nvg.scaledHeightSize(110));
-            nvg.drawText(nvg.adjustedSceneX(920), nvg.scaledHeightSize(180), "bouncy balls");
+            nvg.drawText(nvg.adjustedSceneX(920), nvg.scaledHeightSize(180), "idk what to call this one");
 
             // Render buttons
             Vector2d buttonSize1 = new Vector2d(nvg.adjustedSceneX(buttonX+buttonLength) - nvg.adjustedSceneX(buttonX), nvg.scaledHeightSize(buttonLength));

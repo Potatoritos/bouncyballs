@@ -18,7 +18,7 @@ public class GoalTrigger extends CollisionTrigger {
         if (ball.getHoleColor() == parent.getHoleColor()) {
             ball.setHasReachedGoal(true);
             parent.setHasReachedGoal(true);
-        } else {
+        } else if (!ball.isInExplosionAnimation()) {
             ball.triggerExplosionAnimation(new Vector3d(parent.geometry.displacement).mul(0.5).add(parent.geometry.position));
         }
     }

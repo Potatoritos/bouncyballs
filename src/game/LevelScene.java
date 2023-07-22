@@ -129,7 +129,7 @@ public class LevelScene extends Scene {
         spikeMesh = spikeTileMesh(
                 new Line3f(new Vector3f(0, 0, 0), new Vector3f(1, 1, (float)floorTileHeight)),
                 new Vector3f(0f, 0f, 0f),
-                0.5f, 3
+                0.75f, 3
         );
         gameObjectMeshes = new HashMap<>();
         gameObjectMeshes.put("floor", floorMesh);
@@ -291,6 +291,7 @@ public class LevelScene extends Scene {
         for (Box box : floorTiles) collisionHandler.addBoxFloorColliders(box);
         for (Box box : tallTiles) collisionHandler.addBoxFloorColliders(box);
         for (HoleBox box : holeTiles) collisionHandler.addHoleBoxColliders(box);
+        for (Box box : spikeTiles) collisionHandler.addSpikeColliders(box);
         collisionHandler.addFallDeathTrigger();
     }
 

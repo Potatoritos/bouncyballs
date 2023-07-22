@@ -10,16 +10,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
+      <change afterPath="$PROJECT_DIR$/src/collision/ExplosiveDeathTrigger.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/README_LEVEL_FORMAT.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/README_LEVEL_FORMAT.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/main/level3.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/main/level3.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/collision/CollisionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/CollisionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/collision/GoalTrigger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/collision/GoalTrigger.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/game/Colors.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Colors.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/FloorTile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/FloorTile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/Level.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Level.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game/GameScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/GameScene.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/game/LevelScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/LevelScene.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mesh/MeshGeometry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/mesh/MeshGeometry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mesh/Quad.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/mesh/Quad.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mesh/Triangle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/mesh/Triangle.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,8 +28,8 @@
       <list>
         <option value="GLSL Shader" />
         <option value="Interface" />
-        <option value="Class" />
         <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -56,31 +53,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Downloaded.Files.Path.Enabled": "false",
-    "Repository.Attach.Annotations": "false",
-    "Repository.Attach.JavaDocs": "false",
-    "Repository.Attach.Sources": "false",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "spiked__tiles",
-    "last_opened_file_path": "/home/potatoritos/BouncyBalls/out/artifacts/BouncyBalls_jar",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Artifacts",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.editor",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;spiked__tiles&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/potatoritos/BouncyBalls/out/artifacts/BouncyBalls_jar&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.editor&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/out/artifacts/BouncyBalls_jar" />
@@ -233,7 +230,9 @@
       <workItem from="1689446957485" duration="670000" />
       <workItem from="1689448096173" duration="1364000" />
       <workItem from="1689456175851" duration="13751000" />
-      <workItem from="1689531761775" duration="18698000" />
+      <workItem from="1689531761775" duration="20784000" />
+      <workItem from="1689753878000" duration="656000" />
+      <workItem from="1690058100975" duration="3369000" />
     </task>
     <servers />
   </component>

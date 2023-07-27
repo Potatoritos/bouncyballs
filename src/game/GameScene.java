@@ -229,6 +229,7 @@ public class GameScene extends Scene {
         inTransition = true;
     }
     private void endEnterAboutMenu() {
+        levelScene.setPaused(true);
         inLevelSelect = false;
         inMainMenu = false;
         inLevel = false;
@@ -247,6 +248,7 @@ public class GameScene extends Scene {
         inMainMenu = true;
         inAboutMenu = false;
         levelScene.enterMainMenuMode();
+        levelScene.setPaused(false);
         inTransition = false;
     }
     private void startEnterLevelSelect() {
@@ -733,23 +735,24 @@ public class GameScene extends Scene {
 
             nvg.setFontFace("montserrat");
             nvg.setFontSize(nvg.scaledHeightSize(40));
-            nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(250), "By Elliott Cheng. My first OpenGL project (also my last high school project)!");
+            nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(250), "By Elliott Cheng. My first OpenGL project!");
+            nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(300), "Submitted for my final high school assignment.");
             nvg.setFontFace("montserrat_bold");
-            nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(350), "Instructions:");
+            nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(400), "Instructions:");
             nvg.setFontFace("montserrat");
-            nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(400), "Move your mouse to tilt the board.");
-            nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(450), "Your objective is to manoeuvre all balls into their corresponding holes.");
+            nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(450), "Move your mouse to tilt the board.");
+            nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(500), "Your objective is to manoeuvre all balls into their corresponding holes.");
             nvg.setFontFace("montserrat_bold");
-            nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(550), "Controls:");
-            nvg.drawText(nvg.adjustedSceneX(150), nvg.scaledHeightSize(600), "Esc");
-            nvg.drawText(nvg.adjustedSceneX(150), nvg.scaledHeightSize(650), "R");
-            nvg.drawText(nvg.adjustedSceneX(150), nvg.scaledHeightSize(700), "D");
-            nvg.drawText(nvg.adjustedSceneX(150), nvg.scaledHeightSize(750), "M");
+            nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(600), "Controls:");
+            nvg.drawText(nvg.adjustedSceneX(150), nvg.scaledHeightSize(650), "Esc");
+            nvg.drawText(nvg.adjustedSceneX(150), nvg.scaledHeightSize(700), "R");
+            nvg.drawText(nvg.adjustedSceneX(150), nvg.scaledHeightSize(750), "D");
+            nvg.drawText(nvg.adjustedSceneX(150), nvg.scaledHeightSize(800), "M");
             nvg.setFontFace("montserrat");
-            nvg.drawText(nvg.adjustedSceneX(250), nvg.scaledHeightSize(600), "- back to previous menu / exit game");
-            nvg.drawText(nvg.adjustedSceneX(250), nvg.scaledHeightSize(650), "- restart level");
-            nvg.drawText(nvg.adjustedSceneX(250), nvg.scaledHeightSize(700), "- draw line from screen center to mouse");
-            nvg.drawText(nvg.adjustedSceneX(250), nvg.scaledHeightSize(750), "- ?");
+            nvg.drawText(nvg.adjustedSceneX(250), nvg.scaledHeightSize(650), "- back to previous menu / exit game");
+            nvg.drawText(nvg.adjustedSceneX(250), nvg.scaledHeightSize(700), "- restart level");
+            nvg.drawText(nvg.adjustedSceneX(250), nvg.scaledHeightSize(750), "- draw line from screen center to mouse");
+            nvg.drawText(nvg.adjustedSceneX(250), nvg.scaledHeightSize(800), "- ?");
         }
 
         if (horizontalSwipeTimer.isActive()) {

@@ -367,6 +367,9 @@ public class LevelScene extends Scene {
     public void update(InputState input) {
         audioHandler.listener.updatePosition(camera);
         if (inMainMenuMode) {
+            if (isPaused) {
+                return;
+            }
             // Continuously spawn balls that move downwards
             mainMenuVelocity.update();
             mainMenuVelocity.start();
@@ -708,6 +711,7 @@ public class LevelScene extends Scene {
     }
     public void setPaused(boolean value) {
         isPaused = value;
+        System.out.println(isPaused);
     }
     public void delete() {
         for (Ball ball : balls) {

@@ -39,4 +39,7 @@ public class AudioListener {
         viewMatrix.positiveY(up);
         setOrientation(at, up);
     }
+    public void setGain(float gain) {
+        alListenerf(AL_GAIN, gain);
+    }
 }

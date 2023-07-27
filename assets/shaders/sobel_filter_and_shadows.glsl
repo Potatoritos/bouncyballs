@@ -121,7 +121,7 @@ void main() {
     }
     float gradientColor = max(max(gradient(r), gradient(g)), gradient(b));
 
-    if (gradientDepth >= 0.02 || gradientNormal >= 1.25 || gradientColor >= 1.8) {
+    if (gradientDepth >= 0.02 || gradientNormal >= 1.25 || gradientColor >= 1.6) {
         fragColor = vec4(0, 0, 0, color.a);
     } else {
         float shadowFactor = glow*shadow(fragPosLightSpace);

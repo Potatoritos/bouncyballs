@@ -10,17 +10,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
+      <change afterPath="$PROJECT_DIR$/assets/images/circle.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/README_LEVEL_FORMAT.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/README_LEVEL_FORMAT.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/level_mainmenu.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/level_mainmenu.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/main/level1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/main/level1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/main/level2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/main/level2.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/main/level3.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/main/level3.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/main/level5.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/main/level5.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/main/level6.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/main/level6.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/main/level7.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/main/level7.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game/Colors.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Colors.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/game/GameScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/GameScene.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/Level.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Level.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics/NanoVGContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics/NanoVGContext.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -237,7 +231,7 @@
       <workItem from="1689531761775" duration="20784000" />
       <workItem from="1689753878000" duration="656000" />
       <workItem from="1690058100975" duration="8500000" />
-      <workItem from="1690426752029" duration="1230000" />
+      <workItem from="1690426752029" duration="3588000" />
     </task>
     <servers />
   </component>

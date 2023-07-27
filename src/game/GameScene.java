@@ -491,7 +491,7 @@ public class GameScene extends Scene {
     public void nvgRender(NanoVGContext nvg) {
         if (inLevelSelect || levelTitleTimer.isActive()) {
             // Draw the level title
-            Vector4f color = new Vector4f(Colors.backgroundDarker);
+            Vector4f color = new Vector4f(Colors.textColors[currentLevel().getColor()]);
             if (levelTitleTimer.isActive() && levelTitleTimer.getFrame() >= 288) {
                 color.w = 1 - (levelTitleTimer.getFrame()-288f) / 144;
             }
@@ -511,7 +511,7 @@ public class GameScene extends Scene {
             }
         }
         if (inLevel && currentLevel().showTimer()) {
-            float width = nvg.scaledWidthSize(16);
+            float width = nvg.scaledWidthSize(12);
             float x = nvg.getWidth() - width - nvg.scaledWidthSize(96);
             float starX = nvg.getWidth() - nvg.scaledWidthSize(88);
             float starScale = 0.03125f;
@@ -528,7 +528,7 @@ public class GameScene extends Scene {
             UIRectangle[] rectangles = new UIRectangle[3];
 
             nvg.setFillColor(Colors.black);
-            float border = nvg.scaledWidthSize(4);
+            float border = nvg.scaledWidthSize(3);
             nvg.fillRect(x-border, verticalMargin-border, nvg.scaledWidthSize(16) + 2*border, nvg.getHeight() - 2*verticalMargin + 2*border);
 
             rectangles[2] = new UIRectangle(x, verticalMargin, width, nvg.scaledHeightSize(level2Height));
@@ -562,8 +562,8 @@ public class GameScene extends Scene {
             nvg.drawLine(x, nvg.scaledHeightSize(level2Height)+verticalMargin, x+width, nvg.scaledHeightSize(level2Height)+verticalMargin);
             nvg.drawLine(x, y+verticalMargin, x+width, y+verticalMargin);
 
-            rectangles[starLevel].setPadding(nvg.scaledWidthSize(2));
-            nvg.fillRectOutline(rectangles[starLevel], nvg.scaledWidthSize(4), Colors.black, colors[starLevel]);
+//            rectangles[starLevel].setPadding(nvg.scaledWidthSize(2));
+//            nvg.fillRectOutline(rectangles[starLevel], nvg.scaledWidthSize(2), Colors.black, colors[starLevel]);
 
             if (levelScene.hasWon()) {
                 Vector4f color = new Vector4f(colors[starLevel]);
@@ -594,7 +594,7 @@ public class GameScene extends Scene {
             nvg.setFontSize(nvg.scaledWidthSize(120));
             nvg.setTextAlign(NVG_ALIGN_CENTER);
 
-            Vector4f fg = new Vector4f(Colors.backgroundDarker);
+            Vector4f fg = new Vector4f(Colors.textColors[currentLevel().getColor()]);
             fg.w = 1.5f * levelClearTimer.fpercentage();
             fg.w *= fg.w;
             nvg.setFillColor(fg);
@@ -645,20 +645,20 @@ public class GameScene extends Scene {
                 scrollPosition = 1;
             }
             nvg.setStrokeWidth(nvg.scaledWidthSize(6));
-            nvg.setStrokeColor(Colors.backgroundDarker);
+            nvg.setStrokeColor(Colors.textColors[currentLevel().getColor()]);
             float scrollX = nvg.right() - nvg.scaledWidthSize(42);
             float scrollY = nvg.bottom() - nvg.scaledWidthSize(100);
             nvg.drawLine(scrollX, nvg.top(), scrollX, scrollY);
             scrollY -= nvg.top();
 
-            nvg.setFillColor(Colors.backgroundDarker);
+            nvg.setFillColor(Colors.textColors[currentLevel().getColor()]);
             nvg.fillCircle(scrollX, nvg.top() + scrollPosition*scrollY, nvg.scaledWidthSize(20));
 
         } else if (inMainMenu) {
             // Render title
             nvg.setFontFace("montserrat_bold");
             nvg.setTextAlign(NVG_ALIGN_LEFT);
-            nvg.setFillColor(Colors.backgroundDarker);
+            nvg.setFillColor(Colors.textColors[currentLevel().getColor()]);
             nvg.setFontSize(nvg.scaledHeightSize(110));
             nvg.drawText(nvg.adjustedSceneX(920), nvg.scaledHeightSize(180), "idk what to call this one");
 
@@ -686,10 +686,10 @@ public class GameScene extends Scene {
             // Render about menu text
             nvg.setFillColor(Colors.tile);
             nvg.fillRect(0, 0, windowWidth, windowHeight);
-            nvg.setFillColor(Colors.backgroundDarker);
+            nvg.setFillColor(Colors.textColors[currentLevel().getColor()]);
             nvg.setFontFace("montserrat_bold");
             nvg.setTextAlign(NVG_ALIGN_LEFT);
-            nvg.setFillColor(Colors.backgroundDarker);
+            nvg.setFillColor(Colors.textColors[currentLevel().getColor()]);
             nvg.setFontSize(nvg.scaledHeightSize(80));
             nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(150), "About");
 

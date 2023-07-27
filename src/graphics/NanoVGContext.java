@@ -37,8 +37,8 @@ public class NanoVGContext {
         escapeImage = new NanoVGImage(handle, "assets/images/escape.png", 83, 68);
         mouse1Image = new NanoVGImage(handle, "assets/images/mouse1.png", 83, 68);
         mousewheelImage = new NanoVGImage(handle, "assets/images/mousewheel.png", 83, 104);
-        starImage = new NanoVGImage(handle, "assets/images/star2.png", 1024, 1024);
-        arrowImage = new NanoVGImage(handle, "assets/images/arrow_right.png", 128, 128);
+        starImage = new NanoVGImage(handle, "assets/images/star.png", 1024, 1024);
+        arrowImage = new NanoVGImage(handle, "assets/images/circle.png", 128, 128);
 
         montserratBold = nvgCreateFont(handle, "montserrat_bold", "assets/fonts/Montserrat-Bold.otf");
         montserrat = nvgCreateFont(handle, "montserrat", "assets/fonts/Montserrat-Medium.otf");

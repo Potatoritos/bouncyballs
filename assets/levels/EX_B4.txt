@@ -1,4 +1,4 @@
-extra B4-EX
+level EX B4
 7
 7
 2

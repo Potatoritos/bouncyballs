@@ -1,4 +1,4 @@
-base B4
+level B4
 7
 7
 2

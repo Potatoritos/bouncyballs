@@ -1,4 +1,4 @@
-base C2
+level C2
 12
 12
 2

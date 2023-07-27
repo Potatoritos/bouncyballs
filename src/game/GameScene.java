@@ -594,6 +594,7 @@ public class GameScene extends Scene {
             nvg.setFillColor(Colors.blue);
             nvg.fillRect(rectangles[2]);
 
+            nvg.setStrokeColor(currentLevel().white() ? Colors.tile : Colors.black);
             nvg.setStrokeWidth(nvg.scaledWidthSize(4));
             nvg.drawLine(x, nvg.scaledHeightSize(level2Height)+verticalMargin, x+width, nvg.scaledHeightSize(level2Height)+verticalMargin);
             nvg.drawLine(x, y+verticalMargin, x+width, y+verticalMargin);
@@ -630,7 +631,7 @@ public class GameScene extends Scene {
             nvg.setFontSize(nvg.scaledWidthSize(120));
             nvg.setTextAlign(NVG_ALIGN_CENTER);
 
-            Vector4f fg = new Vector4f(Colors.textColors[currentLevel().getColor()]);
+            Vector4f fg = new Vector4f(Colors.backgroundDarker);
             fg.w = 1.5f * levelClearTimer.fpercentage();
             fg.w *= fg.w;
             nvg.setFillColor(fg);

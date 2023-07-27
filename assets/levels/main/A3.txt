@@ -1,4 +1,4 @@
-level A3
+base A3
 5
 5
 1

@@ -63,6 +63,9 @@ public class InputState {
         return isKeyPressed(GLFW_KEY_R);
     }
     public boolean isShowVectorKeyPressed() {
-        return isKeyPressed(GLFW_KEY_V);
+        return isKeyPressed(GLFW_KEY_D);
+    }
+    public boolean isMuteButtonPressed() {
+        return isKeyPressed(GLFW_KEY_M);
     }
 }

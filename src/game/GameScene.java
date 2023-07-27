@@ -3,6 +3,7 @@ package game;
 import audio.AudioHandler;
 import audio.AudioSource;
 import graphics.NanoVGContext;
+import graphics.NanoVGImage;
 import org.joml.Vector2d;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -65,10 +66,13 @@ public class GameScene extends Scene {
     private final AudioSource menuBack;
     private int buttonHovered;
     private boolean showRotationVector;
+    private boolean playMusic;
     private final Vector2d mousePos;
 
     // Stores star levels in values
     private final HashMap<String, Integer> completedLevels;
+
+    private final AudioSource music;
     public GameScene(int windowWidth, int windowHeight, AudioHandler audioHandler) {
         this.windowWidth = windowWidth;
         this.windowHeight = windowHeight;
@@ -77,11 +81,14 @@ public class GameScene extends Scene {
         menuHover = new AudioSource(audioHandler.menuHover, false, true);
         menuClick = new AudioSource(audioHandler.menuClick, false, true);
         menuBack = new AudioSource(audioHandler.menuBack, false, true);
+        music = new AudioSource(audioHandler.music, true, true);
+        music.setGain(0.1f);
 
         Vector3f origin = new Vector3f(0, 0, 0);
         menuHover.setPosition(origin);
         menuClick.setPosition(origin);
         menuBack.setPosition(origin);
+        music.setPosition(origin);
 
         horizontalSwipeTimer = new FrameTimer(120);
         verticalSwipeTimer = new FrameTimer(120);
@@ -423,6 +430,16 @@ public class GameScene extends Scene {
 
         if (input.isShowVectorKeyPressed()) {
             showRotationVector = !showRotationVector;
+            menuClick.play();
+        }
+        if (input.isMuteButtonPressed()) {
+            playMusic = !playMusic;
+            menuClick.play();
+            if (playMusic) {
+                music.play();
+            } else {
+                music.stop();
+            }
         }
 
         // Handle menu-related input
@@ -488,6 +505,12 @@ public class GameScene extends Scene {
             }
         }
 
+//        if (currentLevel().white() && !music.isPlaying()) {
+//            music.play();
+//        } else if (!currentLevel().white() && music.isPlaying()) {
+//            music.stop();
+//        }
+//
         levelScene.update(input);
     }
     @Override
@@ -511,11 +534,14 @@ public class GameScene extends Scene {
             String name = currentLevel().getName();
             nvg.drawText(nvg.left(), nvg.bottom(), name);
             if (inLevelSelect && completedLevels.containsKey(name)) {
-                nvg.drawImage(nvg.starImage, nvg.left() + nvg.scaledWidthSize(100), nvg.bottom() - nvg.scaledWidthSize(164), 0.0625f);
+
+                NanoVGImage image = currentLevel().white() ? nvg.starWhite : nvg.star;
+
+                nvg.drawImage(image, nvg.left() + nvg.scaledWidthSize(100), nvg.bottom() - nvg.scaledWidthSize(164), 0.0625f);
 
                 int starLevel = completedLevels.get(name);
-                if (starLevel <= 1) nvg.drawImage(nvg.starImage, nvg.left() + nvg.scaledWidthSize(164), nvg.bottom() - nvg.scaledWidthSize(164), 0.0625f);
-                if (starLevel <= 0) nvg.drawImage(nvg.starImage, nvg.left() + nvg.scaledWidthSize(228), nvg.bottom() - nvg.scaledWidthSize(164), 0.0625f);
+                if (starLevel <= 1) nvg.drawImage(image, nvg.left() + nvg.scaledWidthSize(164), nvg.bottom() - nvg.scaledWidthSize(164), 0.0625f);
+                if (starLevel <= 0) nvg.drawImage(image, nvg.left() + nvg.scaledWidthSize(228), nvg.bottom() - nvg.scaledWidthSize(164), 0.0625f);
             }
         }
         if (inLevel && currentLevel().showTimer()) {
@@ -527,6 +553,8 @@ public class GameScene extends Scene {
             float verticalMargin = 60;
             int starLevel = levelScene.getStarLevel();
 
+            NanoVGImage starImage = currentLevel().white() ? nvg.starWhite : nvg.star;
+
             Vector4f[] colors = new Vector4f[] {
                     Colors.red,
                     Colors.pink,
@@ -535,29 +563,29 @@ public class GameScene extends Scene {
 
             UIRectangle[] rectangles = new UIRectangle[3];
 
-            nvg.setFillColor(Colors.black);
+            nvg.setFillColor(currentLevel().white() ? Colors.tile : Colors.black);
             float border = nvg.scaledWidthSize(3);
             nvg.fillRect(x-border, verticalMargin-border, nvg.scaledWidthSize(16) + 2*border, nvg.getHeight() - 2*verticalMargin + 2*border);
 
             rectangles[2] = new UIRectangle(x, verticalMargin, width, nvg.scaledHeightSize(level2Height));
-            nvg.drawImage(nvg.starImage, starX, verticalMargin + nvg.scaledWidthSize(88), starScale);
+            nvg.drawImage(starImage, starX, verticalMargin + nvg.scaledWidthSize(88), starScale);
 
             float midpoint = (float)currentLevel().getStarTimeLimit(1) / (currentLevel().getStarTimeLimit(0) + currentLevel().getStarTimeLimit(1));
             midpoint *= nvg.getHeight() - nvg.scaledHeightSize(level2Height) - 2*verticalMargin;
 
             rectangles[1] = new UIRectangle(x, nvg.scaledHeightSize(level2Height) + verticalMargin, width, midpoint);
             float y = nvg.scaledHeightSize(level2Height) + midpoint;
-            nvg.drawImage(nvg.starImage, starX, y-nvg.scaledHeightSize(32) + verticalMargin, starScale);
-            nvg.drawImage(nvg.starImage, starX, y-nvg.scaledHeightSize(64) + verticalMargin, starScale);
+            nvg.drawImage(starImage, starX, y-nvg.scaledHeightSize(32) + verticalMargin, starScale);
+            nvg.drawImage(starImage, starX, y-nvg.scaledHeightSize(64) + verticalMargin, starScale);
 
             rectangles[0] = new UIRectangle(x, nvg.scaledHeightSize(level2Height)+midpoint + verticalMargin, width, nvg.getHeight()-y - 2*verticalMargin);
-            nvg.drawImage(nvg.starImage, starX, nvg.getHeight()-nvg.scaledHeightSize(32) - verticalMargin, starScale);
-            nvg.drawImage(nvg.starImage, starX, nvg.getHeight()-nvg.scaledHeightSize(64) - verticalMargin, starScale);
-            nvg.drawImage(nvg.starImage, starX, nvg.getHeight()-nvg.scaledHeightSize(96) - verticalMargin, starScale);
+            nvg.drawImage(starImage, starX, nvg.getHeight()-nvg.scaledHeightSize(32) - verticalMargin, starScale);
+            nvg.drawImage(starImage, starX, nvg.getHeight()-nvg.scaledHeightSize(64) - verticalMargin, starScale);
+            nvg.drawImage(starImage, starX, nvg.getHeight()-nvg.scaledHeightSize(96) - verticalMargin, starScale);
 
             float percentage = (float)levelScene.stopwatch.getFrame() / (currentLevel().getStarTimeLimit(0) + currentLevel().getStarTimeLimit(1));
             float arrowY = nvg.getHeight() - percentage * (nvg.getHeight() - nvg.scaledHeightSize(level2Height) - 2*verticalMargin) - nvg.scaledWidthSize(16) - verticalMargin;
-            nvg.drawImage(nvg.arrowImage, nvg.getWidth()-nvg.scaledWidthSize(144), Math.max(arrowY, verticalMargin), 0.25f);
+            nvg.drawImage(currentLevel().white() ? nvg.circleWhite : nvg.circle, nvg.getWidth()-nvg.scaledWidthSize(144), Math.max(arrowY, verticalMargin), 0.25f);
 
             nvg.setFillColor(Colors.red);
             nvg.fillRect(rectangles[0]);
@@ -614,16 +642,16 @@ public class GameScene extends Scene {
             if (levelClearTimer.getFrame() >= 120) {
                 switch(levelScene.getStarLevel()) {
                     case 0 -> {
-                        nvg.drawImage(nvg.starImage, nvg.scaledWidthSize(1920 / 2 - 192), nvg.scaledWidthSize(530), 0.125f);
-                        nvg.drawImage(nvg.starImage, nvg.scaledWidthSize(1920 / 2 - 64), nvg.scaledWidthSize(530), 0.125f);
-                        nvg.drawImage(nvg.starImage, nvg.scaledWidthSize(1920 / 2 + 64), nvg.scaledWidthSize(530), 0.125f);
+                        nvg.drawImage(nvg.star, nvg.scaledWidthSize(1920 / 2 - 192), nvg.scaledWidthSize(530), 0.125f);
+                        nvg.drawImage(nvg.star, nvg.scaledWidthSize(1920 / 2 - 64), nvg.scaledWidthSize(530), 0.125f);
+                        nvg.drawImage(nvg.star, nvg.scaledWidthSize(1920 / 2 + 64), nvg.scaledWidthSize(530), 0.125f);
                     }
                     case 1 -> {
-                        nvg.drawImage(nvg.starImage, nvg.scaledWidthSize(1920 / 2 - 128), nvg.scaledWidthSize(530), 0.125f);
-                        nvg.drawImage(nvg.starImage, nvg.scaledWidthSize(1920 / 2), nvg.scaledWidthSize(530), 0.125f);
+                        nvg.drawImage(nvg.star, nvg.scaledWidthSize(1920 / 2 - 128), nvg.scaledWidthSize(530), 0.125f);
+                        nvg.drawImage(nvg.star, nvg.scaledWidthSize(1920 / 2), nvg.scaledWidthSize(530), 0.125f);
                     }
                     case 2 -> {
-                        nvg.drawImage(nvg.starImage, nvg.scaledWidthSize(1920/2 - 64), nvg.scaledWidthSize(530), 0.125f);
+                        nvg.drawImage(nvg.star, nvg.scaledWidthSize(1920/2 - 64), nvg.scaledWidthSize(530), 0.125f);
                     }
                 }
 
@@ -637,15 +665,16 @@ public class GameScene extends Scene {
                 nvg.setFontFace("montserrat_bold");
                 nvg.drawText(nvg.left() + nvg.scaledWidthSize(80), nvg.bottom() - nvg.scaledWidthSize(10), "next level");
 
-                nvg.drawImage(nvg.mouse1Image, nvg.left(), nvg.bottom()-nvg.scaledWidthSize(nvg.mouse1Image.getHeight())*0.75f, 0.75f);
+                nvg.drawImage(nvg.mouse1, nvg.left(), nvg.bottom()-nvg.scaledWidthSize(nvg.mouse1.getHeight())*0.75f, 0.75f);
             }
 
         }
         if (inLevelSelect) {
             // Draw key indicators
 //            nvg.drawImage(nvg.escapeImage, nvg.left(), nvg.top(), 0.75f);
-            nvg.drawImage(nvg.mouse1Image, nvg.left()+nvg.scaledWidthSize(8), nvg.bottom()-nvg.scaledWidthSize(160), 0.75f);
-            nvg.drawImage(nvg.mousewheelImage, nvg.right()-nvg.scaledWidthSize(nvg.mousewheelImage.getWidth()-10), nvg.bottom()-nvg.scaledWidthSize(60), 0.75f);
+
+            nvg.drawImage(currentLevel().white() ? nvg.mouse1White : nvg.mouse1, nvg.left()+nvg.scaledWidthSize(8), nvg.bottom()-nvg.scaledWidthSize(160), 0.75f);
+            nvg.drawImage(currentLevel().white() ? nvg.mousewheelWhite : nvg.mousewheel, nvg.right()-nvg.scaledWidthSize(nvg.mousewheel.getWidth()-10), nvg.bottom()-nvg.scaledWidthSize(60), 0.75f);
 
             // Draw the scrollbar
             float scrollPosition = (float)selectedLevelIndex / Math.max(1, levels.size()-1);
@@ -666,7 +695,7 @@ public class GameScene extends Scene {
             // Render title
             nvg.setFontFace("montserrat_bold");
             nvg.setTextAlign(NVG_ALIGN_LEFT);
-            nvg.setFillColor(Colors.textColors[currentLevel().getColor()]);
+            nvg.setFillColor(Colors.backgroundDarker);
             nvg.setFontSize(nvg.scaledHeightSize(110));
             nvg.drawText(nvg.adjustedSceneX(920), nvg.scaledHeightSize(180), "idk what to call this one");
 
@@ -694,7 +723,7 @@ public class GameScene extends Scene {
             // Render about menu text
             nvg.setFillColor(Colors.tile);
             nvg.fillRect(0, 0, windowWidth, windowHeight);
-            nvg.setFillColor(Colors.textColors[currentLevel().getColor()]);
+            nvg.setFillColor(Colors.backgroundDarker);
             nvg.setFontFace("montserrat_bold");
             nvg.setTextAlign(NVG_ALIGN_LEFT);
             nvg.setFillColor(Colors.textColors[currentLevel().getColor()]);
@@ -713,11 +742,13 @@ public class GameScene extends Scene {
             nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(550), "Non-implied controls:");
             nvg.drawText(nvg.adjustedSceneX(150), nvg.scaledHeightSize(600), "Esc");
             nvg.drawText(nvg.adjustedSceneX(150), nvg.scaledHeightSize(650), "R");
-            nvg.drawText(nvg.adjustedSceneX(150), nvg.scaledHeightSize(700), "V");
+            nvg.drawText(nvg.adjustedSceneX(150), nvg.scaledHeightSize(700), "D");
+            nvg.drawText(nvg.adjustedSceneX(150), nvg.scaledHeightSize(750), "M");
             nvg.setFontFace("montserrat");
             nvg.drawText(nvg.adjustedSceneX(250), nvg.scaledHeightSize(600), "- back to previous menu / exit game");
             nvg.drawText(nvg.adjustedSceneX(250), nvg.scaledHeightSize(650), "- restart level");
             nvg.drawText(nvg.adjustedSceneX(250), nvg.scaledHeightSize(700), "- draw line from screen center to mouse");
+            nvg.drawText(nvg.adjustedSceneX(250), nvg.scaledHeightSize(750), "- ?");
         }
 
         if (horizontalSwipeTimer.isActive()) {

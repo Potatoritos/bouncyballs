@@ -1,4 +1,4 @@
-level A2
+base A2
 7
 7
 1

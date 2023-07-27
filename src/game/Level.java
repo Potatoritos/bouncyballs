@@ -103,7 +103,7 @@ public class Level implements Comparable<Level> {
     public void setColor(int value) {
         color = value;
     }
-    public int  getColor() {
+    public int getColor() {
         return color;
     }
     public void setShowTimer(boolean value) {
@@ -111,6 +111,13 @@ public class Level implements Comparable<Level> {
     }
     public boolean showTimer() {
         return showTimer;
+    }
+
+    /**
+     * Indicates whether white icons should be used with this level
+     */
+    public boolean white() {
+        return color == 4;
     }
     public int getNumberBalls() {
         return balls;

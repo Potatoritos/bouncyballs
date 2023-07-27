@@ -17,11 +17,18 @@ import static org.lwjgl.nanovg.NanoVGGL3.*;
 public class NanoVGContext {
     private long handle;
 
-    public final NanoVGImage escapeImage;
-    public final NanoVGImage mouse1Image;
-    public final NanoVGImage mousewheelImage;
-    public final NanoVGImage starImage;
-    public final NanoVGImage arrowImage;
+    public final NanoVGImage escape;
+    public final NanoVGImage escapeWhite;
+    public final NanoVGImage mouse1;
+    public final NanoVGImage mouse1White;
+    public final NanoVGImage mousewheel;
+    public final NanoVGImage mousewheelWhite;
+    public final NanoVGImage star;
+    public final NanoVGImage starTransparent;
+    public final NanoVGImage starWhite;
+    public final NanoVGImage starWhiteTransparent;
+    public final NanoVGImage circle;
+    public final NanoVGImage circleWhite;
 
     private int montserratBold;
     private int montserrat;
@@ -34,11 +41,18 @@ public class NanoVGContext {
     public NanoVGContext() {
         handle = nvgCreate(NVG_ANTIALIAS | NVG_STENCIL_STROKES);
 
-        escapeImage = new NanoVGImage(handle, "assets/images/escape.png", 83, 68);
-        mouse1Image = new NanoVGImage(handle, "assets/images/mouse1.png", 83, 68);
-        mousewheelImage = new NanoVGImage(handle, "assets/images/mousewheel.png", 83, 104);
-        starImage = new NanoVGImage(handle, "assets/images/star.png", 1024, 1024);
-        arrowImage = new NanoVGImage(handle, "assets/images/circle.png", 128, 128);
+        escape = new NanoVGImage(handle, "assets/images/escape.png", 83, 68);
+        escapeWhite = new NanoVGImage(handle, "assets/images/escape_white.png", 83, 68);
+        mouse1 = new NanoVGImage(handle, "assets/images/mouse1.png", 83, 68);
+        mouse1White = new NanoVGImage(handle, "assets/images/mouse1_white.png", 83, 68);
+        mousewheel = new NanoVGImage(handle, "assets/images/mousewheel.png", 83, 104);
+        mousewheelWhite = new NanoVGImage(handle, "assets/images/mousewheel_white.png", 83, 104);
+        star = new NanoVGImage(handle, "assets/images/star.png", 1024, 1024);
+        starTransparent = new NanoVGImage(handle, "assets/images/starTransparent.png", 1024, 1024);
+        starWhite = new NanoVGImage(handle, "assets/images/star_white.png", 1024, 1024);
+        starWhiteTransparent = new NanoVGImage(handle, "assets/images/star_white_transparent.png", 1024, 1024);
+        circle = new NanoVGImage(handle, "assets/images/circle.png", 128, 128);
+        circleWhite = new NanoVGImage(handle, "assets/images/circle_white.png", 128, 128);
 
         montserratBold = nvgCreateFont(handle, "montserrat_bold", "assets/fonts/Montserrat-Bold.otf");
         montserrat = nvgCreateFont(handle, "montserrat", "assets/fonts/Montserrat-Medium.otf");

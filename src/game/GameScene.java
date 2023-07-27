@@ -9,7 +9,6 @@ import org.joml.Vector4f;
 
 import java.io.*;
 import java.util.*;
-import java.util.jar.JarEntry;
 
 import static math.MathUtil.cubicInterpolation;
 import static math.MathUtil.cutMaxMin;
@@ -66,6 +65,7 @@ public class GameScene extends Scene {
     private final AudioSource menuBack;
     private int buttonHovered;
     private boolean showRotationVector;
+    private final Vector2d mousePos;
 
     // Stores star levels in values
     private final HashMap<String, Integer> completedLevels;
@@ -119,6 +119,8 @@ public class GameScene extends Scene {
         buttonLength = 300;
 
         completedLevels = new HashMap<>();
+
+        mousePos = new Vector2d();
 
         loadLevels();
         loadCompletedLevels();
@@ -359,6 +361,7 @@ public class GameScene extends Scene {
     }
     @Override
     public void update(InputState input) {
+        mousePos.set(input.windowMousePosition);
         for (FrameTimer timer : timers) {
             timer.advanceFrame();
         }
@@ -416,6 +419,10 @@ public class GameScene extends Scene {
 
         for (UIButton button : buttons) {
             button.update(input);
+        }
+
+        if (input.isShowVectorKeyPressed()) {
+            showRotationVector = !showRotationVector;
         }
 
         // Handle menu-related input
@@ -706,9 +713,11 @@ public class GameScene extends Scene {
             nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(550), "Non-implied controls:");
             nvg.drawText(nvg.adjustedSceneX(150), nvg.scaledHeightSize(600), "Esc");
             nvg.drawText(nvg.adjustedSceneX(150), nvg.scaledHeightSize(650), "R");
+            nvg.drawText(nvg.adjustedSceneX(150), nvg.scaledHeightSize(700), "V");
             nvg.setFontFace("montserrat");
             nvg.drawText(nvg.adjustedSceneX(250), nvg.scaledHeightSize(600), "- back to previous menu / exit game");
             nvg.drawText(nvg.adjustedSceneX(250), nvg.scaledHeightSize(650), "- restart level");
+            nvg.drawText(nvg.adjustedSceneX(250), nvg.scaledHeightSize(700), "- draw line from screen center to mouse");
         }
 
         if (horizontalSwipeTimer.isActive()) {
@@ -732,6 +741,12 @@ public class GameScene extends Scene {
             } else {
                 nvg.fillRect(0, windowHeight * cubicInterpolation((float)(verticalSwipeTimer.getFrame()-72) / 48), windowWidth, windowHeight);
             }
+        }
+
+        if (showRotationVector) {
+            nvg.setStrokeColor(Colors.green);
+            nvg.setStrokeWidth(nvg.scaledWidthSize(4));
+            nvg.drawLine(nvg.getWidth()/2, nvg.getHeight()/2, (float)mousePos.x, (float)mousePos.y);
         }
     }
     @Override

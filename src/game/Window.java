@@ -4,14 +4,11 @@ import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
-import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-import java.util.HashSet;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL13C.GL_MULTISAMPLE;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
@@ -86,7 +83,7 @@ public class Window {
             int minDimension = Math.min(height, width);
             input.mousePosition.x = (x - (width - minDimension)/2.0) / minDimension;
             input.mousePosition.y = (y - (height - minDimension)/2.0) / minDimension;
-            input.actualMousePosition.set(x, y);
+            input.windowMousePosition.set(x, y);
         });
 
         glfwSetScrollCallback(handle, (window, xOffset, yOffset) -> {

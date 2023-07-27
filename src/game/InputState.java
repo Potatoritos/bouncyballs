@@ -22,7 +22,7 @@ public class InputState {
     /**
      * The actual window coordinates of the mouse
      */
-    public final Vector2d actualMousePosition;
+    public final Vector2d windowMousePosition;
     private final HashSet<Integer> pressedKeys;
 
     /**
@@ -44,7 +44,7 @@ public class InputState {
     }
     public InputState() {
         mousePosition = new Vector2d();
-        actualMousePosition = new Vector2d();
+        windowMousePosition = new Vector2d();
         pressedKeys = new HashSet<>();
     }
     public boolean isNextLevelPressed() {

@@ -338,6 +338,7 @@ public class GameScene extends Scene {
             throw new RuntimeException("No level files found!");
         }
         for (File levelFile : levelFiles) {
+            System.out.println("Loading " + levelFile.getName());
             levels.add(Level.fromFile("main/" + levelFile.getName()));
         }
         Collections.sort(levels);
@@ -509,7 +510,7 @@ public class GameScene extends Scene {
                 if (starLevel <= 0) nvg.drawImage(nvg.starImage, nvg.left() + nvg.scaledWidthSize(128), nvg.bottom() - nvg.scaledWidthSize(160), 0.0625f);
             }
         }
-        if (inLevel) {
+        if (inLevel && currentLevel().showTimer()) {
             float width = nvg.scaledWidthSize(16);
             float x = nvg.getWidth() - width - nvg.scaledWidthSize(96);
             float starX = nvg.getWidth() - nvg.scaledWidthSize(88);

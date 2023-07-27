@@ -5,6 +5,7 @@
 [Amount of frames to achieve 3 stars (at 144 frames/second)]
 [Amount of frames to achieve 2 stars, after the above amount of frames passes]
 [Background color; 0: grey, 1: blue, 2: pink, 3: red]
+[Whether to show the speedrun timer (true/false)]
 [rows * columns grid denoting ball spawnpoints; '.' for nothing, '1'/'2'/'3' for ball 1/2/3 spawnpoints]
 [rows * columns grid denoting floor tiles; '.' for air, 'x' for floor, '#' for block, '^' for spike, '1'/'2'/'3' for ball 1/2/3 goals]
 [rows * (columns+1) grid denoting '|'-shaped wall tiles; '.' for air, '|' for wall, '1'/'2'/'3' for colored wall]

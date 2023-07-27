@@ -20,7 +20,7 @@ public class Colors {
     public static final Vector4f pink = hexRGBA(0xeb9de4ff);
     public static final Vector4f pinkDarker = hexRGBA(0x402b3eff);
     public static final Vector4f pinkBG = hexRGBA(0xd992d3ff);
-    public static final Vector4f[] base = {red, blue, green};
+    public static final Vector4f[] base = {red, blue, pink};
     public static final Vector4f[] levelBackgrounds = {background, blueBG, pinkBG, redBG};
     public static final Vector4f[] textColors = {backgroundDarker, blueDarker, pinkDarker, redDarker};
 }

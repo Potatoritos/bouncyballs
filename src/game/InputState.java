@@ -4,8 +4,7 @@ import org.joml.Vector2d;
 
 import java.util.HashSet;
 
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_R;
+import static org.lwjgl.glfw.GLFW.*;
 
 /**
  * Stores the current state of user input
@@ -62,5 +61,8 @@ public class InputState {
     }
     public boolean isResetKeyPressed() {
         return isKeyPressed(GLFW_KEY_R);
+    }
+    public boolean isShowVectorKeyPressed() {
+        return isKeyPressed(GLFW_KEY_V);
     }
 }

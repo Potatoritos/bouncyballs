@@ -65,6 +65,7 @@ public class GameScene extends Scene {
     private final AudioSource menuClick;
     private final AudioSource menuBack;
     private int buttonHovered;
+    private boolean showRotationVector;
 
     // Stores star levels in values
     private final HashMap<String, Integer> completedLevels;
@@ -503,11 +504,11 @@ public class GameScene extends Scene {
             String name = currentLevel().getName();
             nvg.drawText(nvg.left(), nvg.bottom(), name);
             if (inLevelSelect && completedLevels.containsKey(name)) {
-                nvg.drawImage(nvg.starImage, nvg.left(), nvg.bottom() - nvg.scaledWidthSize(160), 0.0625f);
+                nvg.drawImage(nvg.starImage, nvg.left() + nvg.scaledWidthSize(100), nvg.bottom() - nvg.scaledWidthSize(164), 0.0625f);
 
                 int starLevel = completedLevels.get(name);
-                if (starLevel <= 1) nvg.drawImage(nvg.starImage, nvg.left() + nvg.scaledWidthSize(64), nvg.bottom() - nvg.scaledWidthSize(160), 0.0625f);
-                if (starLevel <= 0) nvg.drawImage(nvg.starImage, nvg.left() + nvg.scaledWidthSize(128), nvg.bottom() - nvg.scaledWidthSize(160), 0.0625f);
+                if (starLevel <= 1) nvg.drawImage(nvg.starImage, nvg.left() + nvg.scaledWidthSize(164), nvg.bottom() - nvg.scaledWidthSize(164), 0.0625f);
+                if (starLevel <= 0) nvg.drawImage(nvg.starImage, nvg.left() + nvg.scaledWidthSize(228), nvg.bottom() - nvg.scaledWidthSize(164), 0.0625f);
             }
         }
         if (inLevel && currentLevel().showTimer()) {
@@ -636,7 +637,7 @@ public class GameScene extends Scene {
         if (inLevelSelect) {
             // Draw key indicators
 //            nvg.drawImage(nvg.escapeImage, nvg.left(), nvg.top(), 0.75f);
-            nvg.drawImage(nvg.mouse1Image, nvg.left()+nvg.getWidth()*0.29f, nvg.bottom()-nvg.scaledWidthSize(nvg.mouse1Image.getHeight())*0.75f, 0.75f);
+            nvg.drawImage(nvg.mouse1Image, nvg.left()+nvg.scaledWidthSize(8), nvg.bottom()-nvg.scaledWidthSize(160), 0.75f);
             nvg.drawImage(nvg.mousewheelImage, nvg.right()-nvg.scaledWidthSize(nvg.mousewheelImage.getWidth()-10), nvg.bottom()-nvg.scaledWidthSize(60), 0.75f);
 
             // Draw the scrollbar

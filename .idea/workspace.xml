@@ -10,10 +10,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
+      <change afterPath="$PROJECT_DIR$/assets/sounds/gangnam_style.ogg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/audio/AudioListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/audio/AudioListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/audio/AudioHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/audio/AudioHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/game/GameScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/GameScene.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/LevelScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/LevelScene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game/InputState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/InputState.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,7 +63,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "/home/potatoritos/BouncyBalls/assets",
+    "last_opened_file_path": "/home/potatoritos/BouncyBalls/out/artifacts/BouncyBalls_jar/assets",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -77,11 +78,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/out/artifacts/BouncyBalls_jar/assets" />
       <recent name="$PROJECT_DIR$/assets" />
       <recent name="$PROJECT_DIR$/out/artifacts/BouncyBalls_jar/assets/levels/main" />
       <recent name="$PROJECT_DIR$/assets/levels/main" />
       <recent name="$PROJECT_DIR$/out/artifacts/BouncyBalls_jar" />
-      <recent name="$PROJECT_DIR$/assets/levels" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/out/artifacts/BouncyBalls_jar/assets/levels" />
@@ -231,7 +232,7 @@
       <workItem from="1689531761775" duration="20784000" />
       <workItem from="1689753878000" duration="656000" />
       <workItem from="1690058100975" duration="8500000" />
-      <workItem from="1690426752029" duration="44204000" />
+      <workItem from="1690426752029" duration="44926000" />
     </task>
     <servers />
   </component>

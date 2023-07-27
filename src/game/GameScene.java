@@ -72,7 +72,8 @@ public class GameScene extends Scene {
     // Stores star levels in values
     private final HashMap<String, Integer> completedLevels;
 
-    private final AudioSource music;
+    private final AudioSource[] music;
+    private int musicPlaying;
     public GameScene(int windowWidth, int windowHeight, AudioHandler audioHandler) {
         this.windowWidth = windowWidth;
         this.windowHeight = windowHeight;
@@ -81,14 +82,19 @@ public class GameScene extends Scene {
         menuHover = new AudioSource(audioHandler.menuHover, false, true);
         menuClick = new AudioSource(audioHandler.menuClick, false, true);
         menuBack = new AudioSource(audioHandler.menuBack, false, true);
-        music = new AudioSource(audioHandler.music, true, true);
-        music.setGain(0.1f);
+        music = new AudioSource[] {
+                new AudioSource(audioHandler.music[0], true, true),
+                new AudioSource(audioHandler.music[1], true, true)
+        };
+        music[0].setGain(0.1f);
+        music[1].setGain(0.1f);
 
         Vector3f origin = new Vector3f(0, 0, 0);
         menuHover.setPosition(origin);
         menuClick.setPosition(origin);
         menuBack.setPosition(origin);
-        music.setPosition(origin);
+        music[0].setPosition(origin);
+        music[1].setPosition(origin);
 
         horizontalSwipeTimer = new FrameTimer(120);
         verticalSwipeTimer = new FrameTimer(120);
@@ -434,13 +440,13 @@ public class GameScene extends Scene {
             showRotationVector = !showRotationVector;
             menuClick.play();
         }
-        if (input.isMuteButtonPressed()) {
+        if (input.isMusicButtonPressed()) {
             playMusic = !playMusic;
             menuClick.play();
             if (playMusic) {
-                music.play();
+                music[musicPlaying = (musicPlaying+1) & 1].play();
             } else {
-                music.stop();
+                music[musicPlaying].stop();
             }
         }
 
@@ -789,7 +795,8 @@ public class GameScene extends Scene {
         menuHover.delete();
         menuClick.delete();
         menuBack.delete();
-        music.delete();
+        music[0].delete();
+        music[1].delete();
         levelScene.delete();
     }
 }

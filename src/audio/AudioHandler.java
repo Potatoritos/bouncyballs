@@ -22,7 +22,7 @@ public class AudioHandler implements Deletable {
     public final AudioBuffer menuHover;
     public final AudioBuffer menuClick;
     public final AudioBuffer menuBack;
-    public final AudioBuffer music;
+    public final AudioBuffer[] music;
     public AudioHandler() {
         device = alcOpenDevice((ByteBuffer) null);
         if (device == NULL) {
@@ -47,7 +47,10 @@ public class AudioHandler implements Deletable {
         menuClick = new AudioBuffer("assets/sounds/menuclick.ogg");
         menuBack = new AudioBuffer("assets/sounds/menuback.ogg");
 
-        music = new AudioBuffer("assets/sounds/chinese_toys_rap.ogg");
+        music = new AudioBuffer[] {
+                new AudioBuffer("assets/sounds/chinese_toys_rap.ogg"),
+                new AudioBuffer("assets/sounds/gangnam_style.ogg")
+        };
     }
     public void delete() {
         clackSound.delete();
@@ -58,6 +61,9 @@ public class AudioHandler implements Deletable {
         menuHover.delete();
         menuClick.delete();
         menuBack.delete();
+
+        music[0].delete();
+        music[1].delete();
 
         if (context != NULL) alcDestroyContext(context);
         if (device != NULL) alcCloseDevice(device);

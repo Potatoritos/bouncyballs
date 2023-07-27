@@ -65,7 +65,7 @@ public class InputState {
     public boolean isShowVectorKeyPressed() {
         return isKeyPressed(GLFW_KEY_D);
     }
-    public boolean isMuteButtonPressed() {
+    public boolean isMusicButtonPressed() {
         return isKeyPressed(GLFW_KEY_M);
     }
 }

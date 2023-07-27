@@ -716,7 +716,7 @@ public class LevelScene extends Scene {
         for (Ball ball : ballExplosions) {
             ball.delete();
         }
-        for (Deletable obj : new Deletable[] {floorMesh, holeMesh, holeCoverMesh, wallXMesh, wallXMeshThinner, wallYMesh, wallYMeshThinner, tallTileMesh, ballMesh, spikeMesh, colorNormalsShader, outlineShader, depthShader, levelShader, textureShader}) {
+        for (Deletable obj : new Deletable[] {floorMesh, holeMesh, holeCoverMesh, wallXMesh, wallXMeshThinner, wallYMesh, wallYMeshThinner, tallTileMesh, ballMesh, spikeMesh, colorNormalsShader, outlineShader, depthShader, levelShader, textureShader, spikeMesh}) {
             obj.delete();
         }
     }

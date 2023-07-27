@@ -535,7 +535,7 @@ public class GameScene extends Scene {
             nvg.drawText(nvg.left(), nvg.bottom(), name);
             if (inLevelSelect && completedLevels.containsKey(name)) {
 
-                NanoVGImage image = currentLevel().white() ? nvg.starWhite : nvg.star;
+                NanoVGImage image = currentLevel().white() ? nvg.starWhiteTransparent : nvg.starTransparent;
 
                 nvg.drawImage(image, nvg.left() + nvg.scaledWidthSize(100), nvg.bottom() - nvg.scaledWidthSize(164), 0.0625f);
 
@@ -737,9 +737,9 @@ public class GameScene extends Scene {
             nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(350), "Instructions:");
             nvg.setFontFace("montserrat");
             nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(400), "Move your mouse to tilt the board.");
-            nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(450), "Your objective is to manoeuvre all balls into their respective holes.");
+            nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(450), "Your objective is to manoeuvre all balls into their corresponding holes.");
             nvg.setFontFace("montserrat_bold");
-            nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(550), "Non-implied controls:");
+            nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(550), "Controls:");
             nvg.drawText(nvg.adjustedSceneX(150), nvg.scaledHeightSize(600), "Esc");
             nvg.drawText(nvg.adjustedSceneX(150), nvg.scaledHeightSize(650), "R");
             nvg.drawText(nvg.adjustedSceneX(150), nvg.scaledHeightSize(700), "D");
@@ -785,6 +785,7 @@ public class GameScene extends Scene {
         menuHover.delete();
         menuClick.delete();
         menuBack.delete();
+        music.delete();
         levelScene.delete();
     }
 }

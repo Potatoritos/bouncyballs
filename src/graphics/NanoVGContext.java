@@ -48,7 +48,7 @@ public class NanoVGContext {
         mousewheel = new NanoVGImage(handle, "assets/images/mousewheel.png", 83, 104);
         mousewheelWhite = new NanoVGImage(handle, "assets/images/mousewheel_white.png", 83, 104);
         star = new NanoVGImage(handle, "assets/images/star.png", 1024, 1024);
-        starTransparent = new NanoVGImage(handle, "assets/images/starTransparent.png", 1024, 1024);
+        starTransparent = new NanoVGImage(handle, "assets/images/star_transparent.png", 1024, 1024);
         starWhite = new NanoVGImage(handle, "assets/images/star_white.png", 1024, 1024);
         starWhiteTransparent = new NanoVGImage(handle, "assets/images/star_white_transparent.png", 1024, 1024);
         circle = new NanoVGImage(handle, "assets/images/circle.png", 128, 128);

@@ -182,6 +182,7 @@ public class Ball extends GameObject {
         collisionSound.delete();
         snapSound.delete();
         goalSound.delete();
+        explosionSound.delete();
 //        buffer.delete();
     }
 }

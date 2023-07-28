@@ -205,6 +205,14 @@ public class GameScene extends Scene {
      * Load the list of completed levels from the completed levels file
      */
     private void loadCompletedLevels() {
+        File f = new File("assets/levels/completed_levels.txt");
+        if (!f.exists()) {
+            try {
+                f.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException("Error while creating completed levels file");
+            }
+        }
         try {
             try (FileReader fr = new FileReader("assets/levels/completed_levels.txt"); BufferedReader br = new BufferedReader(fr)) {
                 String line;

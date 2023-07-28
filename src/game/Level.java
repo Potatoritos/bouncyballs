@@ -174,8 +174,12 @@ public class Level implements Comparable<Level> {
                 for (int j = 0; j < row.length(); j++) {
                     if ('1' <= row.charAt(j) && row.charAt(j) <= '1' + numBalls) {
                         int ball = row.charAt(j) - '1';
-                        level.setBallRow(ball, rows-1-i);
-                        level.setBallColumn(ball, j);
+                        try {
+                            level.setBallRow(ball, rows-1-i);
+                            level.setBallColumn(ball, j);
+                        } catch (ArrayIndexOutOfBoundsException e) {
+                            throw new RuntimeException("Specified number of balls does not match actual number of balls");
+                        }
                     }
                 }
             }
@@ -184,7 +188,7 @@ public class Level implements Comparable<Level> {
             // represented by a (rows) * (columns) grid
             for (int i = 0; i < rows; i++) {
                 String row = br.readLine();
-                if (row.length() != columns) new RuntimeException("Invalid level file - floor tiles malformed");
+                if (row.length() != columns) throw new RuntimeException("Invalid level file - floor tiles malformed");
                 for (int j = 0; j < row.length(); j++) {
                     switch(row.charAt(j)) {
                         case '.' -> level.setFloorState(rows-1-i, j, FloorTile.NONE);

@@ -20,6 +20,7 @@ public class Window {
     private int height;
     public final InputState input;
     private boolean resized;
+    private boolean isFullscreen;
     public Window() {
         input = new InputState();
         width = 1600;
@@ -34,29 +35,12 @@ public class Window {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-        handle = glfwCreateWindow(width, height, "bouncy balls", NULL, NULL);
+        handle = glfwCreateWindow(width, height, "bouncy balls", glfwGetPrimaryMonitor(), NULL);
+        isFullscreen = true;
         if (handle == NULL) {
             throw new RuntimeException("Failed to create the GLFW window");
         }
 
-        // Get the thread stack and push a new frame
-        try (MemoryStack stack = stackPush()) {
-            IntBuffer pWidth = stack.mallocInt(1); // int*
-            IntBuffer pHeight = stack.mallocInt(1); // int*
-
-            // Get the window size passed to glfwCreateWindow
-            glfwGetWindowSize(handle, pWidth, pHeight);
-
-            // Get the resolution of the primary monitor
-            GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-
-            // Center the window
-            glfwSetWindowPos(
-                    handle,
-                    (vidmode.width() - pWidth.get(0)) / 2,
-                    (vidmode.height() - pHeight.get(0)) / 2
-            );
-        }
 
         // Make the OpenGL context current
         glfwMakeContextCurrent(handle);
@@ -103,6 +87,29 @@ public class Window {
         glfwSetKeyCallback(handle, (window, key, scanCode, action, mods) -> {
             if (action == GLFW_PRESS) {
                 input.addPressedKey(key);
+                if (key == GLFW_KEY_F) {
+                    isFullscreen = !isFullscreen;
+                    glfwSetWindowMonitor(window, isFullscreen ? glfwGetPrimaryMonitor() : NULL, 0, 0, 1600, 900, GLFW_DONT_CARE);
+                    if (!isFullscreen) {
+                        try (MemoryStack stack = stackPush()) {
+                            IntBuffer pWidth = stack.mallocInt(1); // int*
+                            IntBuffer pHeight = stack.mallocInt(1); // int*
+
+                            // Get the window size passed to glfwCreateWindow
+                            glfwGetWindowSize(handle, pWidth, pHeight);
+
+                            // Get the resolution of the primary monitor
+                            GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+
+                            // Center the window
+                            glfwSetWindowPos(
+                                    handle,
+                                    (vidmode.width() - pWidth.get(0)) / 2,
+                                    (vidmode.height() - pHeight.get(0)) / 2
+                            );
+                        }
+                    }
+                }
             }
 //            System.out.printf("key=%s, scanCode=%s, action=%s, mods=%d\n", key, scanCode, action, mods);
         });

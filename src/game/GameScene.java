@@ -760,12 +760,14 @@ public class GameScene extends Scene {
             nvg.drawText(nvg.adjustedSceneX(150), nvg.scaledHeightSize(650), "Esc");
             nvg.drawText(nvg.adjustedSceneX(150), nvg.scaledHeightSize(700), "R");
             nvg.drawText(nvg.adjustedSceneX(150), nvg.scaledHeightSize(750), "D");
-            nvg.drawText(nvg.adjustedSceneX(150), nvg.scaledHeightSize(800), "M");
+            nvg.drawText(nvg.adjustedSceneX(150), nvg.scaledHeightSize(800), "F");
+            nvg.drawText(nvg.adjustedSceneX(150), nvg.scaledHeightSize(850), "M");
             nvg.setFontFace("montserrat");
             nvg.drawText(nvg.adjustedSceneX(250), nvg.scaledHeightSize(650), "- back to previous menu / exit game");
             nvg.drawText(nvg.adjustedSceneX(250), nvg.scaledHeightSize(700), "- restart level");
             nvg.drawText(nvg.adjustedSceneX(250), nvg.scaledHeightSize(750), "- draw line from screen center to mouse");
-            nvg.drawText(nvg.adjustedSceneX(250), nvg.scaledHeightSize(800), "- ?");
+            nvg.drawText(nvg.adjustedSceneX(250), nvg.scaledHeightSize(800), "- toggle fullscreen");
+            nvg.drawText(nvg.adjustedSceneX(250), nvg.scaledHeightSize(850), "- ?");
         }
 
         if (horizontalSwipeTimer.isActive()) {

@@ -743,7 +743,6 @@ public class GameScene extends Scene {
             nvg.setFillColor(Colors.backgroundDarker);
             nvg.setFontFace("montserrat_bold");
             nvg.setTextAlign(NVG_ALIGN_LEFT);
-            nvg.setFillColor(Colors.textColors[currentLevel().getColor()]);
             nvg.setFontSize(nvg.scaledHeightSize(80));
             nvg.drawText(nvg.adjustedSceneX(100), nvg.scaledHeightSize(150), "About");
 

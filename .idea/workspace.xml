@@ -10,27 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
-      <change afterPath="$PROJECT_DIR$/assets/levels/main/A8.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/levels/main/B5.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/levels/main/C3.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/levels/main/C4.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/levels/main/C5.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/extras/EX_A2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/extras/EX_A2.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/main/A1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/main/A1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/main/A2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/main/A2.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/main/A3.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/main/A3.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/main/A4.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/main/A4.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/main/A5.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/main/A5.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/main/A6.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/main/A6.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/main/A7.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/main/A7.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/main/B1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/main/B1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/main/B2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/main/B2.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/main/B3.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/main/B3.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/main/B4.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/main/B4.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/main/C1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/main/C1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/levels/main/C2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/levels/main/C2.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -254,7 +234,7 @@
       <workItem from="1690572348967" duration="2254000" />
       <workItem from="1690948362680" duration="3109000" />
       <workItem from="1690957070976" duration="370000" />
-      <workItem from="1690971336901" duration="73000" />
+      <workItem from="1690971336901" duration="229000" />
     </task>
     <servers />
   </component>

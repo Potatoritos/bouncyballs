@@ -422,7 +422,7 @@ public class LevelScene extends Scene {
     /**
      * Render all game objects. Meant for use with the normal coloring shader
      */
-    private void renderGameNormals(ShaderProgram shader) {
+    private void renderGameNormalsInstanced(ShaderProgram shader) {
         for (Map.Entry<String, ArrayList<? extends GameObject>> entry : gameObjects.entrySet()) {
             if (entry.getValue().isEmpty()) continue;
             setViewMatrices(shader, entry.getValue());
@@ -431,7 +431,17 @@ public class LevelScene extends Scene {
         }
     }
 
-    private void renderGameColors(ShaderProgram shader) {
+    private void renderGameNormals(ShaderProgram shader) {
+        for (Map.Entry<String, ArrayList<? extends GameObject>> entry : gameObjects.entrySet()) {
+            for (GameObject object : entry.getValue()) {
+                shader.setUniform("viewMatrix", camera.getViewMatrix(object.getWorldMatrix(rotation)));
+                shader.setUniform("transparency", object.getColor(0).w);
+                gameObjectMeshes.get(entry.getKey()).render();
+            }
+        }
+    }
+
+    private void renderGameColorsInstanced(ShaderProgram shader) {
         for (Map.Entry<String, ArrayList<? extends GameObject>> entry : gameObjects.entrySet()) {
             if (entry.getValue().isEmpty()) continue;
             setViewMatrices(shader, entry.getValue());
@@ -441,10 +451,21 @@ public class LevelScene extends Scene {
         }
     }
 
+    private void renderGameColors(ShaderProgram shader) {
+        for (Map.Entry<String, ArrayList<? extends GameObject>> entry : gameObjects.entrySet()) {
+            for (GameObject object : entry.getValue()) {
+                shader.setUniform("viewMatrix", camera.getViewMatrix(object.getWorldMatrix(rotation)));
+                shader.setUniform("color0", object.getColor(0));
+                shader.setUniform("color1", object.getColor(1));
+                gameObjectMeshes.get(entry.getKey()).render();
+            }
+        }
+    }
+
     /**
      * Render all game objects. Meant for use with the shadow (depth) map shader
      */
-    private void renderDepths(ShaderProgram shader) {
+    private void renderDepthsInstanced(ShaderProgram shader) {
         for (Map.Entry<String, ArrayList<? extends GameObject>> entry : gameObjects.entrySet()) {
             if (entry.getKey().equals("explosion") || entry.getValue().isEmpty()) continue;
             setWorldMatrices(shader, entry.getValue());
@@ -452,10 +473,19 @@ public class LevelScene extends Scene {
         }
     }
 
+    private void renderDepths(ShaderProgram shader) {
+        for (Map.Entry<String, ArrayList<? extends GameObject>> entry : gameObjects.entrySet()) {
+            for (GameObject object : entry.getValue()) {
+                shader.setUniform("worldMatrix", object.getWorldMatrix(rotation));
+                gameObjectMeshes.get(entry.getKey()).render();
+            }
+        }
+    }
+
     /**
      * Render all game objects. Meant for use with the shadows + sobel filter shader
      */
-    private void renderGameObjects(ShaderProgram shader) {
+    private void renderGameObjectsInstanced(ShaderProgram shader) {
         for (Map.Entry<String, ArrayList<? extends GameObject>> entry : gameObjects.entrySet()) {
             if (entry.getValue().isEmpty()) continue;
             setViewMatrices(shader, entry.getValue());
@@ -463,6 +493,18 @@ public class LevelScene extends Scene {
             setColors(1, shader, entry.getValue());
             setWorldMatrices(shader, entry.getValue());
             gameObjectMeshes.get(entry.getKey()).renderInstanced(entry.getValue().size());
+        }
+    }
+
+    private void renderGameObjects(ShaderProgram shader) {
+        for (Map.Entry<String, ArrayList<? extends GameObject>> entry : gameObjects.entrySet()) {
+            for (GameObject object : entry.getValue()) {
+                shader.setUniform("viewMatrix", camera.getViewMatrix(object.getWorldMatrix(rotation)));
+                shader.setUniform("color0", object.getColor(0));
+                shader.setUniform("color1", object.getColor(1));
+                shader.setUniform("worldMatrix", object.getWorldMatrix(rotation));
+                gameObjectMeshes.get(entry.getKey()).render();
+            }
         }
     }
 

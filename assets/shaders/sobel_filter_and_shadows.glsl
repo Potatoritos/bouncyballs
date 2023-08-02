@@ -5,14 +5,14 @@ layout (location=0) in vec3 position;
 layout (location=1) in vec3 inNormal;
 layout (location=2) in vec3 inColor;
 
-uniform mat4 viewMatrices[200];
+uniform mat4 viewMatrix;
 uniform mat4 projectionMatrix;
-uniform vec4 color0[200];
-uniform vec4 color1[200];
+uniform vec4 color0;
+uniform vec4 color1;
 uniform vec4 inShadowColor;
 
 uniform mat4 lightSpaceMatrix;
-uniform mat4 worldMatrices[200];
+uniform mat4 worldMatrix;
 
 out vec4 color;
 out float glow;
@@ -23,14 +23,14 @@ out vec3 orthoPos;
 out vec4 fragPosLightSpace;
 
 void main() {
-    gl_Position = projectionMatrix * viewMatrices[gl_InstanceID] * vec4(position, 1.0);
-    color = vec4(mix(color0[gl_InstanceID], color1[gl_InstanceID], inColor.r));
+    gl_Position = projectionMatrix * viewMatrix * vec4(position, 1.0);
+    color = vec4(mix(color0, color1, inColor.r));
     glow = 1 - inColor.g;
 
     normal = inNormal;
     shadowColor = inShadowColor;
 
-    orthoPos = vec3(worldMatrices[gl_InstanceID] * vec4(position, 1.0));
+    orthoPos = vec3(worldMatrix * vec4(position, 1.0));
     fragPosLightSpace = lightSpaceMatrix * vec4(orthoPos, 1.0);
 }
 

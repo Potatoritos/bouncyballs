@@ -1,5 +1,7 @@
 import game.Game;
 
+import static org.lwjgl.opengl.GL20.GL_MAX_VERTEX_UNIFORM_COMPONENTS;
+
 public class Main {
     public static void main(String[] args) throws InterruptedException {
 
@@ -21,6 +23,8 @@ public class Main {
 //        Vector3d result = new Vector3d();
 //        System.out.println(intersectionLineSphere(line, sphere, result));
 //        System.out.println(result);
+
+        System.out.println(GL_MAX_VERTEX_UNIFORM_COMPONENTS);
 
         Game game = new Game();
         game.run();

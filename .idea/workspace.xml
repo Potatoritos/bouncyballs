@@ -10,14 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4b145486-de3d-4307-a7d0-f513c11d03be" name="Changes" comment="Remove color from Mesh">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/shaders/color.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/assets/shaders/color.glsl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/shaders/color_normals.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/assets/shaders/color_normals.glsl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/shaders/depth.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/assets/shaders/depth.glsl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/shaders/outline.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/assets/shaders/outline.glsl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/shaders/sobel_filter_and_shadows.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/assets/shaders/sobel_filter_and_shadows.glsl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/LevelScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/LevelScene.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -239,7 +232,7 @@
       <workItem from="1690508603981" duration="178000" />
       <workItem from="1690509272122" duration="833000" />
       <workItem from="1690572348967" duration="2254000" />
-      <workItem from="1690948362680" duration="2720000" />
+      <workItem from="1690948362680" duration="2870000" />
     </task>
     <servers />
   </component>
